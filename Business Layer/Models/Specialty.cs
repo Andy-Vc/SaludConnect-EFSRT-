@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Models
+{
+    public class Specialty
+    {
+        public int IdSpecialty { get; set; }
+        public string BameSpecialty { get; set; }
+        public bool FlgDelete { get; set; }
+    }
+}
