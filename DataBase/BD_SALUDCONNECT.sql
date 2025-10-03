@@ -63,6 +63,7 @@ GO
 CREATE TABLE TB_SERVICES (
     ID_SERVICE INT PRIMARY KEY IDENTITY(1,1),
     NAME_SERVICE VARCHAR(30) NOT NULL,
+	DESCRIPTION VARCHAR(500) NULL,
     PRICE DECIMAL(10,2) NOT NULL,
     DURATION_MINUTES INT NOT NULL,
     ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
@@ -70,11 +71,11 @@ CREATE TABLE TB_SERVICES (
 );
 GO
 
-INSERT INTO TB_SERVICES (NAME_SERVICE, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
-('Consulta Cardiología', 150.00, 30, 1),
-('Consulta Dermatología', 120.00, 25, 2),
-('Consulta Neurología', 200.00, 40, 3),
-('Consulta Pediatría', 100.00, 20, 4);
+INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
+('Consulta Cardiología', 'Evaluación integral del sistema cardiovascular, diagnóstico y manejo de enfermedades cardíacas.', 150.00, 30, 1),
+('Consulta Dermatología', 'Diagnóstico y tratamiento de enfermedades de la piel, cabello y uñas.', 120.00, 25, 2),
+('Consulta Neurología', 'Evaluación y tratamiento de trastornos del sistema nervioso central y periférico.', 200.00, 40, 3),
+('Consulta Pediatría', 'Atención médica integral para bebés, niños y adolescentes.', 100.00, 20, 4);
 GO
 
 -- Tabla para relacionar doctores con sus especialidades y experiencia
