@@ -30,10 +30,10 @@ CREATE TABLE TB_SPECIALTIES (
 GO
 
 INSERT INTO TB_SPECIALTIES (NAME_SPECIALTY) VALUES
-('CardiologÌa'),
-('DermatologÌa'),
-('NeurologÌa'),
-('PediatrÌa');
+('Cardiolog√≠a'),
+('Dermatolog√≠a'),
+('Neurolog√≠a'),
+('Pediatr√≠a');
 GO
 
 -- Tabla Usuarios (pacientes y doctores)
@@ -46,17 +46,15 @@ CREATE TABLE TB_USERS (
     EMAIL VARCHAR(100) NOT NULL UNIQUE,
     PASSWORD_HASH VARCHAR(255) NOT NULL, 
     ID_ROLE INT NOT NULL REFERENCES TB_ROLES(ID_ROLE),
-    FLG_DELETE BIT DEFAULT 0,
-    CREATED_AT DATETIME DEFAULT GETDATE(),
-    UPDATED_AT DATETIME DEFAULT GETDATE()
+    FLG_DELETE BIT DEFAULT 0
 );
 GO
 
 INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_MAT, LAST_NAME_PAT, DOCUMENT, EMAIL, PASSWORD_HASH, ID_ROLE) VALUES
-('Juan', 'Gonz·lez', 'PÈrez', '123456789', 'juan.perez@example.com', 'clave123', 1),  -- Paciente
-('Ana', 'MartÌnez', 'LÛpez', '987654321', 'ana.lopez@example.com', 'clave123', 2),   -- Administrador
-('Carlos', 'S·nchez', 'RamÌrez', '456789123', 'carlos.ramirez@example.com', 'clave123', 3),  -- Doctor
-('Laura', 'GÛmez', 'Fern·ndez', '789123456', 'laura.fernandez@example.com', 'clave123', 3); -- Doctor
+('Juan', 'Gonz√°lez', 'P√©rez', '123456789', 'juan.perez@example.com', 'clave123', 1),  -- Paciente
+('Ana', 'Mart√≠nez', 'L√≥pez', '987654321', 'ana.lopez@example.com', 'clave123', 2),   -- Administrador
+('Carlos', 'S√°nchez', 'Ram√≠rez', '456789123', 'carlos.ramirez@example.com', 'clave123', 3),  -- Doctor
+('Laura', 'G√≥mez', 'Fern√°ndez', '789123456', 'laura.fernandez@example.com', 'clave123', 3); -- Doctor
 GO
 
 -- Tabla Servicios vinculados a una especialidad
@@ -72,10 +70,10 @@ CREATE TABLE TB_SERVICES (
 GO
 
 INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
-('Consulta CardiologÌa', 'EvaluaciÛn integral del sistema cardiovascular, diagnÛstico y manejo de enfermedades cardÌacas.', 150.00, 30, 1),
-('Consulta DermatologÌa', 'DiagnÛstico y tratamiento de enfermedades de la piel, cabello y uÒas.', 120.00, 25, 2),
-('Consulta NeurologÌa', 'EvaluaciÛn y tratamiento de trastornos del sistema nervioso central y perifÈrico.', 200.00, 40, 3),
-('Consulta PediatrÌa', 'AtenciÛn mÈdica integral para bebÈs, niÒos y adolescentes.', 100.00, 20, 4);
+('Consulta Cardiolog√≠a', 'Evaluaci√≥n integral del sistema cardiovascular, diagn√≥stico y manejo de enfermedades card√≠acas.', 150.00, 30, 1),
+('Consulta Dermatolog√≠a', 'Diagn√≥stico y tratamiento de enfermedades de la piel, cabello y u√±as.', 120.00, 25, 2),
+('Consulta Neurolog√≠a', 'Evaluaci√≥n y tratamiento de trastornos del sistema nervioso central y perif√©rico.', 200.00, 40, 3),
+('Consulta Pediatr√≠a', 'Atenci√≥n m√©dica integral para beb√©s, ni√±os y adolescentes.', 100.00, 20, 4);
 GO
 
 -- Tabla para relacionar doctores con sus especialidades y experiencia
@@ -88,7 +86,7 @@ CREATE TABLE TB_DOCTOR_SPECIALTIES (
 GO
 
 INSERT INTO TB_DOCTOR_SPECIALTIES (ID_DOCTOR, ID_SPECIALTY, YEARS_EXPERIENCE) VALUES
-(3, 1, 10),  -- Carlos RamÌrez: CardiologÌa, 10 aÒos experiencia
+(3, 1, 10),  -- Carlos Ram√≠rez: Cardiolog√≠a, 10 a√±os experiencia
 (4, 2, 5);
 GO
 
@@ -98,15 +96,13 @@ CREATE TABLE TB_APPOINTMENTS (
     ID_PATIENT INT NOT NULL REFERENCES TB_USERS(ID_USER),
     ID_DOCTOR INT NOT NULL REFERENCES TB_USERS(ID_USER),
     ID_SERVICE INT NOT NULL REFERENCES TB_SERVICES(ID_SERVICE),
-    DATE_APPOINTMENT DATE NOT NULL,
+    DATE_APPOINTMENT DATETIME NOT NULL,  
     STATE CHAR(1) NOT NULL,
-    CONSTRAINT CHK_STATE CHECK (STATE IN ('A','P','X','N')),
-    CREATED_AT DATETIME DEFAULT GETDATE(),
-    UPDATED_AT DATETIME DEFAULT GETDATE()
+    CONSTRAINT CHK_STATE CHECK (STATE IN ('A','P','X','N'))
 );
 GO
 
 INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SERVICE, DATE_APPOINTMENT, STATE) VALUES
-(1, 3, 1, '2025-10-01', 'A'),
-(1, 4, 2, '2025-10-10', 'X');
+(1, 3, 1, '2025-10-01 09:00:00', 'A'),
+(1, 4, 2, '2025-10-10 14:30:00', 'X');
 GO
