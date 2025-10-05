@@ -30,6 +30,7 @@ CREATE TABLE TB_SPECIALTIES (
 GO
 
 INSERT INTO TB_SPECIALTIES (NAME_SPECIALTY) VALUES
+<<<<<<< HEAD
 ('Cardiología'),
 ('Dermatología'),
 ('Neurología'),
@@ -38,6 +39,12 @@ INSERT INTO TB_SPECIALTIES (NAME_SPECIALTY) VALUES
 ('Oftalmología'),
 ('Psiquiatría'),
 ('Medicina Interna');
+=======
+('CardiologÃ­a'),
+('DermatologÃ­a'),
+('NeurologÃ­a'),
+('PediatrÃ­a');
+>>>>>>> 567bab0db3d9854871c34331c9d5001c32546de7
 GO
 
 -- Tabla Usuarios (pacientes y doctores)
@@ -58,12 +65,20 @@ CREATE TABLE TB_USERS (
 );
 GO
 
+<<<<<<< HEAD
 INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT,DOCUMENT, BIRTHDATE, PHONE, GENDER,EMAIL, PASSWORD_HASH, ID_ROLE)
 VALUES
 ('Admin', 'Principal', '1', '123456723', '1990-05-10', '912345890', 'M', 'admin@example.com', 'clave123', 2),
 ('Juan', 'Pérez', 'González', '123456789', '1990-05-10', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1),
 ('María', 'López', 'Hernández', '987654321', '1985-08-25', '987654321', 'F', 'maria.lopez@example.com', 'clave123', 3),
 ('Carlos', 'Ramírez', 'Sánchez', '456789123', '1992-12-15', '987654321', 'M', 'carlos.ramirez@example.com', 'clave123', 3);
+=======
+INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_MAT, LAST_NAME_PAT, DOCUMENT, EMAIL, PASSWORD_HASH, ID_ROLE) VALUES
+('Juan', 'GonzÃ¡lez', 'PÃ©rez', '123456789', 'juan.perez@example.com', 'clave123', 1),  -- Paciente
+('Ana', 'MartÃ­nez', 'LÃ³pez', '987654321', 'ana.lopez@example.com', 'clave123', 2),   -- Administrador
+('Carlos', 'SÃ¡nchez', 'RamÃ­rez', '456789123', 'carlos.ramirez@example.com', 'clave123', 3),  -- Doctor
+('Laura', 'GÃ³mez', 'FernÃ¡ndez', '789123456', 'laura.fernandez@example.com', 'clave123', 3); -- Doctor
+>>>>>>> 567bab0db3d9854871c34331c9d5001c32546de7
 GO
 
 
@@ -80,6 +95,7 @@ CREATE TABLE TB_SERVICES (
 GO
 
 INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
+<<<<<<< HEAD
 -- Cardiología
 ('Consulta Cardiología', 'Evaluación integral del sistema cardiovascular, diagnóstico y manejo de enfermedades cardíacas.', 150.00, 30, 1),
 ('Electrocardiograma', 'Prueba diagnóstica para evaluar la actividad eléctrica del corazón.', 80.00, 15, 1),
@@ -111,6 +127,12 @@ INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_
 -- Medicina Interna
 ('Consulta Medicina Interna', 'Atención integral para adultos con enfoque en diagnóstico y tratamiento de enfermedades internas.', 140.00, 30, 8),
 ('Pruebas de Laboratorio', 'Análisis clínicos para diagnóstico y seguimiento de enfermedades.', 60.00, 20, 8);
+=======
+('Consulta CardiologÃ­a', 'EvaluaciÃ³n integral del sistema cardiovascular, diagnÃ³stico y manejo de enfermedades cardÃ­acas.', 150.00, 30, 1),
+('Consulta DermatologÃ­a', 'DiagnÃ³stico y tratamiento de enfermedades de la piel, cabello y uÃ±as.', 120.00, 25, 2),
+('Consulta NeurologÃ­a', 'EvaluaciÃ³n y tratamiento de trastornos del sistema nervioso central y perifÃ©rico.', 200.00, 40, 3),
+('Consulta PediatrÃ­a', 'AtenciÃ³n mÃ©dica integral para bebÃ©s, niÃ±os y adolescentes.', 100.00, 20, 4);
+>>>>>>> 567bab0db3d9854871c34331c9d5001c32546de7
 GO
 
 
@@ -124,7 +146,7 @@ CREATE TABLE TB_DOCTOR_SPECIALTIES (
 GO
 
 INSERT INTO TB_DOCTOR_SPECIALTIES (ID_DOCTOR, ID_SPECIALTY, YEARS_EXPERIENCE) VALUES
-(3, 1, 10),  -- Carlos Ramírez: Cardiología, 10 años experiencia
+(3, 1, 10),  -- Carlos RamÃ­rez: CardiologÃ­a, 10 aÃ±os experiencia
 (4, 2, 5);
 GO
 
@@ -143,4 +165,8 @@ GO
 INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SERVICE, DATE_APPOINTMENT, STATE) VALUES
 (1, 3, 1, '2025-10-01 09:00:00', 'A'),
 (1, 4, 2, '2025-10-10 14:30:00', 'X');
+<<<<<<< HEAD
 GO
+=======
+GO
+>>>>>>> 567bab0db3d9854871c34331c9d5001c32546de7
