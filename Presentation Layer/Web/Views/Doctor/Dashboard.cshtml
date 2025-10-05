@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Web.Models.ViewModels.DoctorVM.DashboardViewModel
+@{
 	Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 	ViewData["Title"] = "Dashboard";
 }
@@ -49,17 +50,16 @@
 
 <div class="container-xl mt-3">
 	<div class="mb-4">
-		<h1 class="h3 fw-bold text-dark mb-2">Welcome back, Dr. Smith</h1>
-		<p class="text-muted">Here's what's happening with your patients today</p>
+		<h1 class="h3 fw-bold text-dark mb-2">Bienvenido de nuevo, @Model.FullName</h1>
+		<p class="text-muted">Esto es lo que está sucediendo hoy con sus pacientes</p>
 	</div>
 	<div class="row g-4 mb-4">
-		<!-- Card 1: Today's Appointments -->
 		<div class="col-12 col-md-6 col-lg-3">
 			<div class="card text-white shadow border-0" style="background: linear-gradient(to right, #3b82f6, #2563eb); border-radius: 1rem;">
 				<div class="card-body d-flex justify-content-between align-items-center">
 					<div>
-						<p class="text-light small mb-1">Today's Appointments</p>
-						<h3 class="fw-bold mb-0">0</h3>
+						<p class="text-light small mb-1">Citas de hoy</p>
+						<h3 class="fw-bold mb-0">@Model.CountInfo.AppointmentsToday</h3>
 					</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -72,14 +72,12 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Card 2: Total Patients -->
 		<div class="col-12 col-md-6 col-lg-3">
 			<div class="card text-white shadow border-0" style="background: linear-gradient(to right, #22c55e, #16a34a); border-radius: 1rem;">
 				<div class="card-body d-flex justify-content-between align-items-center">
 					<div>
-						<p class="text-light small mb-1">Total Patients</p>
-						<h3 class="fw-bold mb-0">1</h3>
+						<p class="text-light small mb-1">Total de pacientes</p>
+						<h3 class="fw-bold mb-0">@Model.CountInfo.TotalPatients</h3>
 					</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -96,8 +94,8 @@
 			<div class="card text-white shadow border-0" style="background: linear-gradient(to right, #7e22ce, #6b21a8); border-radius: 1rem;">
 				<div class="card-body d-flex justify-content-between align-items-center">
 					<div>
-						<p class="text-light small mb-1">Upcoming</p>
-						<h3 class="card-title mb-0">0</h3>
+						<p class="text-light small mb-1">Próximas citas</p>
+						<h3 class="card-title mb-0">@Model.CountInfo.UpcomingAppointments</h3>
 					</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -112,8 +110,8 @@
 			<div class="card text-white shadow border-0" style="background: linear-gradient(to right, #f97316, #ea580c); border-radius: 1rem;">
 				<div class="card-body d-flex justify-content-between align-items-center">
 					<div>
-						<p class="text-light small mb-1">Completed</p>
-						<h3 class="card-title mb-0 fw-bold">0</h3>
+						<p class="text-light small mb-1">Citas completadas</p>
+						<h3 class="card-title mb-0 fw-bold">@Model.CountInfo.CompletedAppointments</h3>
 					</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -125,157 +123,73 @@
 			</div>
 		</div>
 	</div>
-		<div class="row">
-			<!-- Sección 1: Calendario -->
-			<div class="col-md-4 mb-4">
-				<div class="card shadow-sm">
-					<div class="card-body">
-						<h5 class="card-title d-flex align-items-center text-primary mb-3">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-								 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-								 class="lucide lucide-calendar w-5 h-5 mr-2 text-blue-600" aria-hidden="true">
-								<path d="M8 2v4"></path>
-								<path d="M16 2v4"></path>
-								<rect width="18" height="18" x="3" y="4" rx="2"></rect>
-								<path d="M3 10h18"></path>
-							</svg>
-							<span class="text-black ms-2">Calendario</span>
-						</h5>
-					<div id="myCalendarContainer"></div>
-					</div>
-					<div class="bg-light rounded m-3 p-3 border-5">
-						<p class="mb-0 text-muted fw-semibold">Thu Oct 02 2025</p>
-						<p class="mb-0 text-muted">0 citas</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-8">
-				<div class="card shadow rounded-xl p-4">
-					<div class="d-flex justify-content-between align-items-center mb-4">
-						<h5 class="card-title d-flex align-items-center mb-0 text-primary">
-							<!-- Icono de estetoscopio -->
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-								 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-								 class="lucide lucide-stethoscope w-5 h-5 mr-2 text-blue-600" aria-hidden="true">
-								<path d="M11 2v2"></path>
-								<path d="M5 2v2"></path>
-								<path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
-								<path d="M8 15a6 6 0 0 0 12 0v-3"></path>
-								<circle cx="20" cy="10" r="2"></circle>
-							</svg>
-							<span class="text-black ms-2">Appointments for Thu Oct 02 2025</span>
-						</h5>
-
-						<!-- Badge de número de citas -->
-						<span class="badge bg-light text-dark">0 appointments</span>
-					</div>
-					<!--Si hay alguna cita-------------------------------------------------------------->
-					<div class="p-4 border rounded-3 shadow-sm hover:shadow transition">
-						<div class="d-flex justify-content-between align-items-start mb-3">
-							<!-- Info del paciente -->
-							<div class="d-flex align-items-center gap-3">
-								<!-- Avatar circular con iniciales -->
-								<div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-									<span class="fw-semibold small">AC</span>
-								</div>
-								<div>
-									<p class="mb-0 fw-semibold text-dark">Alice Cooper</p>
-									<small class="text-muted">Psychiatry Consultation</small>
-								</div>
-							</div>
-
-							<!-- Hora y estado -->
-							<div class="text-end">
-								<p class="mb-1 fw-semibold text-dark">16:30</p>
-								<span class="badge bg-light text-black fw-medium small">Scheduled</span>
-							</div>
-						</div>
-
-						<!-- Botones de acción -->
-						<div class="d-flex gap-2">
-							<button type="button" class="btn btn-success btn-sm d-flex align-items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-									 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									 class="lucide lucide-circle-check-big w-4 h-4 mr-1" aria-hidden="true">
-									<path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
-									<path d="m9 11 3 3L22 4"></path>
-								</svg>
-								Confirm
-							</button>
-							<button type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-									 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-									 class="lucide lucide-circle-x w-4 h-4 mr-1" aria-hidden="true">
-									<circle cx="12" cy="12" r="10"></circle>
-									<path d="m15 9-6 6"></path>
-									<path d="m9 9 6 6"></path>
-								</svg>
-								Cancel
-							</button>
-						</div>
-					</div>
-
-					<div class="text-center py-5">
-						<!-- Icono de calendario -->
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-							 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-							 stroke-linejoin="round" class="lucide lucide-calendar w-12 h-12 text-gray-300 scale-3 mx-auto mb-4"
-							 aria-hidden="true" >
+	<div class="row">
+		<div class="col-md-4 mb-4">
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<h5 class="card-title d-flex align-items-center text-primary mb-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+							 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							 class="lucide lucide-calendar w-5 h-5 mr-2 text-blue-600" aria-hidden="true">
 							<path d="M8 2v4"></path>
 							<path d="M16 2v4"></path>
 							<rect width="18" height="18" x="3" y="4" rx="2"></rect>
 							<path d="M3 10h18"></path>
 						</svg>
-						<p class="text-muted">No appointments for this date</p>
-					</div>
+						<span class="text-black ms-3">Calendario</span>
+					</h5>
+					<div id="myCalendarContainer"></div>
+				</div>
+				<div class="bg-light rounded m-3 p-3 border-5">
+					<p class="mb-0 text-muted fw-semibold">fecha escogida</p>
+					<p class="mb-0 text-muted">0 citas</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-8">
+			<div class="card shadow rounded-xl p-4">
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h5 class="card-title d-flex align-items-center mb-0 text-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+							 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							 class="lucide lucide-stethoscope w-5 h-5 mr-2 text-blue-600" aria-hidden="true">
+							<path d="M11 2v2"></path>
+							<path d="M5 2v2"></path>
+							<path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+							<path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+							<circle cx="20" cy="10" r="2"></circle>
+						</svg>
+						<span class="text-black ms-2">Citas para el jue 2 oct 2025</span>
+					</h5>
+					<span class="badge bg-light text-dark" id="countLeft">0 citas</span>
+				</div>
+
+				<div id="appointmentsContainer">
 				</div>
 
 			</div>
 		</div>
-	<div class="mt-2">
+
+	</div>
+	<div class="mt-2 mb-5">
 		<div class="card shadow rounded-4 p-4">
-			<!-- Título -->
-			<h5 class="card-title d-flex align-items-center mb-4 text-primary">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-					 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-					 class="lucide lucide-bell w-5 h-5 mr-2 text-blue-600" aria-hidden="true">
-					<path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
-					<path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
-					</path>
+			<h5 class="card-title text-primary mb-4">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 align-text-bottom">
+					<path d="M8 2v4" />
+					<path d="M16 2v4" />
+					<rect width="18" height="18" x="3" y="4" rx="2" />
+					<path d="M3 10h18" />
 				</svg>
-				<span class="ms-2 text-dark">Recent Activity</span>
-			</h5>
-
-			<!-- Lista de actividades -->
-			<div class="d-flex flex-column gap-3">
-				<!-- Item 1 -->
-				<div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-					<div class="d-flex align-items-center gap-3">
-						<div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-							<span class="text-primary small">AC</span>
-						</div>
-						<div>
-							<p class="mb-0 fw-bold text-dark small">Alice Cooper</p>
-							<small class="text-muted">Psychiatry Consultation • 2025-10-03 at 13:30</small>
-						</div>
-					</div>
-					<span class="badge bg-secondary text-white fw-medium">Scheduled</span>
-				</div>
-
-			</div>
+				Resumen de citas - Últimos 7 días
+			</h5>			
+			<canvas id="appointmentsChart" height="300"></canvas>
 		</div>
 	</div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
-	  flatpickr('#myCalendarContainer', {
-		inline: true,
-		defaultDate: new Date() // 👉 Esto pone la fecha de hoy automáticamente
-	  });
-	});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/DashboardDoctor.js" asp-append-version="true"></script>

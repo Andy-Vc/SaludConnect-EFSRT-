@@ -9,10 +9,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add inyection dependencies
+
+builder.Services.AddDependencies();
+
 var app = builder.Build();
 
-// Add inyection dependencies
-builder.Services.AddDependencies();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

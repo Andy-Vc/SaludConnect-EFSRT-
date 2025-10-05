@@ -1,0 +1,108 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
+    ViewData["Title"] = "Mi Perfil";
+}
+<div class="py-5 px-3" style="background: linear-gradient(to right, #eff6ff, #ecfeff);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-dark">Mi Perfil</h1>
+            <p class="lead text-secondary">Información personal y profesional del usuario</p>
+        </div>
+
+        <!-- Datos del Doctor -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4 text-center">
+                <img src="https://via.placeholder.com/180" alt="Foto de perfil" class="img-fluid rounded-circle shadow" style="width: 180px; height: 180px; object-fit: cover;">
+                <h3 class="mt-3 mb-0 text-dark">Dr. Juan Pérez</h3>
+                <p class="text-secondary mb-1">Cardiólogo</p>
+                <span class="badge bg-gradient" style="background: linear-gradient(to right, #2563eb, #06b6d4);">Activo</span>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row gy-3">
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Correo electrónico</label>
+                        <p class="text-dark mb-0">juan.perez@saludconnect.com</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Número de colegiatura</label>
+                        <p class="text-dark mb-0">CMP 123456</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Teléfono</label>
+                        <p class="text-dark mb-0">+51 987 654 321</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Dirección</label>
+                        <p class="text-dark mb-0">Av. Salud 123, Lima, Perú</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Género</label>
+                        <p class="text-dark mb-0">Masculino</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Edad</label>
+                        <p class="text-dark mb-0">45 años</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Especialidad</label>
+                        <p class="text-dark mb-0">Cardiología</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="fw-semibold text-secondary">Años de experiencia</label>
+                        <p class="text-dark mb-0">18 años</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de citas -->
+        <section class="bg-white p-4 rounded-4 shadow-sm">
+            <h3 class="fw-bold mb-4 text-dark">Historial de Citas Atendidas</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Especialidad</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>María López</td>
+                            <td>01/10/2025</td>
+                            <td>10:00 AM</td>
+                            <td>Cardiología</td>
+                            <td><span class="badge bg-success">Completada</span></td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Sánchez</td>
+                            <td>30/09/2025</td>
+                            <td>02:30 PM</td>
+                            <td>Cardiología</td>
+                            <td><span class="badge bg-success">Completada</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ana Torres</td>
+                            <td>29/09/2025</td>
+                            <td>09:00 AM</td>
+                            <td>Cardiología</td>
+                            <td><span class="badge bg-danger">Cancelada</span></td>
+                        </tr>
+                        <tr>
+                            <td>Luis Fernández</td>
+                            <td>28/09/2025</td>
+                            <td>11:30 AM</td>
+                            <td>Cardiología</td>
+                            <td><span class="badge bg-success">Completada</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</div>

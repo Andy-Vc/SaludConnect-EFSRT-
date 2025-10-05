@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Web.Models.ViewModels.DoctorVM.AboutVM
+@{
 	Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 	ViewData["Title"] = "Acerca De";
 }
@@ -9,17 +10,338 @@
 		<div class="container position-relative text-center">
 			<div class="mx-auto mb-5">
 				<div class="d-flex justify-content-center align-items-center mx-auto mb-4 rounded-circle shadow" style="width: 80px; height: 80px; background: linear-gradient(to right, #2563eb, #06b6d4);">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart scale-2 text-white">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart scale-2 text-white" style="opacity:1 !important;">
 						<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
 					</svg>
 				</div>
 				<h1 class="display-4 fw-bold text-dark mb-4">
-					About <span class="text-gradient">SaludConnect</span>
+					Acerca de <span class="text-gradient">SaludConnect</span>
 				</h1>
 				<p class="lead text-secondary mx-auto" style="max-width: 720px;">
-					SaludConnect is a comprehensive medical appointment management platform designed to bridge the gap between patients and healthcare professionals. Our mission is to make healthcare more accessible, efficient, and user-friendly for everyone.
+					SaludConnect es una plataforma integral de gestión de citas médicas diseñada para cerrar la brecha entre pacientes y profesionales de la salud. Nuestra misión es hacer que la atención médica sea más accesible, eficiente y fácil de usar para todos.
 				</p>
 			</div>
 		</div>
 	</section>
+	<section class="py-5 bg-white">
+		<div class="container">
+			<div class="text-center mb-5">
+				<h2 class="fw-bold text-dark mb-3">Nuestra Misión</h2>
+				<p class="fs-5 text-secondary mx-auto" style="max-width: 900px; line-height: 1.6;">
+					Revolucionar la prestación de atención médica al proporcionar una plataforma fluida, segura e intuitiva que conecta a los pacientes con los profesionales de la salud, agiliza la gestión de citas y mejora la experiencia general de la atención médica.
+				</p>
+			</div>
+			<div class="row align-items-center g-4">
+				<div class="col-lg-6">
+					<h3 class="fw-semibold text-dark mb-4">Lo Que Hacemos</h3>
+					<div class="d-flex flex-column gap-3">
+						<div class="d-flex align-items-start">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 me-3" aria-hidden="true" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10" />
+								<path d="m9 11 3 3 5-7" />
+							</svg>
+							<p class="mb-0 text-dark"><strong>Simplificar la Reserva de Citas:</strong> Nuestra interfaz intuitiva facilita a los pacientes encontrar y reservar citas con profesionales de la salud.</p>
+						</div>
+						<div class="d-flex align-items-start">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 me-3" aria-hidden="true" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10" />
+								<path d="m9 11 3 3 5-7" />
+							</svg>
+							<p class="mb-0 text-dark"><strong>Mejorar la Eficiencia del Doctor:</strong> Los profesionales de la salud pueden gestionar sus horarios, ver la información del paciente y actualizar los estados de las citas sin problemas.</p>
+						</div>
+						<div class="d-flex align-items-start">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 me-3" aria-hidden="true" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10" />
+								<path d="m9 11 3 3 5-7" />
+							</svg>
+							<p class="mb-0 text-dark"><strong>Garantizar la Seguridad de los Datos:</strong> Implementamos medidas de seguridad de nivel empresarial para proteger la información médica sensible y mantener la privacidad del paciente.</p>
+						</div>
+						<div class="d-flex align-items-start">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 me-3" aria-hidden="true" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10" />
+								<path d="m9 11 3 3 5-7" />
+							</svg>
+							<p class="mb-0 text-dark"><strong>Mejorar el Acceso a la Atención Médica:</strong> Al digitalizar la gestión de citas, hacemos que la atención médica sea más accesible para los pacientes independientemente de su ubicación u horario.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="p-4 rounded-3" style="background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 100%);">
+						<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4" aria-hidden="true" viewBox="0 0 24 24">
+							<path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+							<circle cx="12" cy="8" r="6"></circle>
+						</svg>
+						<h3 class="fw-semibold text-dark mb-3">Nuestro Compromiso</h3>
+						<p class="text-dark mb-4" style="line-height: 1.6;">
+							Estamos comprometidos con la mejora continua y la innovación en tecnología sanitaria. Nuestra plataforma está diseñada pensando tanto en los pacientes como en los profesionales de la salud, asegurando que cada interacción sea significativa y eficiente.
+						</p>
+						<ul class="list-unstyled text-dark">
+							<li class="d-flex align-items-center mb-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" aria-hidden="true" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="10" />
+									<path d="m9 11 3 3 5-7" />
+								</svg>
+								<span>Soporte Técnico 24/7</span>
+							</li>
+							<li class="d-flex align-items-center mb-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" aria-hidden="true" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="10" />
+									<path d="m9 11 3 3 5-7" />
+								</svg>
+								<span>Actualizaciones Regulares de la Plataforma</span>
+							</li>
+							<li class="d-flex align-items-center">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2" aria-hidden="true" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="10" />
+									<path d="m9 11 3 3 5-7" />
+								</svg>
+								<span>Integración de Comentarios de Usuarios</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="py-5 px-3" style="background: linear-gradient(to right, #eff6ff, #ecfeff);">
+		<div class="container">
+			<div class="text-center mb-5">
+				<h2 class="display-5 fw-bold text-dark mb-3">Nuestros Valores Fundamentales</h2>
+				<p class="lead text-secondary mx-auto" style="max-width: 700px;">
+					Estos principios fundamentales guían todo lo que hacemos y dan forma a nuestro enfoque de la tecnología sanitaria.
+				</p>
+			</div>
+			<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+
+				<div class="col">
+					<div class="card h-100 text-center shadow-sm border-0 rounded-4 bg-white position-relative overflow-hidden" style="transition: box-shadow 0.3s ease;">
+						<div class="mx-auto mt-4 mb-3 d-flex align-items-center justify-content-center rounded-3"
+							 style="width:64px; height:64px; background: linear-gradient(to right, #ef4444, #ec4899); box-shadow: 0 4px 8px rgb(236 72 153 / 0.4); transition: transform 0.3s ease;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-heart" viewBox="0 0 24 24">
+								<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+							</svg>
+						</div>
+						<div class="card-body px-4">
+							<h3 class="h5 fw-semibold text-dark mb-3">Atención Centrada en el Paciente</h3>
+							<p class="text-secondary">Priorizamos las necesidades y experiencias del paciente, asegurando servicios de atención médica accesibles y compasivos.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 text-center shadow-sm border-0 rounded-4 bg-white position-relative overflow-hidden" style="transition: box-shadow 0.3s ease;">
+						<div class="mx-auto mt-4 mb-3 d-flex align-items-center justify-content-center rounded-3"
+							 style="width:64px; height:64px; background: linear-gradient(to right, #3b82f6, #06b6d4); box-shadow: 0 4px 8px rgb(6 182 212 / 0.4); transition: transform 0.3s ease;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-shield-lock" viewBox="0 0 24 24">
+								<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+							</svg>
+						</div>
+						<div class="card-body px-4">
+							<h3 class="h5 fw-semibold text-dark mb-3">Privacidad y Seguridad</h3>
+							<p class="text-secondary">Su información médica está protegida con los más altos estándares de seguridad y protocolos de privacidad.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 text-center shadow-sm border-0 rounded-4 bg-white position-relative overflow-hidden" style="transition: box-shadow 0.3s ease;">
+						<div class="mx-auto mt-4 mb-3 d-flex align-items-center justify-content-center rounded-3"
+							 style="width:64px; height:64px; background: linear-gradient(to right, #22c55e, #10b981); box-shadow: 0 4px 8px rgb(16 185 129 / 0.4); transition: transform 0.3s ease;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-people" viewBox="0 0 24 24">
+								<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+								<path d="M16 3.128a4 4 0 0 1 0 7.744" />
+								<path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+								<circle cx="9" cy="7" r="4" />
+							</svg>
+						</div>
+						<div class="card-body px-4">
+							<h3 class="h5 fw-semibold text-dark mb-3">Excelencia Profesional</h3>
+							<p class="text-secondary">Lo conectamos con profesionales de la salud calificados comprometidos con la prestación de una atención médica excepcional.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 text-center shadow-sm border-0 rounded-4 bg-white position-relative overflow-hidden" style="transition: box-shadow 0.3s ease;">
+						<div class="mx-auto mt-4 mb-3 d-flex align-items-center justify-content-center rounded-3"
+							 style="width:64px; height:64px; background: linear-gradient(to right, #8b5cf6, #4f46e5); box-shadow: 0 4px 8px rgb(79 70 229 / 0.4); transition: transform 0.3s ease;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-target" viewBox="0 0 24 24">
+								<circle cx="12" cy="12" r="10" />
+								<circle cx="12" cy="12" r="6" />
+								<circle cx="12" cy="12" r="2" />
+							</svg>
+						</div>
+						<div class="card-body px-4">
+							<h3 class="h5 fw-semibold text-dark mb-3">Innovación</h3>
+							<p class="text-secondary">Mejoramos continuamente nuestra plataforma con tecnología de vanguardia para mejorar la prestación de atención médica.</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<section class="py-5 px-3 bg-white">
+		<div class="container">
+			<div class="text-center mb-5">
+				<h2 class="display-5 fw-bold text-dark mb-3">Características de la Plataforma</h2>
+				<p class="lead text-secondary mx-auto" style="max-width: 700px;">
+					Descubra las potentes funciones que hacen de SaludConnect la opción preferida para la gestión de citas médicas.
+				</p>
+			</div>
+			<div class="row row-cols-1 row-cols-md-2 g-4">
+
+				<div class="col">
+					<div class="card h-100 border-0 rounded-4 shadow-sm bg-gradient"
+						 style="background: linear-gradient(to bottom right, #ffffff, #f9fafb); transition: box-shadow 0.3s ease;">
+						<div class="d-flex align-items-start gap-3 p-4">
+							<div class="icon-wrapper rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+								 style="width:48px; height:48px; background: linear-gradient(to right, #3b82f6, #06b6d4); transition: transform 0.3s ease;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-calendar" viewBox="0 0 24 24">
+									<path d="M8 2v4"></path>
+									<path d="M16 2v4"></path>
+									<rect width="18" height="18" x="3" y="4" rx="2"></rect>
+									<path d="M3 10h18"></path>
+								</svg>
+							</div>
+							<div>
+								<h3 class="h5 fw-semibold text-dark mb-2 feature-title">Programación Inteligente</h3>
+								<p class="text-secondary mb-0">Sistema inteligente de reserva de citas que se adapta a su horario y a la disponibilidad del médico.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 border-0 rounded-4 shadow-sm bg-gradient"
+						 style="background: linear-gradient(to bottom right, #ffffff, #f9fafb); transition: box-shadow 0.3s ease;">
+						<div class="d-flex align-items-start gap-3 p-4">
+							<div class="icon-wrapper rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+								 style="width:48px; height:48px; background: linear-gradient(to right, #3b82f6, #06b6d4); transition: transform 0.3s ease;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-person-check" viewBox="0 0 24 24">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+									<circle cx="9" cy="7" r="4"></circle>
+									<polyline points="16 11 18 13 22 9"></polyline>
+								</svg>
+							</div>
+							<div>
+								<h3 class="h5 fw-semibold text-dark mb-2 feature-title">Acceso Basado en Rol</h3>
+								<p class="text-secondary mb-0">Paneles de control separados para pacientes y médicos con funcionalidades personalizadas para cada tipo de usuario.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 border-0 rounded-4 shadow-sm bg-gradient"
+						 style="background: linear-gradient(to bottom right, #ffffff, #f9fafb); transition: box-shadow 0.3s ease;">
+						<div class="d-flex align-items-start gap-3 p-4">
+							<div class="icon-wrapper rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+								 style="width:48px; height:48px; background: linear-gradient(to right, #3b82f6, #06b6d4); transition: transform 0.3s ease;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-stethoscope" viewBox="0 0 24 24">
+									<path d="M11 2v2"></path>
+									<path d="M5 2v2"></path>
+									<path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+									<path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+									<circle cx="20" cy="10" r="2"></circle>
+								</svg>
+							</div>
+							<div>
+								<h3 class="h5 fw-semibold text-dark mb-2 feature-title">Soporte Multiespecialidad</h3>
+								<p class="text-secondary mb-0">Soporte integral para diversas especialidades médicas y servicios de atención sanitaria.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div class="card h-100 border-0 rounded-4 shadow-sm bg-gradient"
+						 style="background: linear-gradient(to bottom right, #ffffff, #f9fafb); transition: box-shadow 0.3s ease;">
+						<div class="d-flex align-items-start gap-3 p-4">
+							<div class="icon-wrapper rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+								 style="width:48px; height:48px; background: linear-gradient(to right, #3b82f6, #06b6d4); transition: transform 0.3s ease;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-shield-lock" viewBox="0 0 24 24">
+									<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+								</svg>
+							</div>
+							<div>
+								<h3 class="h5 fw-semibold text-dark mb-2 feature-title">Plataforma Segura</h3>
+								<p class="text-secondary mb-0">Seguridad de nivel empresarial que garantiza que su información médica se mantenga privada y protegida.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<section class="py-5 px-3" style="background: linear-gradient(to right, #2563eb, #06b6d4);">
+		<div class="container">
+			<div class="text-center mb-5">
+				<h2 class="display-5 fw-bold text-white mb-3">SaludConnect en Cifras</h2>
+				<p class="lead text-white mx-auto" style="max-width: 700px;">
+					Nuestra plataforma sirve a profesionales de la salud y pacientes con servicios confiables y eficientes.
+				</p>
+			</div>
+			<div class="row row-cols-1 row-cols-md-5 g-3 text-center text-white">
+				<div class="col">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="rgba(191,219,254,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 mx-auto" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M11 2v2"></path>
+							<path d="M5 2v2"></path>
+							<path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+							<path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+							<circle cx="20" cy="10" r="2"></circle>
+						</svg>
+						<div class="fs-1 fw-bold">@Model.countSpecialties +</div>
+						<div class="fs-5 fw-medium text-white">Especialidades Médicas</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="rgba(191,219,254,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 mx-auto" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+							<path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+							<path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+							<circle cx="9" cy="7" r="4"></circle>
+						</svg>
+						<div class="fs-1 fw-bold">@Model.countDoctors +</div>
+						<div class="fs-5 fw-medium text-white">Profesionales de la Salud</div>
+					</div>
+				</div>
+
+				<div class="col">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="rgba(191,219,254,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 mx-auto" viewBox="0 0 24 24" aria-hidden="true">
+							<circle cx="12" cy="12" r="10"></circle>
+							<polyline points="12 6 12 12 16 14"></polyline>
+						</svg>
+						<div class="fs-1 fw-bold">@Model.minDurationService min</div>
+						<div class="fs-5 fw-medium text-white">Duración Promedio de la Cita</div>
+					</div>
+				</div>
+				<div class="col">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="rgba(191,219,254,0.8)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="mb-2 mx-auto">
+							<path d="M26 5h12a5 5 0 0 1 5 5v12h12a5 5 0 0 1 5 5v12a5 5 0 0 1-5 5H43v12a5 5 0 0 1-5 5H26a5 5 0 0 1-5-5V43H9a5 5 0 0 1-5-5V26a5 5 0 0 1 5-5h12V9a5 5 0 0 1 5-4z" />
+						</svg>
+						<div class="fs-1 fw-bold">@Model.countServices +</div>
+						<div class="fs-5 fw-medium text-white">Servicios Médicos</div>
+					</div>
+				</div>
+				<div class="col">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="rgba(191,219,254,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2 mx-auto" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+						</svg>
+						<div class="fs-1 fw-bold">100%</div>
+						<div class="fs-5 fw-medium text-white">Seguro y Privado</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
 </div>

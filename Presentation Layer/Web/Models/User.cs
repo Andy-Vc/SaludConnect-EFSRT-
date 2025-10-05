@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Web.Models
 {
     public class User
     {
@@ -14,13 +8,9 @@ namespace Models
         public string LastNameMat { get; set; }
         public string Document { get; set; }
         public string Email { get; set; }
-        public string Password{ get; set; }
-        public string Gender { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Phone { get; set; }
+        public string Password { get; set; }
         public Role Role { get; set; }
         public bool FlgDelete { get; set; }
         public List<DoctorSpecialty> DoctorSpecialties { get; set; }
-
     }
 }
