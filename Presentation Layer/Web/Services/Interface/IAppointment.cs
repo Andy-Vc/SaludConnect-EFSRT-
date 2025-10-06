@@ -1,4 +1,5 @@
 ﻿using Web.Models;
+using Web.Models.DTO;
 using Web.Models.ViewModels.DoctorVM;
 
 namespace Web.Services.Interface
@@ -9,7 +10,9 @@ namespace Web.Services.Interface
         Task<int> CountPatientsByDoctor(int doctorId);
         Task<int> CountCompletedAppointmentByDoctor(int doctorId);
         Task<int> CountUpcomingAppointmentsByDoctor(int doctorId);
-        Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime date);
+        Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date);
         Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId);
+        Task<byte[]> DownloadSingleAppointmentPdf(int appointmentId);
+        Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state);
     }
 }

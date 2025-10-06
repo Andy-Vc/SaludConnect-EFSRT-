@@ -16,6 +16,7 @@
     let appointmentsData = [];
     let currentPage = 1;
     const itemsPerPage = 3;
+    let calendarInstance = null;
 
     function loadAppointments(dateStr) {
         console.log("Cargando citas para fecha:", dateStr);
@@ -78,6 +79,9 @@
 
         appointmentContainer.innerHTML = '';
 
+        // Obtener el token anti-falsificación una sola vez
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
         pageItems.forEach(item => {
             const patientFirstName = item.patient?.firstName || 'Paciente';
             const patientLastNamePat = item.patient?.lastNamePat || '';
@@ -85,9 +89,7 @@
             const patientLastName = [patientLastNamePat, patientLastNameMat].filter(Boolean).join(' ');
 
             const initials = (patientFirstName[0] || '') + (patientLastNamePat[0] || '');
-
             const reason = item.service?.nameService || 'Motivo no especificado';
-
             const date = new Date(item.dateAppointment);
             const time = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
@@ -95,52 +97,75 @@
             switch (item.state) {
                 case 'A': statusText = 'Atendida'; break;
                 case 'P': statusText = 'Pendiente'; break;
-                case 'X': statusText = 'No asistió'; break;
-                case 'C': statusText = 'Cancelada'; break;
+                case 'N': statusText = 'No asistió'; break;
+                case 'X': statusText = 'Cancelada'; break;
+            }
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const appointmentDate = new Date(item.dateAppointment);
+            appointmentDate.setHours(0, 0, 0, 0);
+
+            let buttonsHtml = '';
+            if (item.state === 'P' && appointmentDate.getTime() === today.getTime()) {
+                buttonsHtml = `
+    <div class="d-flex gap-2">
+        <form method="POST" action="/Doctor/ChangeAppointmentState" class="d-inline">
+            <input type="hidden" name="__RequestVerificationToken" value="${token}" />
+            <input type="hidden" name="IdAppointment" value="${item.idAppointment}" />
+            <input type="hidden" name="State" value="A" />
+            <button type="submit" class="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4 mr-1">
+                <path d="M21.801 10A10 10 0 1 1 17 3.335"></path> <path d="m9 11 3 3L22 4"></path>
+                </svg> Asistió 
+            </button>
+        </form>
+        
+        <form method="POST" action="/Doctor/ChangeAppointmentState" class="d-inline">
+            <input type="hidden" name="__RequestVerificationToken" value="${token}" />
+            <input type="hidden" name="IdAppointment" value="${item.idAppointment}" />
+            <input type="hidden" name="State" value="N" />
+            <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x w-4 h-4 mr-1">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m15 9-6 6"></path> <path d="m9 9 6 6"></path>
+                </svg> No Asistió
+            </button>
+        </form>
+    </div>
+    `;
             }
 
+
             const html = `
-				<div class="p-4 border rounded-3 shadow-sm hover:shadow transition mb-3">
-					<div class="d-flex justify-content-between align-items-start mb-3">
-						<div class="d-flex align-items-center gap-3">
-							<div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center"
-								style="width: 40px; height: 40px;">
-								<span class="fw-semibold small">${initials}</span>
-							</div>
-							<div>
-								<p class="mb-0 fw-semibold text-dark">${patientFirstName} ${patientLastName}</p>
-								<small class="text-muted">${reason}</small>
-							</div>
-						</div>
-						<div class="text-end">
-							<p class="mb-1 fw-semibold text-dark">${time}</p>
-							<span class="badge bg-light text-black fw-medium small">${statusText}</span>
-						</div>
-					</div>
-					<div class="d-flex gap-2">
-						<button type="button" class="btn btn-success btn-sm d-flex align-items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4 mr-1">
-                            <path d="M21.801 10A10 10 0 1 1 17 3.335"></path> <path d="m9 11 3 3L22 4"></path>
-                            </svg> Asistio 
-                        </button> 
-                        <button type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1"> 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x w-4 h-4 mr-1">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="m15 9-6 6"></path> <path d="m9 9 6 6"></path>
-                            </svg> No Asistio
-                        </button>
-					</div>
-				</div>
-			`;
+        <div class="p-4 border rounded-3 shadow-sm hover:shadow transition mb-3">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 40px; height: 40px;">
+                        <span class="fw-semibold small">${initials}</span>
+                    </div>
+                    <div>
+                        <p class="mb-0 fw-semibold text-dark">${patientFirstName} ${patientLastName}</p>
+                        <small class="text-muted">${reason}</small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <p class="mb-1 fw-semibold text-dark">${time}</p>
+                    <span class="badge bg-light text-black fw-medium small">${statusText}</span>
+                </div>
+            </div>
+            ${buttonsHtml}
+        </div>
+    `;
 
             appointmentContainer.innerHTML += html;
         });
 
         renderPaginationControls();
     }
-
     function renderPaginationControls() {
         const totalPages = Math.ceil(appointmentsData.length / itemsPerPage);
 
@@ -179,8 +204,7 @@
         });
     }
 
-    // Inicializa el calendario
-    const calendar = flatpickr(calendarContainer, {
+    calendarInstance = flatpickr(calendarContainer, {
         inline: true,
         defaultDate: new Date(),
         locale: 'es',
@@ -189,11 +213,17 @@
         }
     });
 
-    // Cargar citas para hoy por defecto
-    const todayStr = new Date().toISOString().slice(0, 10);
+    window.loadAppointmentsGlobal = loadAppointments;
+    window.getCalendarInstance = () => calendarInstance;
+
+    const now = new Date();
+    const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     loadAppointments(todayStr);
+
 });
 
+
+// Gráfico de citas
 document.addEventListener("DOMContentLoaded", function () {
     fetch("/Doctor/GetAppointmentsChartData")
         .then(response => {

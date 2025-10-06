@@ -1,6 +1,7 @@
 ﻿using Logic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.DTO;
 
 namespace API.Controllers
@@ -33,6 +34,19 @@ namespace API.Controllers
             else
             {
                 return Unauthorized(result);
+            }
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] PatientDTO patient)
+        {
+            var result = await serviceBL.RegisterPatient(patient);
+            if (result.Value)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
             }
         }
     }

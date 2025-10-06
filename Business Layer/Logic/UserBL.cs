@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
+using Models;
+using Models.DTO;
 
 namespace Logic
 {
@@ -14,6 +16,11 @@ namespace Logic
         public UserBL(IUser service)
         {
             this.service = service;
+        }
+
+        public async Task<ResultResponse<User>> GetProfile(int idUser)
+        {
+            return await service.GetProfile(idUser);
         }
 
         public async Task<int> totalDoctors()

@@ -14,7 +14,9 @@ namespace Data.Interface
         Task<int> CountPatientsByDoctor(int doctorId);
         Task<int> CountCompletedAppointmentByDoctor(int doctorId);
         Task<int> CountUpcomingAppointmentsByDoctor(int doctorId);
-        Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime date);
+        Task<Appointment> GetAppointmentForId(int idUser);
+        Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date);
         Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId);
+        Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state);
     }
 }

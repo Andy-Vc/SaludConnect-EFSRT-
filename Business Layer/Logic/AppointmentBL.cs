@@ -18,6 +18,11 @@ namespace Logic
             this.service = service;
         }
 
+        public async Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state)
+        {
+            return await service.ChangeStateAppointment(idAppointment, state);
+        }
+
         public async Task<int> CountAppointmentsTodayByDoctor(int doctorId)
         {
             return await service.CountAppointmentsTodayByDoctor(doctorId);
@@ -38,12 +43,17 @@ namespace Logic
             return await service.CountUpcomingAppointmentsByDoctor(doctorId);
         }
 
+        public async Task<Appointment> GetAppointmentForId(int idUser)
+        {
+            return await service.GetAppointmentForId(idUser);
+        }
+
         public async Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId)
         {
             return await service.GetAppointmentsSummaryLast7Days(doctorId);
         }
 
-        public async Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime date)
+        public async Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
         {
             return await service.ListAppointmentDateByDoctor(doctorId, date);
         }

@@ -1,4 +1,7 @@
-﻿using Web.Models.ViewModels.DoctorVM;
+﻿using System.Text.Json;
+using Web.Models;
+using Web.Models.DTO;
+using Web.Models.ViewModels.DoctorVM;
 using Web.Services.Interface;
 
 namespace Web.Services.Implementation
@@ -10,6 +13,23 @@ namespace Web.Services.Implementation
         public UserService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<ResultResponse<User>> GetProfile(int idUser)
+        {
+            var response = await _httpClient.GetAsync($"user/profile/{idUser}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new ResultResponse<User>($"Error: {response.StatusCode}", false);
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<ResultResponse<User>>(responseContent, options);
+
+            return result ?? new ResultResponse<User>("Error al procesar la respuesta.", false);
         }
 
         public async Task<int> totalDoctors()

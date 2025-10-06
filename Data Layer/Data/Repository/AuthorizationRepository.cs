@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,5 +102,42 @@ namespace Data.Repository
             }
         }
 
+        public async Task<ResultResponse<int>> RegisterPatient(PatientDTO patient)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(stringConexion))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("SP_REGISTER_PATIENTS", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@FIRST_NAME", patient.FirstName);
+                        command.Parameters.AddWithValue("@LAST_NAME_PAT", patient.LastNamePat);
+                        command.Parameters.AddWithValue("@LAST_NAME_MAT", patient.LastNameMat);
+                        command.Parameters.AddWithValue("@DOCUMENT", patient.Document);
+                        command.Parameters.AddWithValue("@BIRTHDATE", patient.BirthDate);
+                        command.Parameters.AddWithValue("@PHONE", patient.Phone);
+                        command.Parameters.AddWithValue("@GENDER", patient.Gender);
+                        command.Parameters.AddWithValue("@EMAIL", patient.Email);
+                        command.Parameters.AddWithValue("@PASSWORD_HASH", patient.Password);
+
+                        var result = await command.ExecuteScalarAsync(); 
+
+                        int newId = Convert.ToInt32(result);
+
+                        return new ResultResponse<int>("Paciente registrado exitosamente", true, newId);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                return new ResultResponse<int>($"{ex.Message}", false);
+            }
+            catch (Exception ex)
+            {
+                return new ResultResponse<int>($"Error general: {ex.Message}", false);
+            }
+        }
     }
 }

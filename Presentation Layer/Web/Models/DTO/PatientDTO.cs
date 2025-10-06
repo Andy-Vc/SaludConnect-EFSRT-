@@ -1,8 +1,8 @@
-﻿namespace Web.Models
+﻿namespace Web.Models.DTO
+
 {
-    public class User
+    public class PatientDTO
     {
-        public int IdUser { get; set; }
         public string FirstName { get; set; }
         public string LastNamePat { get; set; }
         public string LastNameMat { get; set; }
@@ -12,8 +12,5 @@
         public string Gender { get; set; }
         public DateTime BirthDate { get; set; }
         public string Phone { get; set; }
-        public Role Role { get; set; }
-        public bool FlgDelete { get; set; }
-        public List<DoctorSpecialty> DoctorSpecialties { get; set; }
     }
 }

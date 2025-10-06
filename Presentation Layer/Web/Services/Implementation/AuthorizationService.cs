@@ -32,6 +32,19 @@ namespace Web.Services.Implementation
 
             return result ?? new ResultResponse<User>("Error al procesar la respuesta.", false);
         }
+
+        public async Task<ResultResponse<int>> RegisterPatient(PatientDTO patient)
+        {
+            var response = await _httpClient.PostAsJsonAsync("authorization/register", patient);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<ResultResponse<int>>(responseContent, options);
+
+            return result ?? new ResultResponse<int>("Error al procesar la respuesta.", false);
+        }
+
     }
 
 

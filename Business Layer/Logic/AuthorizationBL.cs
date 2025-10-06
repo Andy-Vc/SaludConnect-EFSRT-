@@ -22,5 +22,10 @@ namespace Logic
         {
             return await service.Login(email, password);
         }
+
+        public async Task<ResultResponse<int>> RegisterPatient(PatientDTO patient)
+        {
+            return await service.RegisterPatient(patient);
+        }
     }
 }

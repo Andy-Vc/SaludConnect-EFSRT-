@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
 using Web.Models.DTO;
 using Web.Services.Interface;
@@ -53,7 +54,6 @@ namespace Web.Controllers
             }
         }
 
-
         [HttpPost]
         public IActionResult Logout()
         {
@@ -64,6 +64,22 @@ namespace Web.Controllers
         public IActionResult Register()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(PatientDTO patient)
+        {
+            var result = await authorization.RegisterPatient(patient);
+            if (result.Value)
+            {
+
+                TempData["GoodMessage"] = result.Message;
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message ?? "Credenciales incorrectas.";
+                return View(patient);
+            }
         }
     }
 }

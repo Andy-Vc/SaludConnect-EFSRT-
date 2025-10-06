@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTO;
 using Web.Extensions;
 using Web.Models;
 using Web.Models.ViewModels.DoctorVM;
+using Web.Services.Implementation;
 using Web.Services.Interface;
 
 namespace Web.Controllers
@@ -61,6 +63,31 @@ namespace Web.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAppointmentState(ChangeAppointmentStateRequest request)
+        {
+            try
+            {
+                var result = await appointment.ChangeStateAppointment(request.IdAppointment, request.State);
+
+                if (result.Value)
+                {
+                    TempData["GoodMessage"] = result.Message;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.Message;
+                }
+
+                return RedirectToAction("Dashboard");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error al cambiar el estado: " + ex.Message;
+                return RedirectToAction("Dashboard");
+            }
+        }
         #endregion
         public async Task<IActionResult> Dashboard()
         {
@@ -104,7 +131,6 @@ namespace Web.Controllers
             int doctorId = user.IdUser;
             var listByDoctor = await service.ListServicesForDoctor(doctorId);
 
-            // Filtro por búsqueda (si aplica)
             if (!string.IsNullOrWhiteSpace(search))
             {
                 listByDoctor = listByDoctor
@@ -137,9 +163,67 @@ namespace Web.Controllers
             return View(countInfo);
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile(int page = 1, int pageSize = 6, string searchPatient = null)
         {
-            return View();
+            var userSession = HttpContext.Session.GetObjectFromJson<User>("User");
+            if (userSession == null || userSession.Role?.IdRole != 3)
+            {
+                return RedirectToAction("Login", "UserAuth");
+            }
+
+            int doctorId = userSession.IdUser;
+            var userResult = await user.GetProfile(doctorId);
+
+            if (userResult == null || userResult.Data == null)
+            {
+                return RedirectToAction("Login", "UserAuth");
+            }
+
+            var appointments = await appointment.ListAppointmentDateByDoctor(doctorId, null);
+
+            if (!string.IsNullOrEmpty(searchPatient))
+            {
+                appointments = appointments.Where(a =>
+                    a.Patient != null &&
+                    (
+                        (a.Patient.FirstName ?? "").ToLower().Contains(searchPatient.ToLower()) ||
+                        (a.Patient.LastNamePat ?? "").ToLower().Contains(searchPatient.ToLower()) ||
+                        (a.Patient.LastNameMat ?? "").ToLower().Contains(searchPatient.ToLower()) ||
+                        $"{a.Patient.FirstName} {a.Patient.LastNamePat}".ToLower().Contains(searchPatient.ToLower()) ||
+                        $"{a.Patient.FirstName} {a.Patient.LastNamePat} {a.Patient.LastNameMat}".ToLower().Contains(searchPatient.ToLower())
+                    )
+                ).ToList();
+            }
+
+            var pagedAppointments = appointments
+                .OrderByDescending(a => a.DateAppointment)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            int totalAppointments = appointments.Count;
+            int totalPages = (int)Math.Ceiling((double)totalAppointments / pageSize);
+
+            var model = new ProfileVM
+            {
+                User = userResult.Data,
+                Appointments = pagedAppointments,
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
+            ViewBag.SearchPatient = searchPatient;
+            return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> DescargarComprobante(int id)
+        {
+            var pdfBytes = await appointment.DownloadSingleAppointmentPdf(id);
+
+            if (pdfBytes == null || pdfBytes.Length == 0)
+                return NotFound("No se pudo generar el PDF.");
+
+            return File(pdfBytes, "application/pdf", $"Cita_{id}.pdf");
+        }
+
     }
 }
