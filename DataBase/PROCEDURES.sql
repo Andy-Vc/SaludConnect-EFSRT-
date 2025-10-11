@@ -276,3 +276,19 @@ BEGIN
     END
 END
 GO
+
+
+/*PROCEDURES ADMIN*/
+
+CREATE OR ALTER PROC SP_Total_Appointments
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT COUNT(*) AS TotalAppointments
+    FROM TB_APPOINTMENTS
+    WHERE 1 = 1;
+END;
+GO
+
+EXEC SP_Total_Appointments
