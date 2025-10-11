@@ -40,7 +40,7 @@ namespace Web.Controllers
                     case 1:
                         return RedirectToAction("Index", "Paciente");
                     case 2:
-                        return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Dashboard", "Admin");
                     case 3:
                         return RedirectToAction("Dashboard", "Doctor");
                     default:

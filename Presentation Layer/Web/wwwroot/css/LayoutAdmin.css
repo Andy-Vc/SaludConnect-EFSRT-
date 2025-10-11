@@ -1,0 +1,124 @@
+﻿body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--color-gray-900);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding-top: 60px;
+    z-index: 1030;
+    transition: all 0.3s;
+}
+
+    .sidebar .nav-link {
+        color: #fff;
+        padding: 12px 20px;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-gray-50) !important;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+.topbar {
+    height: 60px;
+    background-color: var(--color-gray-900);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+}
+
+    .topbar .menu-toggle {
+        display: none;
+    }
+
+.main-content {
+    margin-left: 250px;
+    padding-top: 70px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .topbar .menu-toggle {
+        display: inline-block;
+    }
+}
+
+.alert-info {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+}
+.card.bg-primary-subtle, .card.bg-info-subtle, .card.bg-warning-subtle, .card.bg-success-subtle {
+    transition: transform 0.2s ease-in-out;
+}
+
+    .card.bg-primary-subtle:hover, .card.bg-info-subtle:hover, .card.bg-warning-subtle:hover, .card.bg-success-subtle:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+
+.chart-grid canvas {
+    max-width: 100%;
+    height: 300px !important;
+}
+
+.card-body h6 {
+    letter-spacing: 1px;
+}
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+}
+.pagination .page-item .page-link {
+    border-radius: 50rem; 
+    margin: 0 4px; 
+    border: none; 
+    color: #6c757d; 
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--color-primary-dark);
+    color: var(--color-gray-50);
+}
+
+.pagination .page-item:not(.active) .page-link:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-gray-50) !important;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: transparent;
+    color: #adb5bd;
+    cursor: not-allowed;
+}

@@ -1,4 +1,8 @@
+using Data.Interface;
+using Data.Repository;
 using Logic;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,9 @@ builder.Services.AddSwaggerGen();
 // Add inyection dependencies
 
 builder.Services.AddDependencies();
+
+builder.Services.AddScoped<IAdmin, AdminService>();
+
 
 var app = builder.Build();
 

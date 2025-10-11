@@ -1,0 +1,58 @@
+﻿@model Web.Models.ViewModels.AdminVM.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container-fluid py-4">
+    <h2 class="mb-1">Panel de Control</h2>
+    <p class="text-muted mb-4">
+        Bienvenido, @Model.MensajeBienvenida Aquí puedes ver un resumen de tus métricas principales.
+    </p>
+
+    <h4 class="mb-3">Métricas Generales</h4>
+    <p class="text-muted">Resumen del estado actual de tus citas y pacientes.</p>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100 bg-primary-subtle text-primary">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase fw-bold mb-0">Total de Citas</h6>
+                        <h3 class="fw-bolder mt-2">@Model.TotalAppointments</h3>
+                    </div>
+                    <i class="bi bi-calendar-check h2 text-primary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100 bg-success-subtle text-success">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase fw-bold mb-0">Total de Pacientes</h6>
+                        <h3 class="fw-bolder mt-2">@Model.TotalPacientes</h3>
+                    </div>
+                    <i class="bi bi-people h2 text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Información del Usuario</h4>
+    <div class="card shadow-sm border-0 p-4 bg-light">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+            <div>
+                <h5 class="fw-bold mb-1">@Model.FullName</h5>
+                <p class="mb-0 text-muted">Rol: @Model.Rol</p>
+            </div>
+            <div class="mt-3 mt-md-0">
+                <a asp-controller="UserAuth" asp-action="Logout" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

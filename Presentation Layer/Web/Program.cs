@@ -33,6 +33,7 @@ builder.Services.AddApiHttpClient<IAuthorization, AuthorizationService>(builder.
 builder.Services.AddApiHttpClient<IService, ServiceService>(builder.Configuration);
 builder.Services.AddApiHttpClient<IUser, UserService>(builder.Configuration);
 builder.Services.AddApiHttpClient<ISpecialty, SpecialtyService>(builder.Configuration);
+builder.Services.AddApiHttpClient<IAdmin, AdminService>(builder.Configuration);
 
 var app = builder.Build();
 
