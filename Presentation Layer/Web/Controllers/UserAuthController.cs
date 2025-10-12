@@ -38,7 +38,7 @@ namespace Web.Controllers
                 switch (result.Data.Role.IdRole)
                 {
                     case 1:
-                        return RedirectToAction("Index", "Paciente");
+                        return RedirectToAction("Index", "Patient");
                     case 2:
                         return RedirectToAction("Dashboard", "Admin");
                     case 3:
