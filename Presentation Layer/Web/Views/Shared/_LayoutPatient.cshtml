@@ -1,0 +1,292 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - MediCitas</title>
+
+    <link rel="stylesheet" href="~/css/main.css">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://medicitas-patient-portal-vjucr07.public.builtwithrocket.new/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap">
+    <script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fmedicitas3242back.builtwithrocket.new&amp;_be=https%3A%2F%2Fapplication.rocket.new&amp;_v=0.1.8">
+    </script>
+</head>
+<body class="bg-background min-h-screen">
+    <nav class="bg-surface shadow-md border-b border-secondary-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-semibold text-text-primary">MediCitas</h1>
+                        <p class="text-xs text-text-secondary">Portal del Paciente</p>
+                    </div>
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                           asp-controller="Patient"
+                           asp-action="Index">
+                            Portal Client
+                        </a>
+                       
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                           asp-controller="Patient"
+                           asp-action="Booking">
+                            Booking
+                        </a>
+
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                           asp-controller="Patient"
+                           asp-action="Record">
+                            Record
+                        </a>
+
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                           asp-controller="Patient"
+                           asp-action="Help">
+                            Help
+                        </a>
+                        
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                           asp-controller="Patient"
+                           asp-action="Profile">
+                            My Profile
+                        </a>
+
+                        <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors relative"
+                           asp-controller="Patient"
+                           asp-action="Notifications">
+                            Notifications
+                            <span class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </a>
+                       
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button type="button" class="text-text-secondary hover:text-text-primary p-2 rounded-md" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex items-center">
+                    <div class="ml-4 flex items-center">
+                        <img class="h-8 w-8 rounded-full object-cover"
+                             src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop"
+                             alt="Perfil">
+                        <span class="ml-2 text-sm font-medium text-text-primary">María García</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="md:hidden hidden bg-surface border-t border-secondary-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Index">
+                    Index
+                </a>
+
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Index">
+                    Reserva
+                </a>
+
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Record">
+                    Historial
+                </a>
+
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Help">
+                    Ayuda
+                </a>
+
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Profile">
+                    Mi Perfil
+                </a>
+               
+                <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
+                   asp-controller="Patient"
+                   asp-action="Notifications">
+                    Notificaciones (3)
+                </a>
+               
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-surface border-t border-secondary-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-primary mr-3" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-text-primary">MediCitas</h3>
+                    </div>
+                    <p class="text-text-secondary text-sm mb-4">
+                        Tu salud es nuestra prioridad. Gestiona tus citas médicas de forma fácil y segura con nuestro portal de pacientes.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium text-text-primary mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>
+                            <a class="text-text-secondary hover:text-primary transition-colors"
+                               asp-controller="Patient"
+                               asp-action="Index">
+                                Index
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="text-text-secondary hover:text-primary transition-colors"
+                               asp-controller="Patient"
+                               asp-action="Index">
+                                Reserva
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a class="text-text-secondary hover:text-primary transition-colors"
+                               asp-controller="Appointments"
+                               asp-action="History">
+                                Historial 
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="text-text-secondary hover:text-primary transition-colors"
+                               asp-controller="Help"
+                               asp-action="Index">
+                                Centro de Ayuda
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="text-text-secondary hover:text-primary transition-colors"
+                               asp-controller="Patient"
+                               asp-action="Profile">
+                                Mi Perfil
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-text-primary mb-4">Contacto</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary">
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-2"></i>
+                            +34 900 123 456
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            info@medicitas.es
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            Madrid, España
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-secondary-200 mt-8 pt-8 text-center">
+                <p class="text-text-secondary text-sm">© 2025 MediCitas. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FAB Button -->
+    <button class="fab"
+            onclick="window.location.href='@Url.Action("Index", "Help")'"
+            title="Centro de Ayuda">
+        <i class="fas fa-question text-lg"></i>
+    </button>
+
+    <!-- SCRIPTS -->
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = event.target.closest('button');
+
+            if (!menuButton && !mobileMenu.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add loading states for appointment cards
+        document.querySelectorAll('.medical-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.opacity = '0.7';
+                setTimeout(() => {
+                    this.style.opacity = '1';
+                }, 200);
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

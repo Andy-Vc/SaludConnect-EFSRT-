@@ -1,0 +1,582 @@
+﻿
+@{
+    ViewData["Title"] = "BookingDate";
+    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+}
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-component-id="1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="main" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22main%22%2C%22className%22%3A%22max-w-7xl%20mx-auto%20px-4%20sm%3Apx-6%20lg%3Apx-8%20py-8%22%7D">
+    <!-- Breadcrumb Navigation -->
+    <nav class="flex mb-8" aria-label="Breadcrumb" data-component-id="1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="nav" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22nav%22%2C%22className%22%3A%22flex%20mb-8%22%7D">
+        <ol class="flex items-center space-x-4" data-component-id="1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="ol" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22ol%22%2C%22className%22%3A%22flex%20items-center%20space-x-4%22%7D">
+            <li data-component-id="1-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="li" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22li%22%7D">
+                <div data-component-id="1-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%7D">
+                    <a href="dashboard.html" class="text-text-secondary hover:text-primary transition-smooth" data-component-id="1-0-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="a" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22a%22%2C%22className%22%3A%22text-text-secondary%20hover%3Atext-primary%20transition-smooth%22%2C%22href%22%3A%22dashboard.html%22%7D">
+                        <svg class="flex-shrink-0 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" data-component-id="1-0-0-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22flex-shrink-0%20h-5%20w-5%22%7D">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        <span class="sr-only" data-component-id="1-0-0-0-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22sr-only%22%2C%22textContent%22%3A%22Inicio%22%7D">Inicio</span>
+                    </a>
+                </div>
+            </li>
+            <li data-component-id="1-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="li" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22li%22%7D">
+                <div class="flex items-center" data-component-id="1-0-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor" data-component-id="1-0-0-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22flex-shrink-0%20h-5%20w-5%20text-text-secondary%22%7D">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <a class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth" href="/pages/book_appointment_specialty" data-component-id="1-0-0-1-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="a" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22a%22%2C%22className%22%3A%22ml-4%20text-sm%20font-medium%20text-text-secondary%20hover%3Atext-primary%20transition-smooth%22%2C%22href%22%3A%22%2Fpages%2Fbook_appointment_specialty%22%2C%22textContent%22%3A%22Especialidad%22%7D">Especialidad</a>
+                </div>
+            </li>
+            <li data-component-id="1-0-0-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="li" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22li%22%7D">
+                <div class="flex items-center" data-component-id="1-0-0-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor" data-component-id="1-0-0-2-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22flex-shrink-0%20h-5%20w-5%20text-text-secondary%22%7D">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <a class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth" href="/pages/book_appointment_doctor" data-component-id="1-0-0-2-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="a" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22a%22%2C%22className%22%3A%22ml-4%20text-sm%20font-medium%20text-text-secondary%20hover%3Atext-primary%20transition-smooth%22%2C%22href%22%3A%22%2Fpages%2Fbook_appointment_doctor%22%2C%22textContent%22%3A%22Doctor%22%7D">Doctor</a>
+                </div>
+            </li>
+            <li data-component-id="1-0-0-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="li" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22li%22%7D">
+                <div class="flex items-center" data-component-id="1-0-0-3-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor" data-component-id="1-0-0-3-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22flex-shrink-0%20h-5%20w-5%20text-text-secondary%22%7D">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-4 text-sm font-medium text-primary" data-component-id="1-0-0-3-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22ml-4%20text-sm%20font-medium%20text-primary%22%2C%22textContent%22%3A%22Fecha%20y%20Hora%22%7D">Fecha y Hora</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Progress Indicator -->
+    <div class="mb-8" data-component-id="1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22mb-8%22%7D">
+        <div class="flex items-center justify-center" data-component-id="1-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20justify-center%22%7D">
+            <div class="flex items-center space-x-4" data-component-id="1-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-4%22%7D">
+                <!-- Step 1: Specialty Selection (Completed) -->
+                <div class="flex items-center" data-component-id="1-1-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <div class="progress-step completed" data-component-id="1-1-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22progress-step%20completed%22%7D">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" data-component-id="1-1-0-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-4%20h-4%22%7D">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-success" data-component-id="1-1-0-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22ml-2%20text-sm%20font-medium%20text-success%22%2C%22textContent%22%3A%22Especialidad%22%7D">Especialidad</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-success" data-component-id="1-1-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-16%20h-0.5%20bg-success%22%7D"></div>
+
+                <!-- Step 2: Doctor Selection (Completed) -->
+                <div class="flex items-center" data-component-id="1-1-0-0-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <div class="progress-step completed" data-component-id="1-1-0-0-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22progress-step%20completed%22%7D">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" data-component-id="1-1-0-0-2-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-4%20h-4%22%7D">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-success" data-component-id="1-1-0-0-2-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22ml-2%20text-sm%20font-medium%20text-success%22%2C%22textContent%22%3A%22Doctor%22%7D">Doctor</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-primary" data-component-id="1-1-0-0-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-16%20h-0.5%20bg-primary%22%7D"></div>
+
+                <!-- Step 3: Calendar (Active) -->
+                <div class="flex items-center" data-component-id="1-1-0-0-4" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <div class="progress-step active" data-component-id="1-1-0-0-4-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22progress-step%20active%22%7D">
+                        <span class="text-sm font-medium" data-component-id="1-1-0-0-4-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22text-sm%20font-medium%22%2C%22textContent%22%3A%223%22%7D">3</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary" data-component-id="1-1-0-0-4-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22ml-2%20text-sm%20font-medium%20text-primary%22%2C%22textContent%22%3A%22Fecha%22%7D">Fecha</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-secondary-200" data-component-id="1-1-0-0-5" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-16%20h-0.5%20bg-secondary-200%22%7D"></div>
+
+                <!-- Step 4: Confirmation -->
+                <div class="flex items-center" data-component-id="1-1-0-0-6" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%22%7D">
+                    <div class="progress-step" data-component-id="1-1-0-0-6-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22progress-step%22%7D">
+                        <span class="text-sm font-medium text-secondary-400" data-component-id="1-1-0-0-6-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22text-sm%20font-medium%20text-secondary-400%22%2C%22textContent%22%3A%224%22%7D">4</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-secondary-400" data-component-id="1-1-0-0-6-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22ml-2%20text-sm%20font-medium%20text-secondary-400%22%2C%22textContent%22%3A%22Confirmar%22%7D">Confirmar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="text-center mb-8" data-component-id="1-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20mb-8%22%7D">
+        <h1 class="text-3xl font-semibold text-text-primary mb-2" data-component-id="1-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="h1" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22h1%22%2C%22className%22%3A%22text-3xl%20font-semibold%20text-text-primary%20mb-2%22%2C%22textContent%22%3A%22Seleccionar%20Fecha%20y%20Hora%22%7D">Seleccionar Fecha y Hora</h1>
+        <p class="text-text-secondary max-w-2xl mx-auto" data-component-id="1-2-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22text-text-secondary%20max-w-2xl%20mx-auto%22%2C%22textContent%22%3A%22Elige%20la%20fecha%20y%20hora%20que%20mejor%20se%20adapte%20a%20tu%20horario.%20Los%20horarios%20disponibles%20se%20muestran%20en%20tiempo%20real.%22%7D">Elige la fecha y hora que mejor se adapte a tu horario. Los horarios disponibles se muestran en tiempo real.</p>
+    </div>
+
+    <!-- Booking Summary Context -->
+    <div class="mb-8" data-component-id="1-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22mb-8%22%7D">
+        <div class="max-w-4xl mx-auto" data-component-id="1-3-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22max-w-4xl%20mx-auto%22%7D">
+            <div class="card" data-component-id="1-3-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22card%22%7D">
+                <div class="flex items-center justify-between mb-4" data-component-id="1-3-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20justify-between%20mb-4%22%7D">
+                    <h2 class="text-lg font-semibold text-text-primary" data-component-id="1-3-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="h2" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22h2%22%2C%22className%22%3A%22text-lg%20font-semibold%20text-text-primary%22%2C%22textContent%22%3A%22Resumen%20de%20la%20Cita%22%7D">Resumen de la Cita</h2>
+                    <button onclick="goBack()" class="text-primary hover:text-primary-700 transition-smooth" data-component-id="1-3-0-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22text-primary%20hover%3Atext-primary-700%20transition-smooth%22%7D">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-3-0-0-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-5%20h-5%22%7D">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-component-id="1-3-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22grid%20grid-cols-1%20md%3Agrid-cols-2%20gap-6%22%7D">
+                    <div class="flex items-center space-x-4" data-component-id="1-3-0-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-4%22%7D">
+                        <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center" data-component-id="1-3-0-0-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-12%20h-12%20bg-blue-50%20rounded-lg%20flex%20items-center%20justify-center%22%7D">
+                            <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24" data-component-id="1-3-0-0-1-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-6%20h-6%20text-blue-500%22%7D">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            </svg>
+                        </div>
+                        <div data-component-id="1-3-0-0-1-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%7D">
+                            <p class="text-sm text-text-secondary" data-component-id="1-3-0-0-1-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22Especialidad%22%7D">Especialidad</p>
+                            <p class="font-semibold text-text-primary" id="selected-specialty" data-component-id="1-3-0-0-1-0-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22font-semibold%20text-text-primary%22%2C%22id%22%3A%22selected-specialty%22%2C%22textContent%22%3A%22Cardiolog%C3%ADa%22%7D">Cardiología</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4" data-component-id="1-3-0-0-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-4%22%7D">
+                        <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center" data-component-id="1-3-0-0-1-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-12%20h-12%20bg-green-50%20rounded-lg%20flex%20items-center%20justify-center%22%7D">
+                            <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 24 24" data-component-id="1-3-0-0-1-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-6%20h-6%20text-green-500%22%7D">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                            </svg>
+                        </div>
+                        <div data-component-id="1-3-0-0-1-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%7D">
+                            <p class="text-sm text-text-secondary" data-component-id="1-3-0-0-1-1-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22Doctor%22%7D">Doctor</p>
+                            <p class="font-semibold text-text-primary" id="selected-doctor" data-component-id="1-3-0-0-1-1-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22font-semibold%20text-text-primary%22%2C%22id%22%3A%22selected-doctor%22%2C%22textContent%22%3A%22Dr.%20Carlos%20Mendoza%22%7D">Dr. Carlos Mendoza</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar and Time Selection -->
+    <div class="max-w-6xl mx-auto" data-component-id="1-4" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22max-w-6xl%20mx-auto%22%7D">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" data-component-id="1-4-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22grid%20grid-cols-1%20lg%3Agrid-cols-3%20gap-8%22%7D">
+            <!-- Calendar Section -->
+            <div class="lg:col-span-2" data-component-id="1-4-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22lg%3Acol-span-2%22%7D">
+                <div class="card" data-component-id="1-4-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22card%22%7D">
+                    <div class="flex items-center justify-between mb-6" data-component-id="1-4-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20justify-between%20mb-6%22%7D">
+                        <h3 class="text-xl font-semibold text-text-primary" data-component-id="1-4-0-0-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="h3" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22h3%22%2C%22className%22%3A%22text-xl%20font-semibold%20text-text-primary%22%2C%22textContent%22%3A%22Seleccionar%20Fecha%22%7D">Seleccionar Fecha</h3>
+                        <div class="flex items-center space-x-2" data-component-id="1-4-0-0-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-2%22%7D">
+                            <button onclick="previousMonth()" class="p-2 text-text-secondary hover:text-primary transition-smooth" data-component-id="1-4-0-0-0-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22p-2%20text-text-secondary%20hover%3Atext-primary%20transition-smooth%22%7D">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-4-0-0-0-0-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-5%20h-5%22%7D">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <h4 class="text-lg font-medium text-text-primary" id="current-month" data-component-id="1-4-0-0-0-0-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="h4" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22h4%22%2C%22className%22%3A%22text-lg%20font-medium%20text-text-primary%22%2C%22id%22%3A%22current-month%22%2C%22textContent%22%3A%22Octubre%202025%22%7D">Octubre 2025</h4>
+                            <button onclick="nextMonth()" class="p-2 text-text-secondary hover:text-primary transition-smooth" data-component-id="1-4-0-0-0-0-1-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22p-2%20text-text-secondary%20hover%3Atext-primary%20transition-smooth%22%7D">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-4-0-0-0-0-1-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-5%20h-5%22%7D">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1 mb-4" data-component-id="1-4-0-0-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22grid%20grid-cols-7%20gap-1%20mb-4%22%7D">
+                        <!-- Day Headers -->
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Lun%22%7D">Lun</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Mar%22%7D">Mar</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Mi%C3%A9%22%7D">Mié</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Jue%22%7D">Jue</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-4" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Vie%22%7D">Vie</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-5" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22S%C3%A1b%22%7D">Sáb</div>
+                        <div class="text-center text-sm font-medium text-text-secondary py-2" data-component-id="1-4-0-0-0-1-6" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20text-sm%20font-medium%20text-text-secondary%20py-2%22%2C%22textContent%22%3A%22Dom%22%7D">Dom</div>
+                    </div>
+
+                    <!-- Calendar Days -->
+                    <div class="grid grid-cols-7 gap-1" id="calendar-grid" data-component-id="1-4-0-0-0-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22grid%20grid-cols-7%20gap-1%22%2C%22id%22%3A%22calendar-grid%22%7D"><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%2229%22%7D">29</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%2230%22%7D">30</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%221%22%7D">1</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%222%22%7D">2</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-4" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%223%22%7D">3</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-5" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%224%22%7D">4</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-6" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%225%22%7D">5</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-7" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%226%22%7D">6</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-8" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%227%22%7D">7</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-9" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%228%22%7D">8</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-400 cursor-not-allowed bg-secondary-50" data-component-id="1-4-0-0-0-2-10" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-400%20cursor-not-allowed%20bg-secondary-50%22%2C%22textContent%22%3A%229%22%7D">9</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale ring-2 ring-primary ring-opacity-50" data-component-id="1-4-0-0-0-2-11" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%20ring-2%20ring-primary%20ring-opacity-50%22%2C%22textContent%22%3A%2210%22%7D">10</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-12" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2211%22%7D">11</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-13" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2212%22%7D">12</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale" data-component-id="1-4-0-0-0-2-14" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%22%2C%22textContent%22%3A%2213%22%7D">13</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale" data-component-id="1-4-0-0-0-2-15" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%22%2C%22textContent%22%3A%2214%22%7D">14</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale" data-component-id="1-4-0-0-0-2-16" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%22%2C%22textContent%22%3A%2215%22%7D">15</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale" data-component-id="1-4-0-0-0-2-17" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%22%2C%22textContent%22%3A%2216%22%7D">16</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale" data-component-id="1-4-0-0-0-2-18" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-accent-50%20border%20border-accent%20text-accent-600%20hover%3Abg-accent-100%20active-scale%22%2C%22textContent%22%3A%2217%22%7D">17</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-19" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2218%22%7D">18</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-20" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2219%22%7D">19</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-21" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2220%22%7D">20</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-22" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2221%22%7D">21</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-23" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2222%22%7D">22</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-24" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2223%22%7D">23</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-25" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2224%22%7D">24</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-26" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2225%22%7D">25</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-27" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2226%22%7D">26</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-28" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2227%22%7D">27</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-29" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2228%22%7D">28</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-30" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2229%22%7D">29</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-31" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2230%22%7D">30</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth bg-secondary-100 text-secondary-400 cursor-not-allowed" data-component-id="1-4-0-0-0-2-32" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20bg-secondary-100%20text-secondary-400%20cursor-not-allowed%22%2C%22textContent%22%3A%2231%22%7D">31</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-33" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%221%22%7D">1</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-34" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%222%22%7D">2</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-35" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%223%22%7D">3</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-36" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%224%22%7D">4</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-37" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%225%22%7D">5</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-38" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%226%22%7D">6</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-39" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%227%22%7D">7</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-40" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%228%22%7D">8</div><div class="calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth text-secondary-300 cursor-not-allowed" data-component-id="1-4-0-0-0-2-41" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22calendar-day%20h-12%20flex%20items-center%20justify-center%20text-sm%20cursor-pointer%20rounded-lg%20transition-smooth%20text-secondary-300%20cursor-not-allowed%22%2C%22textContent%22%3A%229%22%7D">9</div></div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-6 pt-6 border-t border-secondary-200" data-component-id="1-4-0-0-0-3" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20justify-center%20space-x-6%20mt-6%20pt-6%20border-t%20border-secondary-200%22%7D">
+                        <div class="flex items-center space-x-2" data-component-id="1-4-0-0-0-3-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-2%22%7D">
+                            <div class="w-4 h-4 bg-primary rounded" data-component-id="1-4-0-0-0-3-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-4%20h-4%20bg-primary%20rounded%22%7D"></div>
+                            <span class="text-sm text-text-secondary" data-component-id="1-4-0-0-0-3-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22Seleccionado%22%7D">Seleccionado</span>
+                        </div>
+                        <div class="flex items-center space-x-2" data-component-id="1-4-0-0-0-3-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-2%22%7D">
+                            <div class="w-4 h-4 bg-accent-50 border border-accent rounded" data-component-id="1-4-0-0-0-3-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-4%20h-4%20bg-accent-50%20border%20border-accent%20rounded%22%7D"></div>
+                            <span class="text-sm text-text-secondary" data-component-id="1-4-0-0-0-3-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22Disponible%22%7D">Disponible</span>
+                        </div>
+                        <div class="flex items-center space-x-2" data-component-id="1-4-0-0-0-3-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20space-x-2%22%7D">
+                            <div class="w-4 h-4 bg-secondary-100 rounded" data-component-id="1-4-0-0-0-3-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22w-4%20h-4%20bg-secondary-100%20rounded%22%7D"></div>
+                            <span class="text-sm text-text-secondary" data-component-id="1-4-0-0-0-3-2-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="span" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22span%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22No%20disponible%22%7D">No disponible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Slots Section -->
+            <div class="lg:col-span-1" data-component-id="1-4-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22lg%3Acol-span-1%22%7D">
+                <div class="card" data-component-id="1-4-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22card%22%7D">
+                    <h3 class="text-xl font-semibold text-text-primary mb-6" data-component-id="1-4-0-1-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="h3" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22h3%22%2C%22className%22%3A%22text-xl%20font-semibold%20text-text-primary%20mb-6%22%2C%22textContent%22%3A%22Horarios%20Disponibles%22%7D">Horarios Disponibles</h3>
+
+                    <!-- Selected Date Display -->
+                    <div class="mb-6 p-4 bg-primary-50 rounded-lg" data-component-id="1-4-0-1-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22mb-6%20p-4%20bg-primary-50%20rounded-lg%22%7D">
+                        <p class="text-sm text-text-secondary" data-component-id="1-4-0-1-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22text-sm%20text-text-secondary%22%2C%22textContent%22%3A%22Fecha%20seleccionada%22%7D">Fecha seleccionada</p>
+                        <p class="font-semibold text-primary" id="selected-date-display" data-component-id="1-4-0-1-0-1-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22font-semibold%20text-primary%22%2C%22id%22%3A%22selected-date-display%22%2C%22textContent%22%3A%22Selecciona%20una%20fecha%22%7D">Selecciona una fecha</p>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div id="time-slots-container" data-component-id="1-4-0-1-0-2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22id%22%3A%22time-slots-container%22%7D">
+                        <div class="text-center py-8" data-component-id="1-4-0-1-0-2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22text-center%20py-8%22%7D">
+                            <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-4-0-1-0-2-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22mx-auto%20h-12%20w-12%20text-text-secondary%20mb-4%22%7D">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-text-secondary" data-component-id="1-4-0-1-0-2-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="p" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22p%22%2C%22className%22%3A%22text-text-secondary%22%2C%22textContent%22%3A%22Selecciona%20una%20fecha%20para%20ver%20los%20horarios%20disponibles%22%7D">Selecciona una fecha para ver los horarios disponibles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="max-w-6xl mx-auto mt-8" data-component-id="1-5" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22max-w-6xl%20mx-auto%20mt-8%22%7D">
+        <div class="flex items-center justify-between" data-component-id="1-5-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22flex%20items-center%20justify-between%22%7D">
+            <button onclick="goBack()" class="btn-secondary" data-component-id="1-5-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22btn-secondary%22%2C%22textContent%22%3A%22Volver%22%7D">
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-5-0-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-5%20h-5%20mr-2%22%7D">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Volver
+            </button>
+            <button id="continue-btn" onclick="proceedToConfirmation()" class="btn-primary opacity-50 cursor-not-allowed" disabled="" data-component-id="1-5-0-1" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22btn-primary%20opacity-50%20cursor-not-allowed%22%2C%22id%22%3A%22continue-btn%22%2C%22textContent%22%3A%22Continuar%22%7D">
+                Continuar
+                <svg class="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="1-5-0-1-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-5%20h-5%20ml-2%22%7D">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</main>
+
+<!-- Floating Chat Widget -->
+<div class="fixed bottom-6 right-6 z-50" data-component-id="2" data-component-path="/pages/book_appointment_calendar.html" data-component-name="div" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22div%22%2C%22className%22%3A%22fixed%20bottom-6%20right-6%20z-50%22%7D">
+    <button class="chat-widget w-14 h-14 flex items-center justify-center" onclick="toggleChat()" data-component-id="2-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="button" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22button%22%2C%22className%22%3A%22chat-widget%20w-14%20h-14%20flex%20items-center%20justify-center%22%7D">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-component-id="2-0-0" data-component-path="/pages/book_appointment_calendar.html" data-component-name="svg" data-component-file="book_appointment_calendar.html" data-component-content="%7B%22elementName%22%3A%22svg%22%2C%22className%22%3A%22w-6%20h-6%22%7D">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </button>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Calendar state
+    let currentDate = new Date();
+    let selectedDate = null;
+    let selectedTime = null;
+
+    // Mock availability data
+    const availabilityData = {
+        '2025-10-06': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
+        '2025-10-07': ['09:00', '10:30', '11:30', '14:30', '15:30'],
+        '2025-10-08': ['08:30', '09:30', '10:30', '14:00', '15:00', '16:30'],
+        '2025-10-09': ['09:00', '10:00', '11:00', '14:00', '15:00'],
+        '2025-10-10': ['08:30', '09:30', '11:00', '14:30', '15:30', '16:00'],
+        '2025-10-13': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
+        '2025-10-14': ['09:30', '10:30', '11:30', '14:30', '15:30'],
+        '2025-10-15': ['08:30', '09:00', '10:00', '14:00', '15:00', '16:30'],
+        '2025-10-16': ['09:00', '10:30', '11:30', '14:30', '15:30'],
+        '2025-10-17': ['08:30', '09:30', '10:30', '14:00', '15:00', '16:00']
+    };
+
+    // Spanish month names
+    const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    // Initialize calendar
+    function initializeCalendar() {
+        updateCalendarHeader();
+        generateCalendar();
+        loadBookingContext();
+    }
+
+    // Update calendar header
+    function updateCalendarHeader() {
+        const monthYear = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        document.getElementById('current-month').textContent = monthYear;
+    }
+
+    // Generate calendar grid
+    function generateCalendar() {
+        const calendarGrid = document.getElementById('calendar-grid');
+        calendarGrid.innerHTML = '';
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        // First day of the month
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        // Start from Monday (1) instead of Sunday (0)
+        const startDate = new Date(firstDay);
+        const dayOfWeek = firstDay.getDay();
+        const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+        startDate.setDate(firstDay.getDate() - daysToSubtract);
+
+        // Generate 42 days (6 weeks)
+        for (let i = 0; i < 42; i++) {
+            const cellDate = new Date(startDate);
+            cellDate.setDate(startDate.getDate() + i);
+
+            const dayElement = createDayElement(cellDate, month);
+            calendarGrid.appendChild(dayElement);
+        }
+    }
+
+    // Create individual day element
+    function createDayElement(date, currentMonth) {
+        const dayElement = document.createElement('div');
+        const dateStr = formatDateForAPI(date);
+        const isCurrentMonth = date.getMonth() === currentMonth;
+        const isToday = isDateToday(date);
+        const isPast = date < new Date().setHours(0, 0, 0, 0);
+        const hasAvailability = availabilityData[dateStr] && availabilityData[dateStr].length > 0;
+        const isSelected = selectedDate && formatDateForAPI(selectedDate) === dateStr;
+
+        dayElement.className = 'calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth';
+        dayElement.textContent = date.getDate();
+
+        // Apply styling based on conditions
+        if (!isCurrentMonth) {
+            dayElement.className += ' text-secondary-300 cursor-not-allowed';
+        } else if (isPast) {
+            dayElement.className += ' text-secondary-400 cursor-not-allowed bg-secondary-50';
+        } else if (isSelected) {
+            dayElement.className += ' bg-primary text-white font-semibold';
+        } else if (hasAvailability) {
+            dayElement.className += ' bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale';
+        } else {
+            dayElement.className += ' bg-secondary-100 text-secondary-400 cursor-not-allowed';
+        }
+
+        if (isToday && !isSelected) {
+            dayElement.className += ' ring-2 ring-primary ring-opacity-50';
+        }
+
+        // Add click handler for available dates
+        if (isCurrentMonth && !isPast && hasAvailability) {
+            dayElement.addEventListener('click', () => selectDate(date));
+        }
+
+        return dayElement;
+    }
+
+    // Select date
+    function selectDate(date) {
+        selectedDate = date;
+        selectedTime = null;
+        generateCalendar();
+        updateSelectedDateDisplay();
+        generateTimeSlots();
+        updateContinueButton();
+    }
+
+    // Update selected date display
+    function updateSelectedDateDisplay() {
+        const display = document.getElementById('selected-date-display');
+        if (selectedDate) {
+            const formattedDate = formatDateSpanish(selectedDate);
+            display.textContent = formattedDate;
+        } else {
+            display.textContent = 'Selecciona una fecha';
+        }
+    }
+
+    // Generate time slots
+    function generateTimeSlots() {
+        const container = document.getElementById('time-slots-container');
+
+        if (!selectedDate) {
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-text-secondary">Selecciona una fecha para ver los horarios disponibles</p>
+                </div>
+            `;
+            return;
+        }
+
+        const dateStr = formatDateForAPI(selectedDate);
+        const timeSlots = availabilityData[dateStr] || [];
+
+        if (timeSlots.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-text-secondary">No hay horarios disponibles para esta fecha</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Group time slots by period
+        const morningSlots = timeSlots.filter(time => {
+            const hour = parseInt(time.split(':')[0]);
+            return hour < 12;
+        });
+
+        const afternoonSlots = timeSlots.filter(time => {
+            const hour = parseInt(time.split(':')[0]);
+            return hour >= 12 && hour < 18;
+        });
+
+        const eveningSlots = timeSlots.filter(time => {
+            const hour = parseInt(time.split(':')[0]);
+            return hour >= 18;
+        });
+
+        let slotsHTML = '';
+
+        if (morningSlots.length > 0) {
+            slotsHTML += `
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Mañana
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        ${morningSlots.map(time => createTimeSlotHTML(time)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (afternoonSlots.length > 0) {
+            slotsHTML += `
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Tarde
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        ${afternoonSlots.map(time => createTimeSlotHTML(time)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (eveningSlots.length > 0) {
+            slotsHTML += `
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Noche
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        ${eveningSlots.map(time => createTimeSlotHTML(time)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        container.innerHTML = slotsHTML;
+
+        // Add click handlers to time slots
+        container.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', () => selectTime(slot.dataset.time));
+        });
+    }
+
+    // Create time slot HTML
+    function createTimeSlotHTML(time) {
+        const isSelected = selectedTime === time;
+        const baseClass = 'time-slot';
+        const selectedClass = isSelected ? ' selected' : '';
+
+        return `
+            <button class="${baseClass}${selectedClass}" data-time="${time}">
+                ${time}
+            </button>
+        `;
+    }
+
+    // Select time
+    function selectTime(time) {
+        selectedTime = time;
+        generateTimeSlots();
+        updateContinueButton();
+    }
+
+    // Update continue button state
+    function updateContinueButton() {
+        const continueBtn = document.getElementById('continue-btn');
+        if (selectedDate && selectedTime) {
+            continueBtn.disabled = false;
+            continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            continueBtn.disabled = true;
+            continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    // Navigation functions
+    function previousMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        updateCalendarHeader();
+        generateCalendar();
+    }
+
+    function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        updateCalendarHeader();
+        generateCalendar();
+    }
+
+    function goBack() {
+        window.location.href = 'book_appointment_doctor.html';
+    }
+
+    function proceedToConfirmation() {
+        if (selectedDate && selectedTime) {
+            // Store selection in localStorage
+            localStorage.setItem('selectedDate', formatDateForAPI(selectedDate));
+            localStorage.setItem('selectedTime', selectedTime);
+            localStorage.setItem('selectedDateFormatted', formatDateSpanish(selectedDate));
+
+            // Navigate to confirmation
+            window.location.href = 'book_appointment_confirm.html';
+        }
+    }
+
+    // Utility functions
+    function formatDateForAPI(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function formatDateSpanish(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    function isDateToday(date) {
+        const today = new Date();
+        return date.toDateString() === today.toDateString();
+    }
+
+    function loadBookingContext() {
+        // Load previous selections from localStorage
+        const specialty = localStorage.getItem('selectedSpecialtyName') || 'Cardiología';
+        const doctor = localStorage.getItem('selectedDoctorName') || 'Dr. Carlos Mendoza';
+
+        document.getElementById('selected-specialty').textContent = specialty;
+        document.getElementById('selected-doctor').textContent = doctor;
+    }
+
+    // Chat widget toggle
+    function toggleChat() {
+        alert('Chat de ayuda - Funcionalidad próximamente disponible');
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeCalendar);
+</script>
