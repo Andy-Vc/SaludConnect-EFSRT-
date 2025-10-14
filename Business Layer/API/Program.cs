@@ -19,7 +19,6 @@ builder.Services.AddDependencies();
 
 builder.Services.AddScoped<IAdmin, AdminService>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
