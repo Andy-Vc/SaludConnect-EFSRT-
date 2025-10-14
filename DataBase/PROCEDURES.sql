@@ -292,3 +292,83 @@ END;
 GO
 
 EXEC SP_Total_Appointments
+go
+
+
+/*PROCEDURES PACIENTE-CLIENTE */
+
+
+	-- Status APPOINTMENTS
+	-- A = Completas , P = Pendiente, X = Cancelado , N = Inasistencia
+
+CREATE or alter PROC sp_total_citas
+@idPaciente int
+as
+begin
+	select Count(*) AS Total_Citas from TB_APPOINTMENTS
+	where ID_PATIENT = @idPaciente
+end
+go
+
+CREATE or alter PROC sp_total_citas_asistidas
+@idPaciente int
+as
+begin
+	select Count(*) AS Citas_Asistidas from TB_APPOINTMENTS
+	where ID_PATIENT = @idPaciente and STATE like ('A')
+end
+go
+
+
+CREATE or alter PROC sp_total_citas_pendientes
+@idPaciente int
+as
+begin
+	select Count(*) AS Citas_Pendientes from TB_APPOINTMENTS
+	where ID_PATIENT = @idPaciente and STATE like ('P')
+end
+go
+
+
+CREATE or alter PROC sp_total_citas_canceladas
+@idPaciente int
+as
+begin
+	select Count(*) AS Citas_Canceladas from TB_APPOINTMENTS
+	where ID_PATIENT = @idPaciente and STATE like ('X')
+end
+go
+
+CREATE OR ALTER PROC sp_proximas_citas
+@idPaciente int
+as
+begin
+	select 
+	a.ID_APPOINTMENT,
+	CONCAT (d.FIRST_NAME, ' ', d.LAST_NAME_PAT) AS Nombres_Completos,
+	s.NAME_SPECIALTY,
+	FORMAT(a.DATE_APPOINTMENT, 'HH:mm') AS Hora_Cita,
+	FORMAT(a.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Fecha_Cita
+	from TB_APPOINTMENTS a
+	INNER JOIN TB_USERS d ON a.ID_DOCTOR = d.ID_USER
+	INNER JOIN TB_DOCTOR_SPECIALTIES dc on d.ID_USER = dc.ID_DOCTOR
+	INNER JOIN TB_SPECIALTIES s on dc.ID_SPECIALTY = s.ID_SPECIALTY
+	where ID_PATIENT = @idPaciente 
+end
+go
+
+CREATE OR ALTER PROC sp_total_doctores
+as
+begin
+	select COUNT(*) as total_Doctores from TB_USERS where ID_ROLE = 3
+end
+go
+
+select * from TB_APPOINTMENTS
+select * from TB_USERS
+select * from TB_SPECIALTIES
+select * from TB_DOCTOR_SPECIALTIES
+
+EXEC sp_total_doctores
+exec sp_proximas_citas 2
+
