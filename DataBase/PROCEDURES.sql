@@ -309,6 +309,7 @@ begin
 	where ID_PATIENT = @idPaciente
 end
 go
+--exec sp_total_citas 2
 
 CREATE or alter PROC sp_total_citas_asistidas
 @idPaciente int
