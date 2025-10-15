@@ -2,8 +2,12 @@ USE master;
 GO
 
 IF DB_ID('BD_SALUDCONNECT') IS NOT NULL
+BEGIN
+    ALTER DATABASE BD_SALUDCONNECT SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE BD_SALUDCONNECT;
+END
 GO
+
 CREATE DATABASE BD_SALUDCONNECT;
 GO
 
@@ -108,13 +112,16 @@ CREATE TABLE TB_USERS (
 );
 GO
 
+SET DATEFORMAT DMY;
+GO
+
 INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT, DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE, ID_E_CONTACT, DATE_REGISTER, PROFILE_PICTURE)
 VALUES
-('Admin', 'Principal', 'Uno', '123456723', '1990-05-10', '912345890', 'M', 'admin@example.com', 'clave123', 2, 2, '2024-10-10 10:00:00', NULL),
-('Juan', 'Pérez', 'González', '123456789', '1990-05-10', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1, 1, '2025-01-15 14:30:00', NULL),
-('María', 'López', 'Hernández', '987654321', '1985-08-25', '987654322', 'F', 'maria.lopez@example.com', 'clave123', 3, 2, '2024-12-01 08:00:00', NULL),
-('Carlos', 'Ramírez', 'Sánchez', '456789123', '1992-12-15', '987654323', 'M', 'carlos.ramirez@example.com', 'clave123', 3, 2, '2024-12-05 09:15:00', NULL),
-('Ana', 'García', 'Díaz', '111222333', '2000-01-01', '900111222', 'F', 'ana.garcia@example.com', 'clave123', 1, 2, '2025-02-20 17:00:00', NULL);
+('Admin', 'Principal', 'Uno', '123456723', '10/05/1990', '912345890', 'M', 'admin@example.com', 'clave123', 2, 2, '10/10/2024 10:00:00', NULL),
+('Juan', 'Pérez', 'González', '123456789', '10/05/1990', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1, 1, '15/01/2025 14:30:00', NULL),
+('María', 'López', 'Hernández', '987654321', '25/08/1985', '987654322', 'F', 'maria.lopez@example.com', 'clave123', 3, 2, '01/12/2024 08:00:00', NULL),
+('Carlos', 'Ramírez', 'Sánchez', '456789123', '15/12/1992', '987654323', 'M', 'carlos.ramirez@example.com', 'clave123', 3, 2, '05/12/2024 09:15:00', NULL),
+('Ana', 'García', 'Díaz', '111222333', '01/01/2000', '900111222', 'F', 'ana.garcia@example.com', 'clave123', 1, 2, '20/02/2025 17:00:00', NULL);
 GO
 
 CREATE TABLE TB_DOCTOR_SPECIALTIES (
@@ -127,8 +134,8 @@ GO
 
 INSERT INTO TB_DOCTOR_SPECIALTIES (ID_DOCTOR, ID_SPECIALTY, YEARS_EXPERIENCE) VALUES
 (3, 1, 10), 
-(4, 2, 5),  
-(3, 8, 8);  
+(3, 8, 8),
+(4, 2, 5);  
 GO
 
 CREATE TABLE TB_DOCTOR_SCHEDULES (
@@ -143,9 +150,9 @@ CREATE TABLE TB_DOCTOR_SCHEDULES (
 GO
 
 INSERT INTO TB_DOCTOR_SCHEDULES (ID_DOCTOR, ID_CONSULTORIO, FECHA_INICIO, FECHA_FIN, DURACION_CITA) VALUES
-(3, 1, '2025-10-20 08:00:00', '2025-10-20 13:00:00', 20), 
-(4, 4, '2025-10-21 14:00:00', '2025-10-21 18:00:00', 20), 
-(4, 3, '2025-10-24 10:00:00', '2025-10-24 16:00:00', 20); 
+(3, 1, '20/10/2025 08:00:00', '20/10/2025 13:00:00', 20), 
+(4, 4, '21/10/2025 14:00:00', '21/10/2025 18:00:00', 20), 
+(4, 3, '24/10/2025 10:00:00', '24/10/2025 16:00:00', 20); 
 GO
 
 CREATE TABLE TB_APPOINTMENTS (
@@ -161,10 +168,10 @@ CREATE TABLE TB_APPOINTMENTS (
 GO
 
 INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SPECIALTY, DATE_APPOINTMENT, STATE, APPOINTMENT_PRICE, ID_CONSULTORIO) VALUES
-(2, 3, 1, '2025-10-20 08:00:00', 'A', 150.00, 1), 
-(5, 4, 2, '2025-10-21 14:00:00', 'P', 120.00, 4), 
-(2, 4, 2, '2025-10-24 10:20:00', 'X', 120.00, 3), 
-(5, 3, 8, '2025-10-20 08:20:00', 'N', 140.00, 1); 
+(2, 3, 1, '20/10/2025 08:00:00', 'A', 150.00, 1), 
+(5, 4, 2, '21/10/2025 14:00:00', 'P', 120.00, 4), 
+(2, 4, 2, '24/10/2025 10:20:00', 'X', 120.00, 3), 
+(5, 3, 8, '20/10/2025 08:20:00', 'N', 140.00, 1); 
 GO
 
 CREATE TABLE TB_SERVICES (
@@ -203,7 +210,7 @@ INSERT INTO TB_MEDICAL_RECORDS (ID_APPOINTMENT, OBSERVATIONS, DIAGNOSIS, TREATME
  'Paciente refiere dolor torácico esporádico. TA: 135/85. Sin soplos.', 
  'Posible Angina Estable.', 
  'Indicar reposo y Aspirina 100mg/día. Se requieren exámenes adicionales.', 
- '2025-11-03' 
+ '03/11/2025' 
 ); 
 GO
 
@@ -221,4 +228,7 @@ GO
 INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE) VALUES
 (1, 2, 80.00, 'P'),
 (1, 6, 60.00, 'P');
+GO
+
+SET DATEFORMAT MDY;
 GO
