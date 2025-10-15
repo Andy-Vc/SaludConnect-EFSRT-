@@ -373,3 +373,43 @@ select * from TB_DOCTOR_SPECIALTIES
 EXEC sp_total_doctores
 exec sp_proximas_citas 2
 
+go
+
+CREATE OR ALTER PROC SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
+    @ScheduleID INT
+AS
+BEGIN
+    DECLARE @StartTime DATETIME;
+    DECLARE @EndTime DATETIME;
+    DECLARE @SlotDuration INT;
+    DECLARE @TotalMinutes DECIMAL(10, 2);
+    DECLARE @MaxCapacity INT;
+
+    -- 1. Obtener la información del horario específico
+    SELECT
+        @StartTime = FECHA_INICIO,
+        @EndTime = FECHA_FIN,
+        @SlotDuration = DURACION_CITA -- Ahora será 20
+    FROM
+        TB_DOCTOR_SCHEDULES
+    WHERE
+        ID_SCHEDULE = @ScheduleID;
+
+    IF @StartTime IS NULL
+    BEGIN
+        SELECT 0 AS MaxCapacity, 'Error: Horario no encontrado.' AS StatusMessage;
+        RETURN;
+    END
+
+    SET @TotalMinutes = DATEDIFF(MINUTE, @StartTime, @EndTime);
+
+    SET @MaxCapacity = FLOOR(@TotalMinutes / @SlotDuration);
+
+    SELECT
+        @MaxCapacity AS MaxCapacity,
+        @TotalMinutes AS TotalMinutesInShift,
+        @SlotDuration AS SlotDurationMinutes,
+        'Cálculo exitoso' AS StatusMessage;
+END
+GO
+

@@ -1,17 +1,11 @@
-USE master;
-GO
-
-CREATE DATABASE BD_SALUDCONNECT;
-GO
-
 USE BD_SALUDCONNECT;
 GO
-
 
 CREATE TABLE TB_RELATIONSHIP(
 	ID_RELATIONSHIP INT PRIMARY KEY IDENTITY(1,1),
 	DESCRIPTION_RELATIONSHIP VARCHAR(20)
-)
+);
+GO
 
 INSERT INTO TB_RELATIONSHIP (DESCRIPTION_RELATIONSHIP) VALUES
 ('Esposo(a)'),
@@ -21,32 +15,26 @@ INSERT INTO TB_RELATIONSHIP (DESCRIPTION_RELATIONSHIP) VALUES
 ('Familiar');
 GO
 
-
-
 CREATE TABLE TB_EMERGENCY_CONTACT(
 	ID_E_CONTACT INT PRIMARY KEY IDENTITY (1,1),
 	NAMES_CONTACT VARCHAR(50)	NULL,
-	LAST_NAME_PAT VARCHAR(50)  NULL,
-    LAST_NAME_MAT VARCHAR(50) NULL,
+	LAST_NAME_PAT VARCHAR(50)  NULL,
+    LAST_NAME_MAT VARCHAR(50) NULL,
 	ID_RELATIONSHIP INT,
-	PHONE_EMERGENCY VARCHAR(9) NULL
-
+	PHONE_EMERGENCY VARCHAR(9) NULL,
 	FOREIGN KEY (ID_RELATIONSHIP) REFERENCES TB_RELATIONSHIP(ID_RELATIONSHIP)
-
-)
+);
 GO
 
 INSERT INTO TB_EMERGENCY_CONTACT (NAMES_CONTACT,LAST_NAME_PAT,LAST_NAME_MAT,ID_RELATIONSHIP,PHONE_EMERGENCY) VALUES
 ('Juan Miguel','Casas','Villanueva',1,'928878787'),
-('','','',5,'');
+('Sin Contacto','','',5,'');                    
 GO
 
-
--- Tabla Roles
 CREATE TABLE TB_ROLES (
-    ID_ROLE INT PRIMARY KEY IDENTITY(1,1),
-    NAME_ROLE VARCHAR(20) NOT NULL,
-    FLG_DELETE BIT DEFAULT 0
+    ID_ROLE INT PRIMARY KEY IDENTITY(1,1),
+    NAME_ROLE VARCHAR(20) NOT NULL,
+    FLG_DELETE BIT DEFAULT 0
 );
 GO
 
@@ -56,11 +44,10 @@ INSERT INTO TB_ROLES (NAME_ROLE) VALUES
 ('Doctor');
 GO
 
--- Tabla Especialidades
 CREATE TABLE TB_SPECIALTIES (
-    ID_SPECIALTY INT PRIMARY KEY IDENTITY(1,1),
-    NAME_SPECIALTY VARCHAR(50) NOT NULL,
-    FLG_DELETE BIT DEFAULT 0
+    ID_SPECIALTY INT PRIMARY KEY IDENTITY(1,1),
+    NAME_SPECIALTY VARCHAR(50) NOT NULL,
+    FLG_DELETE BIT DEFAULT 0
 );
 GO
 
@@ -75,114 +62,182 @@ INSERT INTO TB_SPECIALTIES (NAME_SPECIALTY) VALUES
 ('Medicina Interna');
 GO
 
--- Tabla Usuarios (pacientes y doctores)
+CREATE TABLE TB_CONSULTORIOS (
+    ID_CONSULTORIO INT PRIMARY KEY IDENTITY(1,1),
+    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
+    NUMERO_CONSULTORIO VARCHAR(10) NOT NULL UNIQUE,
+    FLOOR_NUMBER INT NOT NULL
+);
+GO
+
+INSERT INTO TB_CONSULTORIOS (ID_SPECIALTY, NUMERO_CONSULTORIO, FLOOR_NUMBER) VALUES
+(1, 'C-301', 3), 
+(1, 'C-302', 3),
+(2, 'D-101', 1),
+(2, 'D-102', 1),
+(8, 'M-305', 3);
+GO
+
+
 CREATE TABLE TB_USERS (
-    ID_USER INT PRIMARY KEY IDENTITY(1,1),
-    FIRST_NAME VARCHAR(50) NOT NULL,
-    LAST_NAME_PAT VARCHAR(50) NOT NULL,
-    LAST_NAME_MAT VARCHAR(50) NOT NULL,
-    DOCUMENT VARCHAR(9) NOT NULL UNIQUE,
+    ID_USER INT PRIMARY KEY IDENTITY(1,1),
+    FIRST_NAME VARCHAR(50) NOT NULL,
+    LAST_NAME_PAT VARCHAR(50) NOT NULL,
+    LAST_NAME_MAT VARCHAR(50) NOT NULL,
+    DOCUMENT VARCHAR(9) NOT NULL UNIQUE,
 	BIRTHDATE DATE NOT NULL,
 	PHONE VARCHAR(13) NOT NULL,
 	GENDER CHAR(1) NOT NULL,
 	CONSTRAINT CK_USER_GENDER CHECK (GENDER IN ('M','F')),
-    EMAIL VARCHAR(100) NOT NULL UNIQUE,
-    PASSWORD_HASH VARCHAR(255) NOT NULL,
-    ID_ROLE INT NOT NULL REFERENCES TB_ROLES(ID_ROLE),
+    EMAIL VARCHAR(100) NOT NULL UNIQUE,
+    PASSWORD_HASH VARCHAR(255) NOT NULL,
+    ID_ROLE INT NOT NULL REFERENCES TB_ROLES(ID_ROLE),
 	ID_E_CONTACT INT,
-    FLG_DELETE BIT DEFAULT 0,
-
+    DATE_REGISTER DATETIME NOT NULL DEFAULT GETDATE(),
+    PROFILE_PICTURE VARCHAR(200) NULL,              
+    FLG_DELETE BIT DEFAULT 0,
 	FOREIGN KEY (ID_E_CONTACT) REFERENCES TB_EMERGENCY_CONTACT(ID_E_CONTACT)
 );
 GO
 
-INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT,DOCUMENT, BIRTHDATE, PHONE, GENDER,EMAIL, PASSWORD_HASH, ID_ROLE, ID_E_CONTACT)
+INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT, DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE, ID_E_CONTACT, DATE_REGISTER, PROFILE_PICTURE)
 VALUES
-('Admin', 'Principal', '1', '123456723', '1990-05-10', '912345890', 'M', 'admin@example.com', 'clave123', 2, 2),
-('Juan', 'Pérez', 'González', '123456789', '1990-05-10', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1, 1),
-('María', 'López', 'Hernández', '987654321', '1985-08-25', '987654321', 'F', 'maria.lopez@example.com', 'clave123', 3 , 2),
-('Carlos', 'Ramírez', 'Sánchez', '456789123', '1992-12-15', '987654321', 'M', 'carlos.ramirez@example.com', 'clave123', 3, 2);
+('Admin', 'Principal', '1', '123456723', '1990-05-10', '912345890', 'M', 'admin@example.com', 'clave123', 2, 2, '2024-10-10 10:00:00', NULL),
+('Juan', 'Pérez', 'González', '123456789', '1990-05-10', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1, 1, '2025-01-15 14:30:00', NULL),
+('María', 'López', 'Hernández', '987654321', '1985-08-25', '987654321', 'F', 'maria.lopez@example.com', 'clave123', 3 , 2, '2024-12-01 08:00:00', NULL),
+('Carlos', 'Ramírez', 'Sánchez', '456789123', '1992-12-15', '987654321', 'M', 'carlos.ramirez@example.com', 'clave123', 3, 2, '2024-12-05 09:15:00', NULL),
+('Ana', 'García', 'Díaz', '111222333', '2000-01-01', '900111222', 'F', 'ana.garcia@example.com', 'clave123', 1, 2, '2025-02-20 17:00:00', NULL);
 GO
 
-SELECT * FROM TB_USERS
-
--- Tabla Servicios vinculados a una especialidad
-CREATE TABLE TB_SERVICES (
-    ID_SERVICE INT PRIMARY KEY IDENTITY(1,1),
-    NAME_SERVICE VARCHAR(100) NOT NULL,
-	DESCRIPTION VARCHAR(500) NULL,
-    PRICE DECIMAL(10,2) NOT NULL,
-    DURATION_MINUTES INT NOT NULL,
+CREATE TABLE TB_CONSULTORIOS (
+    ID_CONSULTORIO INT PRIMARY KEY IDENTITY(1,1),
     ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
-    FLG_DELETE BIT DEFAULT 0
+    NUMERO_CONSULTORIO VARCHAR(10) NOT NULL UNIQUE,
+    FLOOR_NUMBER INT NOT NULL
 );
 GO
 
-INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
--- Cardiología
-('Consulta Cardiología', 'Evaluación integral del sistema cardiovascular, diagnóstico y manejo de enfermedades cardíacas.', 150.00, 30, 1),
-('Electrocardiograma', 'Prueba diagnóstica para evaluar la actividad eléctrica del corazón.', 80.00, 15, 1),
-
--- Dermatología
-('Consulta Dermatología', 'Diagnóstico y tratamiento de enfermedades de la piel, cabello y uñas.', 120.00, 25, 2),
-('Tratamiento Láser Dermatológico', 'Procedimiento para tratar lesiones cutáneas mediante tecnología láser.', 250.00, 45, 2),
-
--- Neurología
-('Consulta Neurología', 'Evaluación y tratamiento de trastornos del sistema nervioso central y periférico.', 200.00, 40, 3),
-('Electroencefalograma', 'Registro de la actividad eléctrica cerebral para diagnóstico neurológico.', 120.00, 35, 3),
-
--- Pediatría
-('Consulta Pediatría', 'Atención médica integral para bebés, niños y adolescentes.', 100.00, 20, 4),
-('Vacunación Pediátrica', 'Administración de vacunas para prevención de enfermedades en niños.', 50.00, 15, 4),
-
--- Ortopedía
-('Consulta Ortopédica', 'Diagnóstico y tratamiento de lesiones y enfermedades del sistema musculoesquelético.', 130.00, 30, 5),
-('Terapia Física Ortopédica', 'Rehabilitación para lesiones musculares y óseas.', 90.00, 40, 5),
-
--- Oftalmología
-('Consulta Oftalmológica', 'Evaluación de la salud ocular y corrección de problemas visuales.', 110.00, 25, 6),
-('Prueba de Campo Visual', 'Evaluación de la visión periférica para detectar daños oculares.', 70.00, 30, 6),
-
--- Psiquiatría
-('Consulta Psiquiátrica', 'Evaluación y tratamiento de trastornos mentales y emocionales.', 180.00, 40, 7),
-('Terapia Cognitivo-Conductual', 'Tratamiento psicoterapéutico para trastornos emocionales y de conducta.', 150.00, 50, 7),
-
--- Medicina Interna
-('Consulta Medicina Interna', 'Atención integral para adultos con enfoque en diagnóstico y tratamiento de enfermedades internas.', 140.00, 30, 8),
-('Pruebas de Laboratorio', 'Análisis clínicos para diagnóstico y seguimiento de enfermedades.', 60.00, 20, 8);
+INSERT INTO TB_CONSULTORIOS (ID_SPECIALTY, NUMERO_CONSULTORIO, FLOOR_NUMBER) VALUES
+(1, 'C-301', 3),
+(1, 'C-302', 3),
+(2, 'D-101', 1),
+(2, 'D-102', 1),
+(8, 'M-305', 3);
 GO
 
-
--- Tabla para relacionar doctores con sus especialidades y experiencia
 CREATE TABLE TB_DOCTOR_SPECIALTIES (
-    ID_DOCTOR INT NOT NULL REFERENCES TB_USERS(ID_USER),
-    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
-    YEARS_EXPERIENCE INT DEFAULT 0,
-    PRIMARY KEY (ID_DOCTOR, ID_SPECIALTY)
+    ID_DOCTOR INT NOT NULL REFERENCES TB_USERS(ID_USER),
+    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
+    YEARS_EXPERIENCE INT DEFAULT 0,
+    PRIMARY KEY (ID_DOCTOR, ID_SPECIALTY)
 );
 GO
 
 INSERT INTO TB_DOCTOR_SPECIALTIES (ID_DOCTOR, ID_SPECIALTY, YEARS_EXPERIENCE) VALUES
-(3, 1, 10),  -- Carlos Ramírez: Cardiología, 10 años experiencia
-(4, 2, 5);
+(3, 1, 10), 
+(4, 2, 5),  
+(3, 8, 8);  
 GO
 
--- Tabla Citas (con servicio y doctores/pacientes)
-CREATE TABLE TB_APPOINTMENTS (
-    ID_APPOINTMENT INT PRIMARY KEY IDENTITY(1,1),
-    ID_PATIENT INT NOT NULL REFERENCES TB_USERS(ID_USER),
+CREATE TABLE TB_DOCTOR_SCHEDULES (
+    ID_SCHEDULE INT PRIMARY KEY IDENTITY(1,1),
     ID_DOCTOR INT NOT NULL REFERENCES TB_USERS(ID_USER),
-    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
-    DATE_APPOINTMENT DATETIME NOT NULL,
-    STATE CHAR(1) NOT NULL,
-    CONSTRAINT CHK_STATE CHECK (STATE IN ('A','P','X','N')),
-    -- A = Completas, P = Pendiente, X = Cancelado, N = Inasistencia
-    APPOINTMENT_PRICE DECIMAL(10,2) NOT NULL DEFAULT 20.00
+    ID_CONSULTORIO INT NOT NULL REFERENCES TB_CONSULTORIOS(ID_CONSULTORIO),
+    FECHA_INICIO DATETIME NOT NULL,
+    FECHA_FIN DATETIME NOT NULL,
+    DURACION_CITA INT NOT NULL DEFAULT 25, -- Slot de 25 minutos
+    UNIQUE (ID_DOCTOR, FECHA_INICIO)
 );
 GO
 
+INSERT INTO TB_DOCTOR_SCHEDULES (ID_DOCTOR, ID_CONSULTORIO, FECHA_INICIO, FECHA_FIN, DURACION_CITA) VALUES
+-- Doctor 3 (María López) - Cardiología: 8:00 a 13:00 (300 min)
+(3, 1, '2025-10-20 08:00:00', '2025-10-20 13:00:00', 20), 
+-- Doctor 4 (Carlos Ramírez) - Dermatología: 14:00 a 18:00 (240 min)
+(4, 4, '2025-10-21 14:00:00', '2025-10-21 18:00:00', 20), 
+-- Turno más largo: Doctor 4 (Carlos Ramírez): 10:00 a 16:00 (360 min)
+(4, 3, '2025-10-24 10:00:00', '2025-10-24 16:00:00', 20); 
+GO
 
-INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SPECIALTY, DATE_APPOINTMENT, STATE) VALUES
-(2, 3, 1, '2025-10-01 09:00:00', 'A'),
-(2, 4, 2, '2025-10-10 14:30:00', 'X');
+
+CREATE TABLE TB_APPOINTMENTS (
+    ID_APPOINTMENT INT PRIMARY KEY IDENTITY(1,1),
+    ID_PATIENT INT NOT NULL REFERENCES TB_USERS(ID_USER),
+    ID_DOCTOR INT NOT NULL REFERENCES TB_USERS(ID_USER),
+    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
+    DATE_APPOINTMENT DATETIME NOT NULL,
+    ID_CONSULTORIO INT NOT NULL REFERENCES TB_CONSULTORIOS(ID_CONSULTORIO),
+    STATE CHAR(1) NOT NULL CONSTRAINT CHK_STATE CHECK (STATE IN ('A','P','X','N')),
+    APPOINTMENT_PRICE DECIMAL(10,2) NOT NULL DEFAULT 20.00
+);
+GO
+
+-- 4 Citas, cubriendo los 4 estados
+INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SPECIALTY, DATE_APPOINTMENT, STATE, APPOINTMENT_PRICE, ID_CONSULTORIO) VALUES
+-- Cita 1 (Completada 'A') - Lunes 20/10 a las 8:00 (Para informe médico)
+(2, 3, 1, '2025-10-20 08:00:00', 'A', 150.00, 1), 
+-- Cita 2 (Pendiente 'P') - Martes 21/10 a las 14:00
+(5, 4, 2, '2025-10-21 14:00:00', 'P', 120.00, 4), 
+-- Cita 3 (Cancelado 'X') - Viernes 24/10 a las 10:25
+(2, 4, 2, '2025-10-24 10:25:00', 'X', 120.00, 3), 
+-- Cita 4 (Inasistencia 'N') - Lunes 20/10 a las 8:25
+(5, 3, 8, '2025-10-20 08:25:00', 'N', 140.00, 5); 
+GO
+
+CREATE TABLE TB_SERVICES (
+    ID_SERVICE INT PRIMARY KEY IDENTITY(1,1),
+    NAME_SERVICE VARCHAR(100) NOT NULL,
+	DESCRIPTION VARCHAR(500) NULL,
+    PRICE DECIMAL(10,2) NOT NULL,
+    DURATION_MINUTES INT NOT NULL,
+    ID_SPECIALTY INT NOT NULL REFERENCES TB_SPECIALTIES(ID_SPECIALTY),
+    FLG_DELETE BIT DEFAULT 0
+);
+GO
+
+INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
+('Consulta Cardiología', 'Evaluación integral.', 150.00, 30, 1), 
+('Electrocardiograma', 'Prueba diagnóstica.', 80.00, 15, 1), -- ID 2 (Examen adicional)
+('Consulta Dermatología', 'Diagnóstico de piel.', 120.00, 25, 2), 
+('Biopsia de Piel', 'Toma de muestra.', 250.00, 45, 2), 
+('Consulta Medicina Interna', 'Atención integral adultos.', 140.00, 30, 8), 
+('Prueba de Glucosa en Ayunas', 'Análisis clínico.', 60.00, 20, 8); -- ID 6 (Examen adicional)
+GO
+
+CREATE TABLE TB_MEDICAL_RECORDS (
+    ID_RECORD INT PRIMARY KEY IDENTITY(1,1),
+    ID_APPOINTMENT INT NOT NULL UNIQUE REFERENCES TB_APPOINTMENTS(ID_APPOINTMENT),
+    DATE_REPORT DATETIME NOT NULL DEFAULT GETDATE(),
+    OBSERVATIONS VARCHAR(2000) NOT NULL,
+    DIAGNOSIS VARCHAR(500) NULL,
+    TREATMENT VARCHAR(2000) NOT NULL,
+    FOLLOW_UP_DATE DATE NULL
+);
+GO
+
+-- Informe solo para la Cita 1 (Estado 'A')
+INSERT INTO TB_MEDICAL_RECORDS (ID_APPOINTMENT, OBSERVATIONS, DIAGNOSIS, TREATMENT, FOLLOW_UP_DATE) VALUES
+(1, 
+ 'Paciente refiere dolor torácico esporádico. TA: 135/85. Sin soplos.', 
+ 'Posible Angina Estable.', 
+ 'Indicar reposo y Aspirina 100mg/día. Se requieren exámenes adicionales.', 
+ '2025-11-03' 
+); 
+GO
+
+CREATE TABLE TB_ADDITIONAL_SERVICES (
+    ID_ADD_SERVICE INT PRIMARY KEY IDENTITY(1,1),
+    ID_RECORD INT NOT NULL REFERENCES TB_MEDICAL_RECORDS(ID_RECORD),
+    ID_SERVICE INT NOT NULL REFERENCES TB_SERVICES(ID_SERVICE),
+    PRICE_AT_TIME DECIMAL(10,2) NOT NULL,
+    STATE CHAR(1) NOT NULL DEFAULT 'P',
+    CONSTRAINT CHK_ADD_SERVICE_STATE CHECK (STATE IN ('P', 'A', 'X')),
+    UNIQUE (ID_RECORD, ID_SERVICE)
+);
+GO
+
+-- Se solicitan dos servicios adicionales para el Informe 1
+INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE) VALUES
+(1, 2, 80.00, 'P'), -- Electrocardiograma
+(1, 6, 60.00, 'P'); -- Prueba de Glucosa
 GO
