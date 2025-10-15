@@ -385,11 +385,10 @@ BEGIN
     DECLARE @TotalMinutes DECIMAL(10, 2);
     DECLARE @MaxCapacity INT;
 
-    -- 1. Obtener la información del horario específico
     SELECT
         @StartTime = FECHA_INICIO,
         @EndTime = FECHA_FIN,
-        @SlotDuration = DURACION_CITA -- Ahora será 20
+        @SlotDuration = DURACION_CITA
     FROM
         TB_DOCTOR_SCHEDULES
     WHERE
