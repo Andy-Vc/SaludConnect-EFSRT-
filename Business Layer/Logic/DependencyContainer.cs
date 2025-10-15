@@ -18,6 +18,9 @@ namespace Logic
             services.AddScoped<IAppointment, AppointmentRepository>();
             services.AddScoped<IUser, UserRepository>();
             services.AddScoped<ISpecialty, SpecialtyRepository>();
+            services.AddScoped<IPatient, PatientRepository>();
+
+            services.AddScoped<PatientBL>();
             services.AddScoped<ServiceBL>();
             services.AddScoped<AppointmentBL>();
             services.AddScoped<AuthorizationBL>();
