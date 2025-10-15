@@ -358,6 +358,8 @@ begin
 end
 go
 
+--exec sp_proximas_citas 2
+
 CREATE OR ALTER PROC sp_total_doctores
 as
 begin
@@ -365,10 +367,29 @@ begin
 end
 go
 
+
+create or alter proc sp_patient_information
+@idUser int
+as
+begin
+	select 
+	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
+	us.PHONE, us.EMAIL,
+	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
+	ec.ID_RELATIONSHIP, rl.DESCRIPTION_RELATIONSHIP
+	from TB_USERS us 
+	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
+	INNER JOIN TB_RELATIONSHIP rl on ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
+	where ID_USER = @idUser
+end
+
+--exec sp_patient_information 2
+
 select * from TB_APPOINTMENTS
 select * from TB_USERS
 select * from TB_SPECIALTIES
 select * from TB_DOCTOR_SPECIALTIES
+select * from TB_EMERGENCY_CONTACT
 
 EXEC sp_total_doctores
 exec sp_proximas_citas 2
