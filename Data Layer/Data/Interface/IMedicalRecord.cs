@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
+using Models.DTO;
 
 namespace Data.Interface
 {
-    public interface ISpecialty
+    public interface IMedicalRecord
     {
-        Task<int> totalSpecialties();
-        Task<List<Specialty>> ListSpecialties();
+        Task<ResultResponse<int>> RegisterRecordWithServicesAsync(MedicalRecord record);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
+using Models;
 
 namespace Logic
 {
@@ -14,6 +15,11 @@ namespace Logic
         public SpecialtyBL(ISpecialty service)
         {
             this.service = service;
+        }
+
+        public async Task<List<Specialty>> ListSpecialties()
+        {
+            return await service.ListSpecialties();
         }
 
         public async Task<int> totalSpecialties()

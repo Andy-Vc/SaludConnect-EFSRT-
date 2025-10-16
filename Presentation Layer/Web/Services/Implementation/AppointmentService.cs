@@ -81,7 +81,7 @@ namespace Web.Services.Implementation
             return 0;
         }
 
-        public async Task<byte[]> DownloadSingleAppointmentPdf(int appointmentId)
+        public async Task<(byte[] FileBytes, string FileName)> DownloadSingleAppointmentPdf(int appointmentId)
         {
             var url = $"appointment/appointment-for-id/{appointmentId}/pdf";
 
@@ -89,10 +89,17 @@ namespace Web.Services.Implementation
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsByteArrayAsync();
+                var fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                var contentDisposition = response.Content.Headers.ContentDisposition;
+                string fileName = contentDisposition?.FileNameStar
+                    ?? contentDisposition?.FileName?.Trim('"')
+                    ?? $"Cita_{appointmentId}.pdf";
+
+                return (fileBytes, fileName);
             }
 
-            return Array.Empty<byte>();
+            return (Array.Empty<byte>(), $"Cita_{appointmentId}.pdf");
         }
 
         public async Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId)

@@ -217,12 +217,12 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DescargarComprobante(int id)
         {
-            var pdfBytes = await appointment.DownloadSingleAppointmentPdf(id);
+            var (pdfBytes, fileName) = await appointment.DownloadSingleAppointmentPdf(id);
 
             if (pdfBytes == null || pdfBytes.Length == 0)
                 return NotFound("No se pudo generar el PDF.");
 
-            return File(pdfBytes, "application/pdf", $"Cita_{id}.pdf");
+            return File(pdfBytes, "application/pdf", fileName);
         }
 
     }

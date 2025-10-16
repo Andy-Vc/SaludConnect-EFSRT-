@@ -14,6 +14,8 @@
         public string Phone { get; set; }
         public Role Role { get; set; }
         public bool FlgDelete { get; set; }
+        public DateTime DateRegister { get; set; }
+        public string ProfilePicture { get; set; }
         public List<DoctorSpecialty> DoctorSpecialties { get; set; }
     }
 }

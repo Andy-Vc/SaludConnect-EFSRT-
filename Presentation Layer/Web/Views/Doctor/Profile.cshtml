@@ -193,7 +193,7 @@ else
 								<td class="text-dark fw-medium py-3">@appt.Patient.FirstName @appt.Patient.LastNamePat @appt.Patient.LastNameMat</td>
 								<td class="py-3">@appt.DateAppointment.ToString("dd/MM/yyyy")</td>
 								<td class="py-3">@appt.DateAppointment.ToString("hh:mm tt")</td>
-								<td class="py-3">@appt.Service.NameService</td>
+								<td class="py-3">@appt.Specialty.NameSpecialty</td>
 								<td class="py-3">
 									<span class="badge fw-medium text-white px-2 py-1 @GetBadgeClass(appt.State)" style="min-width: 90px; text-align: center;">
 										@GetStateText(appt.State)

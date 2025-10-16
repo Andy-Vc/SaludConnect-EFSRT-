@@ -22,6 +22,44 @@ namespace Data.Repository
             this.configuration = configuration;
             stringConexion = configuration["ConnectionStrings:DB"];
         }
+
+        public async Task<List<Service>> ListServicesBySpecialty(int idSpecialty)
+        {
+            var list = new List<Service>();
+
+            try
+            {
+                using (var conexion = new SqlConnection(stringConexion))
+                {
+                    await conexion.OpenAsync();
+
+                    using (var cmd = new SqlCommand("SP_LIST_SERVICES_BY_SPECIALTY", conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@IdSpecialty", idSpecialty);
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (reader != null && reader.HasRows)
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    list.Add(ConvertReaderToService(reader));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                list = new List<Service>();
+                Console.WriteLine(ex.Message);
+            }
+
+            return list;
+        }
+
         public async Task<List<Service>> ListServicesForDoctor(int idDoctor)
         {
             var list = new List<Service>();

@@ -38,5 +38,12 @@ namespace API.Controllers
             var count = await Task.Run(() => serviceBL.minDurationService());
             return Ok(new { minDurationService = count });
         }
+
+        [HttpGet("services-by-specialty")]
+        public async Task<IActionResult> GetServicesBySpecialty(int idSpecialty)
+        {
+            var result = await Task.Run(() => serviceBL.ListServicesBySpecialty(idSpecialty));
+            return Ok(result);
+        }
     }
 }

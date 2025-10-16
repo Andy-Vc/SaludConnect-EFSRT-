@@ -21,5 +21,12 @@ namespace API.Controllers
             var count = await Task.Run(() => serviceBL.totalSpecialties());
             return Ok(new { countSpecialties = count });
         }
+
+        [HttpGet("list-specialties")]
+        public async Task<IActionResult> listSpecialties()
+        {
+            var list = await serviceBL.ListSpecialties();
+            return Ok(list);
+        }
     }
 }

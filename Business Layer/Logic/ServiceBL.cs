@@ -17,6 +17,11 @@ namespace Logic
             this.service = service;
         }
 
+        public async Task<List<Service>> ListServicesBySpecialty(int idSpecialty)
+        {
+            return await service.ListServicesBySpecialty(idSpecialty);
+        }
+
         public async Task<List<Service>> ListServicesForDoctor(int idDoctor)
         {
             return await service.ListServicesForDoctor(idDoctor);

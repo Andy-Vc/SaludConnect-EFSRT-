@@ -211,7 +211,36 @@ namespace Data.Repository
                         {
                             if (await reader.ReadAsync())
                             {
-                                appointment = ConvertReaderToAppointment(reader);
+                                appointment = ConvertReaderToFullAppointment(reader);
+                            }
+
+                            if (appointment?.MedicalRecord != null && await reader.NextResultAsync())
+                            {
+                                appointment.MedicalRecord.AdditionalServices = new List<AdditionalService>();
+
+                                while (await reader.ReadAsync())
+                                {
+                                    appointment.MedicalRecord.AdditionalServices.Add(new AdditionalService
+                                    {
+                                        IdAddService = reader.GetInt32(reader.GetOrdinal("ID_ADD_SERVICE")),
+                                        IdRecord = reader.GetInt32(reader.GetOrdinal("ID_RECORD")),
+                                        State = reader.GetString(reader.GetOrdinal("STATE")),
+                                        Service = new Service
+                                        {
+                                            IdService = reader.GetInt32(reader.GetOrdinal("ID_SERVICE")),
+                                            NameService = reader.GetString(reader.GetOrdinal("NAME_SERVICE")),
+                                            Description = reader.IsDBNull(reader.GetOrdinal("DESCRIPTION"))
+                                                ? null
+                                                : reader.GetString(reader.GetOrdinal("DESCRIPTION")),
+                                            Price = reader.GetDecimal(reader.GetOrdinal("PRICE")),
+                                            DurationMinutes = reader.GetInt32(reader.GetOrdinal("DURATION_MINUTES")),
+                                            Specialty = new Specialty
+                                            {
+                                                NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY"))
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
@@ -258,7 +287,6 @@ namespace Data.Repository
                 }
             }
         }
-
         private Appointment ConvertReaderToAppointment(SqlDataReader reader)
         {
             var dateOnly = reader.GetDateTime(reader.GetOrdinal("DateOnly"));
@@ -292,12 +320,81 @@ namespace Data.Repository
                 },
                 DateAppointment = dateAppointment,
                 State = reader.GetString(reader.GetOrdinal("STATE")),
-                Service = new Service
+                Specialty = new Specialty
                 {
-                    NameService = reader.GetString(reader.GetOrdinal("NAME_SERVICE")),
-                    Price = HasColumn("PRICE") ? reader.GetDecimal(reader.GetOrdinal("PRICE")) : 0m
+                    NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),
+                },
+                AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE"))
+            };
+        }
+        private Appointment ConvertReaderToFullAppointment(SqlDataReader reader)
+        {
+            var dateOnly = reader.GetDateTime(reader.GetOrdinal("DateOnly"));
+            var timeStr = reader.GetString(reader.GetOrdinal("AppointmentTime"));
+
+            TimeSpan time;
+            if (!TimeSpan.TryParse(timeStr, out time))
+            {
+                time = TimeSpan.Zero;
+            }
+
+            var dateAppointment = dateOnly.Date + time;
+
+            var appointment = new Appointment()
+            {
+                IdAppointment = reader.GetInt32(reader.GetOrdinal("ID_APPOINTMENT")),
+                Patient = new User
+                {
+                    IdUser = reader.GetInt32(reader.GetOrdinal("PatientId")),
+                    FirstName = reader.GetString(reader.GetOrdinal("FIRST_NAME")),
+                    LastNamePat = reader.GetString(reader.GetOrdinal("LAST_NAME_PAT")),
+                    LastNameMat = reader.GetString(reader.GetOrdinal("LAST_NAME_MAT")),
+                    Document = reader.GetString(reader.GetOrdinal("DOCUMENT")),
+                    BirthDate = reader.GetDateTime(reader.GetOrdinal("BIRTHDATE")),
+                    Phone = reader.GetString(reader.GetOrdinal("PHONE")),
+                    Gender = reader.GetString(reader.GetOrdinal("GENDER")),
+                    Email = reader.GetString(reader.GetOrdinal("EMAIL"))
+                },
+                DateAppointment = dateAppointment,
+                State = reader.GetString(reader.GetOrdinal("STATE")),
+                Specialty = new Specialty
+                {
+                    IdSpecialty = reader.GetInt32(reader.GetOrdinal("ID_SPECIALTY")),
+                    NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY"))
+                },
+                AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE")),
+                Office = new Office
+                {
+                    NroOffice = reader.GetString(reader.GetOrdinal("NUMERO_CONSULTORIO")),
+                    FloorNumber = reader.GetInt32(reader.GetOrdinal("FLOOR_NUMBER"))
+                },
+                Doctor = new User
+                {
+                    IdUser = reader.GetInt32(reader.GetOrdinal("DoctorId")),
+                    FirstName = reader.GetString(reader.GetOrdinal("DoctorFirstName")),
+                    LastNamePat = reader.GetString(reader.GetOrdinal("DoctorLastNamePat")),
+                    LastNameMat = reader.GetString(reader.GetOrdinal("DoctorLastNameMat"))
                 }
             };
+
+            if (!reader.IsDBNull(reader.GetOrdinal("ID_RECORD")))
+            {
+                appointment.MedicalRecord = new MedicalRecord
+                {
+                    IdRecord = reader.GetInt32(reader.GetOrdinal("ID_RECORD")),
+                    IdAppointment = appointment.IdAppointment,
+                    DateReport = reader.GetDateTime(reader.GetOrdinal("DATE_REPORT")),
+                    Observations = reader.IsDBNull(reader.GetOrdinal("OBSERVATIONS"))
+                        ? null
+                        : reader.GetString(reader.GetOrdinal("OBSERVATIONS")),
+                    Diagnosis = reader.GetString(reader.GetOrdinal("DIAGNOSIS")),
+                    Treatment = reader.IsDBNull(reader.GetOrdinal("TREATMENT"))
+                        ? null
+                        : reader.GetString(reader.GetOrdinal("TREATMENT"))
+                };
+            }
+
+            return appointment;
         }
     }
 }
