@@ -571,9 +571,9 @@ as
 begin
 	select 
 	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
-	us.PHONE, us.EMAIL,
+	us.PHONE, us.EMAIL,us.DATE_REGISTER,us.PROFILE_PICTURE,
 	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
-	ec.ID_RELATIONSHIP, rl.DESCRIPTION_RELATIONSHIP
+	ec.ID_RELATIONSHIP, ec.PHONE_EMERGENCY, rl.DESCRIPTION_RELATIONSHIP
 	from TB_USERS us 
 	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
 	INNER JOIN TB_RELATIONSHIP rl on ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
@@ -581,14 +581,63 @@ begin
 end
 go
 
---exec sp_patient_information 2
+CREATE OR ALTER PROC sp_update_information_patient 
+--VARIABLES USER
+@idUser int, 
+@firstname VARCHAR(50),
+@lastNamePat VARCHAR(50),
+@lastNameMat VARCHAR(50),
+@document VARCHAR(50),
+@phone VARCHAR(50),
+@email VARCHAR(50),
+@profilePicture VARCHAR(50),
+--VARIABLES CONTACTO
+@namesContact varchar(50),
+@contacNamePat varchar(50),
+@contacNameMat varchar(50),
+@idRelation int,
+@phoneEmergency varchar(50)
+as
+begin
+	begin try
+		begin TRANSACTION
+			DECLARE @idContact INT;
+				Select @idContact = ID_E_CONTACT --OBTENER EL ID_CONTACT DEL USER
+				from TB_USERS where ID_USER = @idUser
+					
+					UPDATE TB_USERS
+					set FIRST_NAME = @firstname,LAST_NAME_PAT = @lastNamePat, 
+						LAST_NAME_MAT = @lastNameMat, DOCUMENT = @document, PHONE = @phone,
+						EMAIL = @email, PROFILE_PICTURE = @profilePicture 
+						where ID_USER = @idUser
 
-select * from TB_APPOINTMENTS
-select * from TB_USERS
-select * from TB_SPECIALTIES
-select * from TB_DOCTOR_SPECIALTIES
-select * from TB_EMERGENCY_CONTACT
+					if @idContact IS NOT NULL
+						BEGIN
+							UPDATE TB_EMERGENCY_CONTACT
+								set NAMES_CONTACT = @namesContact,
+									LAST_NAME_PAT = @contacNamePat,
+									LAST_NAME_MAT = @contacNameMat,
+									ID_RELATIONSHIP = @idRelation,
+									PHONE_EMERGENCY = @phoneEmergency
+						END
+		COMMIT TRANSACTION;
+	end try
+	
+	begin catch
+		ROLLBACK TRANSACTION
+		THROW
+	end catch
+end
+GO
 
+--exec sp_patient_information 6
+
+--select * from TB_APPOINTMENTS
+--select * from TB_USERS
+--select * from TB_SPECIALTIES
+--select * from TB_DOCTOR_SPECIALTIES
+--select * from TB_EMERGENCY_CONTACT
+--SELECT * FROM TB_RELATIONSHIP
 
 
 IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL

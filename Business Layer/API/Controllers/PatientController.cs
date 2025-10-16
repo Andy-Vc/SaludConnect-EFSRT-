@@ -1,6 +1,7 @@
 ﻿using Logic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.DTO;
 
 namespace API.Controllers
@@ -67,6 +68,25 @@ namespace API.Controllers
             listMostrar = await _patientBL.PatientInformation(idUser);
             return Ok(listMostrar);
         }
+
+        [HttpGet("CompletListRelation")]
+        public async Task<IActionResult> CompletListRelationShip() {
+            List<RelationShip> listMostrar = new List<RelationShip>();
+
+            listMostrar = await _patientBL.CompletListOfRelationShips();
+
+            return Ok(listMostrar);
+        }
+
+        [HttpPut("UpdateInformationPatient")]
+        public async Task<IActionResult> UpdateInformationPatient(PatientUpdate patient) {
+            PatientUpdate patientInformation = new PatientUpdate();
+
+            patientInformation = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
+
+            return Ok(patientInformation);
+        }
+
 
     }
 }
