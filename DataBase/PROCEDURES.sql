@@ -70,13 +70,13 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE DOCUMENT = @DOCUMENT)
     BEGIN
-        RAISERROR('El n˙mero de documento %s ya existe', 16, 1, @DOCUMENT);
+        RAISERROR('El n√∫mero de documento %s ya existe', 16, 1, @DOCUMENT);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE EMAIL = @EMAIL)
     BEGIN
-        RAISERROR('El correo electrÛnico %s ya existe', 16, 1, @EMAIL);
+        RAISERROR('El correo electr√≥nico %s ya existe', 16, 1, @EMAIL);
         RETURN;
     END
 
@@ -367,7 +367,7 @@ BEGIN
 
     IF @STATE NOT IN ('A', 'P', 'X', 'N')
     BEGIN
-        RAISERROR('Estado inv·lido. Use: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiÛ', 16, 1);
+        RAISERROR('Estado inv√°lido. Use: A=Atendido, P=Pendiente, X=Cancelado, N=No asisti√≥', 16, 1);
         RETURN;
     END
 
@@ -489,14 +489,14 @@ GO
 
 /* ============================================
    PROCEDURES PACIENTE-CLIENTE
-   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiÛ
+   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asisti√≥
    ============================================ */
 
 IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
 
-CREATE PROCEDURE sp_total_citas
+CREATE or alter PROCEDURE sp_total_citas
     @idPaciente INT
 AS
 BEGIN
@@ -512,7 +512,7 @@ IF OBJECT_ID('sp_total_citas_asistidas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_asistidas;
 GO
 
-CREATE PROCEDURE sp_total_citas_asistidas
+CREATE or alter  PROCEDURE sp_total_citas_asistidas
     @idPaciente INT
 AS
 BEGIN
@@ -528,7 +528,7 @@ IF OBJECT_ID('sp_total_citas_pendientes', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_pendientes;
 GO
 
-CREATE PROCEDURE sp_total_citas_pendientes
+CREATE or alter PROCEDURE sp_total_citas_pendientes
     @idPaciente INT
 AS
 BEGIN
@@ -544,23 +544,59 @@ IF OBJECT_ID('sp_total_citas_canceladas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_canceladas;
 GO
 
-CREATE PROCEDURE sp_total_citas_canceladas
+CREATE or alter PROCEDURE sp_total_citas_canceladas
     @idPaciente INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT COUNT(*) AS Citas_Canceladas 
+	 SELECT COUNT(*) AS Citas_Pendientes 
     FROM TB_APPOINTMENTS
     WHERE ID_PATIENT = @idPaciente AND STATE = 'X';
 END
 GO
 
+
+CREATE OR ALTER PROC sp_total_doctores
+as
+begin
+	select COUNT(*) as total_Doctores from TB_USERS where ID_ROLE = 3
+end
+go
+
+
+create or alter proc sp_patient_information
+@idUser int
+as
+begin
+	select 
+	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
+	us.PHONE, us.EMAIL,
+	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
+	ec.ID_RELATIONSHIP, rl.DESCRIPTION_RELATIONSHIP
+	from TB_USERS us 
+	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
+	INNER JOIN TB_RELATIONSHIP rl on ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
+	where ID_USER = @idUser
+end
+go
+
+--exec sp_patient_information 2
+
+select * from TB_APPOINTMENTS
+select * from TB_USERS
+select * from TB_SPECIALTIES
+select * from TB_DOCTOR_SPECIALTIES
+select * from TB_EMERGENCY_CONTACT
+
+
+
 IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_proximas_citas;
 GO
 
-CREATE PROCEDURE sp_proximas_citas
+
+CREATE OR ALTER PROCEDURE sp_proximas_citas
     @idPaciente INT
 AS
 BEGIN
@@ -574,12 +610,12 @@ BEGIN
         FORMAT(a.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Fecha_Cita,
         a.STATE,
         a.APPOINTMENT_PRICE,
-        c.NUMERO_CONSULTORIO,
+        c.NUMBER_CONSULTORIES,
         c.FLOOR_NUMBER
     FROM TB_APPOINTMENTS a
     INNER JOIN TB_USERS d ON a.ID_DOCTOR = d.ID_USER
     INNER JOIN TB_SPECIALTIES s ON a.ID_SPECIALTY = s.ID_SPECIALTY
-    INNER JOIN TB_CONSULTORIOS c ON a.ID_CONSULTORIO = c.ID_CONSULTORIO
+    INNER JOIN TB_CONSULTORIES c ON a.ID_CONSULTORIES = c.ID_CONSULTORIES
     WHERE a.ID_PATIENT = @idPaciente 
         AND a.DATE_APPOINTMENT >= CAST(GETDATE() AS DATE)
         AND a.STATE = 'P'
@@ -587,11 +623,15 @@ BEGIN
 END
 GO
 
+
+
+--EXEC sp_proximas_citas 5
+
 IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_doctores;
 GO
 
-CREATE PROCEDURE sp_total_doctores
+CREATE or alter PROCEDURE sp_total_doctores
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -610,7 +650,7 @@ IF OBJECT_ID('SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO', 'P') IS NOT NULL
     DROP PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO;
 GO
 
-CREATE PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
+CREATE or alter PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
     @ScheduleID INT
 AS
 BEGIN
@@ -647,7 +687,7 @@ BEGIN
             0 AS MaxCapacity, 
             @TotalMinutes AS TotalMinutesInShift,
             @SlotDuration AS SlotDurationMinutes,
-            'Error: DuraciÛn de cita inv·lida.' AS StatusMessage;
+            'Error: Duraci√≥n de cita inv√°lida.' AS StatusMessage;
         RETURN;
     END
 
@@ -657,7 +697,7 @@ BEGIN
         @MaxCapacity AS MaxCapacity,
         @TotalMinutes AS TotalMinutesInShift,
         @SlotDuration AS SlotDurationMinutes,
-        'C·lculo exitoso' AS StatusMessage;
+        'C√°lculo exitoso' AS StatusMessage;
 END
 GO
 

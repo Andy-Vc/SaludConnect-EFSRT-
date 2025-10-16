@@ -19,6 +19,9 @@ namespace Models
         public DateTime BirthDate { get; set; }
         public string Phone { get; set; }
         public Role Role { get; set; }
+        public EmergencyContact Emergency { get; set; }
+        public DateTime dateRegister { get; set; }
+        public string profilePicture { get; set; }
         public bool FlgDelete { get; set; }
         public List<DoctorSpecialty> DoctorSpecialties { get; set; }
 
