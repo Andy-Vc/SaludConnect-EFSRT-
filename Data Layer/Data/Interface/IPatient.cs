@@ -18,5 +18,7 @@ namespace Data.Interface
         Task<int> TotalDoctors();
         Task<List<PatientInformation>>PatientInformation(int idUser);
         Task<List<RelationShip>> CompletListOfRelationShips();
+
+        Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, int idUser);
     }
 }

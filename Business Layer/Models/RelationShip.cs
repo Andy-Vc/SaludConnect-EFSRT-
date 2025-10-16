@@ -8,7 +8,7 @@ namespace Models
 {
     public class RelationShip
     {
-        public int relationShip { get; set; }
-        public string descriptionRelationShip { get; set; }
+        public int idRelationShip { get; set; }
+        public string? descriptionRelationShip { get; set; }
     }
 }

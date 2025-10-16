@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
+using Models;
 using Models.DTO;
 
 namespace Logic
@@ -50,6 +51,16 @@ namespace Logic
         public async Task<List<PatientInformation>> PatientInformation(int idUser)
         {
             return await _patient.PatientInformation(idUser);
+        }
+
+        public async Task<List<RelationShip>> CompletListOfRelationShips()
+        {
+            return await _patient.CompletListOfRelationShips();
+        }
+
+        public async Task<PatientUpdate> UpdateInformationPatient(PatientUpdate patient, int idUser)
+        {
+            return await _patient.UpdateInformationPatient(patient, patient.idUser);
         }
     }
 }
