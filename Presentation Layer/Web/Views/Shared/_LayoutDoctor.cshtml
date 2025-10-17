@@ -19,9 +19,9 @@
 </head>
 <style>
 	.btn-outline-secondary.btn-sm:hover {
-		border-color: #dc3545 !important;
-		color: #fff !important;
-		background-color: #dc3545 !important;
+	border-color: #dc3545 !important;
+	color: #fff !important;
+	background-color: #dc3545 !important;
 	}
 </style>
 <body>
@@ -31,10 +31,10 @@
 
 				<a class="navbar-brand d-flex align-items-center me-3" href="/">
 					<div class="rounded-circle d-flex align-items-center justify-content-center me-2"
-						 style="width: 40px; height: 40px; background: linear-gradient(to right, #2563eb, #06b6d4);">
+					style="width: 40px; height: 40px; background: linear-gradient(to right, #2563eb, #06b6d4);">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-							 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-							 class="lucide lucide-heart text-white">
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="lucide lucide-heart text-white">
 							<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
 						</svg>
 					</div>
@@ -42,7 +42,7 @@
 				</a>
 
 				<button class="navbar-toggler ms-auto d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainOffcanvas"
-						aria-controls="mainOffcanvas" aria-expanded="false" aria-label="Toggle navigation">
+				aria-controls="mainOffcanvas" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
@@ -55,7 +55,7 @@
 								? "active bg-primary bg-opacity-10 text-primary"
 								: "text-secondary hover:bg-light")
 								rounded px-3 d-flex align-items-center gap-1"
-								   asp-action="Dashboard" asp-controller="Doctor">
+								asp-action="Dashboard" asp-controller="Doctor">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house w-4 h-4" aria-hidden="true">
 										<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
 										<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -68,7 +68,7 @@
 								? "active bg-primary bg-opacity-10 text-primary"
 								: "text-secondary hover:bg-light")
 								rounded px-3 d-flex align-items-center gap-1"
-								   asp-action="Services" asp-controller="Doctor">
+								asp-action="Services" asp-controller="Doctor">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-stethoscope w-4 h-4" aria-hidden="true">
 										<path d="M11 2v2"></path>
 										<path d="M5 2v2"></path>
@@ -84,7 +84,7 @@
 								 ? "active bg-primary bg-opacity-10 text-primary"
 								 : "text-secondary hover:bg-light")
 								 rounded px-3 d-flex align-items-center gap-1"
-								   asp-action="About" asp-controller="Doctor">
+								asp-action="About" asp-controller="Doctor">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info w-4 h-4" aria-hidden="true">
 										<circle cx="12" cy="12" r="10"></circle>
 										<path d="M12 16v-4"></path>
@@ -98,7 +98,7 @@
 								 ? "active bg-primary bg-opacity-10 text-primary"
 								 : "text-secondary hover:bg-light")
 								 rounded px-3 d-flex align-items-center gap-1"
-								   asp-action="Profile" asp-controller="Doctor">
+								asp-action="Profile" asp-controller="Doctor">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user w-4 h-4" aria-hidden="true">
 										<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
 										<circle cx="12" cy="7" r="4"></circle>
@@ -110,10 +110,25 @@
 
 						<div class="d-flex align-items-center gap-3">
 							<div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill gap-2">
-								<div class="rounded-circle d-flex align-items-center justify-content-center"
-									 style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4);">
-									<span class="text-white fw-medium small">@initials</span>
-								</div>
+								@if (string.IsNullOrEmpty(user.ProfilePicture))
+								{
+									<div class="rounded-circle d-flex align-items-center justify-content-center"
+									style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4);">
+										<span class="text-white fw-medium small">@initials</span>
+									</div>
+								}
+								else
+								{
+									<div class="rounded-circle d-flex align-items-center justify-content-center"
+										 style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4); overflow: hidden;">
+										<img id="profileImageLayout"
+											 src="@user.ProfilePicture"
+											 alt="Preview"
+											 class="img-fluid rounded-circle"
+											 style="width: 32px; height: 32px; object-fit: cover;">
+									</div>
+
+								}
 								<div class="text-start">
 									@if (user != null)
 									{
@@ -222,10 +237,25 @@
 
 			<div class="mt-auto border-top pt-3">
 				<div class="d-flex align-items-center bg-light px-3 py-2 rounded-pill gap-2 mb-3">
-					<div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-						 style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4);">
-						<span class="text-white fw-medium small">@initials</span>
-					</div>
+					@if (string.IsNullOrEmpty(user.ProfilePicture))
+					{
+						<div class="rounded-circle d-flex align-items-center justify-content-center"
+							 style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4);">
+							<span class="text-white fw-medium small">@initials</span>
+						</div>
+					}
+					else
+					{
+						<div class="rounded-circle d-flex align-items-center justify-content-center"
+							 style="width: 32px; height: 32px; background: linear-gradient(to right, #3b82f6, #06b6d4); overflow: hidden;">
+							<img id="profileImageLayout"
+								 src="@user.ProfilePicture"
+								 alt="Preview"
+								 class="img-fluid rounded-circle"
+								 style="width: 32px; height: 32px; object-fit: cover;">
+						</div>
+
+					}
 					<div class="text-start">
 						@if (user != null)
 						{

@@ -11,6 +11,7 @@ namespace Models
         public int IdAddService { get; set; }
         public int IdRecord { get; set; }
         public Service Service { get; set; }
+        public decimal PriceAtTime { get; set; }
         public string State { get; set; }
     }
 }

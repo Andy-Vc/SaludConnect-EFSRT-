@@ -44,9 +44,16 @@ namespace Data.Repository
                 string serviceIdsCsv = string.Join(",", serviceIds);
                 command.Parameters.AddWithValue("@ServiceIds", serviceIdsCsv);
 
-                var idRecordObj = await command.ExecuteScalarAsync();
+                var outputParam = new SqlParameter("@NewRecordID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
 
-                if (idRecordObj != null && int.TryParse(idRecordObj.ToString(), out int idRecord))
+                await command.ExecuteNonQueryAsync();
+
+                var newId = outputParam.Value;
+                if (newId != null && int.TryParse(newId.ToString(), out int idRecord))
                 {
                     result.Value = true;
                     result.Data = idRecord;
@@ -62,6 +69,7 @@ namespace Data.Repository
                 result.Value = false;
                 result.Message = "Error: " + ex.Message;
             }
+
 
             return result;
         }

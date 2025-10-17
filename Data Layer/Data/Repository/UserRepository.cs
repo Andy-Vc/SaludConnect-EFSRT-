@@ -56,6 +56,8 @@ namespace Data.Repository
                                         Gender = reader.GetString(reader.GetOrdinal("GENDER")),
                                         BirthDate = reader.GetDateTime(reader.GetOrdinal("BIRTHDATE")),
                                         Phone = reader.GetString(reader.GetOrdinal("PHONE")),
+                                        profilePicture = reader.IsDBNull(reader.GetOrdinal("PROFILE_PICTURE"))
+                                                         ? null : reader.GetString(reader.GetOrdinal("PROFILE_PICTURE")),
                                         Role = new Role
                                         {
                                             IdRole = reader.GetInt32(reader.GetOrdinal("ID_ROLE")),

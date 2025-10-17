@@ -465,6 +465,7 @@
         selectedServices.push({
             idService: service.idService,
             nameService: service.nameService,
+            price: service.price,
             specialty: {
                 idSpecialty: specialty.idSpecialty,
                 nameSpecialty: specialty.nameSpecialty
@@ -491,6 +492,7 @@
             <tr>
                 <td>${index + 1}</td>
                 <td>${service.nameService}</td>
+                <td>${service.price}</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeServiceGlobal(${index})">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -540,7 +542,7 @@
                     idService: service.idService,
                     nameService: service.nameService,
                     description: "",
-                    price: 0,
+                    price: service.price,
                     durationMinutes: 0,
                     specialty: {
                         idSpecialty: service.specialty.idSpecialty,
@@ -549,6 +551,7 @@
                     },
                     flgDelete: false
                 },
+                priceAtTime: service.price,
                 state: "P"
             }))
         };

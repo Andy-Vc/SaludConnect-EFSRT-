@@ -27,6 +27,7 @@ BEGIN
         U.GENDER,
         U.PHONE,
         U.ID_ROLE,
+		U.PROFILE_PICTURE,
         R.NAME_ROLE
     FROM TB_USERS U
     INNER JOIN TB_ROLES R ON U.ID_ROLE = R.ID_ROLE
@@ -102,11 +103,17 @@ BEGIN
     UPDATE TB_USERS
     SET
         Email = CASE WHEN @Email IS NOT NULL AND @Email <> '' THEN @Email ELSE Email END,
-        Profile_Picture = CASE WHEN @ProfilePicture IS NOT NULL AND @ProfilePicture <> '' THEN @ProfilePicture ELSE Profile_Picture END,
+		Profile_Picture = 
+    CASE 
+        WHEN @ProfilePicture IS NOT NULL AND @ProfilePicture <> '' THEN @ProfilePicture
+        WHEN @ProfilePicture = '' THEN NULL
+        ELSE Profile_Picture
+    END,
         Password_Hash = CASE WHEN @PasswordHash IS NOT NULL AND @PasswordHash <> '' THEN @PasswordHash ELSE Password_Hash END
     WHERE ID_USER = @ID_USER;
 END
 GO
+
 /* ============================================
    PROCEDURES MEDICAL RECORDS
    ============================================ */
@@ -119,7 +126,8 @@ CREATE PROCEDURE SP_INSERT_RECORD_WITH_SERVICES
     @Observations VARCHAR(2000),
     @Diagnosis VARCHAR(500) = NULL,
     @Treatment VARCHAR(2000) = NULL,
-    @ServiceIds VARCHAR(MAX)
+    @ServiceIds VARCHAR(MAX) = NULL,
+    @NewRecordID INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -129,23 +137,27 @@ BEGIN
         INSERT INTO TB_MEDICAL_RECORDS (ID_APPOINTMENT, OBSERVATIONS, DIAGNOSIS, TREATMENT)
         VALUES (@IdAppointment, @Observations, @Diagnosis, @Treatment);
 
-        DECLARE @NewRecordID INT = SCOPE_IDENTITY();
+        SET @NewRecordID = SCOPE_IDENTITY();
 
-        INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, STATE)
-        SELECT @NewRecordID, CAST(value AS INT), 'P'
-        FROM STRING_SPLIT(@ServiceIds, ',')
-        WHERE TRY_CAST(value AS INT) IS NOT NULL;
-
-        COMMIT TRANSACTION;
-
-        SELECT @NewRecordID AS NewRecordID;
+        IF @ServiceIds IS NOT NULL AND LTRIM(RTRIM(@ServiceIds)) <> ''
+        BEGIN
+            INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE)
+            SELECT
+                @NewRecordID,
+                TRY_CAST(value AS INT),
+                S.PRICE,
+                'P' 
+            FROM STRING_SPLIT(@ServiceIds, ',') AS split
+            INNER JOIN TB_SERVICES S ON S.ID_SERVICE = TRY_CAST(split.value AS INT)
+            WHERE TRY_CAST(split.value AS INT) IS NOT NULL;
+        END
+        COMMIT;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
+        ROLLBACK;
         THROW;
     END CATCH
 END;
-GO
 
 /* ============================================
    PROCEDURES SPECIALTY
@@ -160,7 +172,6 @@ BEGIN
 	SELECT ID_SPECIALTY,NAME_SPECIALTY FROM TB_SPECIALTIES
 END
 GO
-
 /* ============================================
    PROCEDURES SERVICES
    ============================================ */
@@ -447,8 +458,6 @@ BEGIN
     END
 END
 GO
-
-exec SP_GET_APPOINTEMNT_FOR_ID 2
 
 IF OBJECT_ID('SP_APPOINTMENT_CHANGE_STATE', 'P') IS NOT NULL
     DROP PROCEDURE SP_APPOINTMENT_CHANGE_STATE;

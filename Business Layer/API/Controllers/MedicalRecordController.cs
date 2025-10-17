@@ -22,7 +22,6 @@ namespace API.Controllers
         {
             try
             {
-                // Validar que el objeto no sea null
                 if (record == null)
                 {
                     return BadRequest(new ResultResponse<int>

@@ -128,26 +128,8 @@ namespace Web.Controllers
         {
             try
             {
-                if (doctorDto.file != null && doctorDto.file.Length > 0)
-                {
-                    string uploadsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
-                    if (!Directory.Exists(uploadsPath))
-                        Directory.CreateDirectory(uploadsPath);
-
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(doctorDto.file.FileName);
-                    string fullPath = Path.Combine(uploadsPath, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        await doctorDto.file.CopyToAsync(stream);
-                    }
-
-                    doctorDto.ProfilePicture = "/uploads/" + fileName;
-                }
-
-                // Ya con imagen guardada localmente, llamamos a la API
-                var result = await userService.UpdateProfileDoctor(doctorDto);
+                var result = await user.UpdateProfileDoctor(doctorDto);
 
                 return Json(new { success = result.Value, message = result.Message });
             }

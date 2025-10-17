@@ -51,7 +51,6 @@ namespace API.Controllers
 
                     string rutaUploads = Path.GetFullPath(relativePath, Directory.GetCurrentDirectory());
                     string currentDir = Directory.GetCurrentDirectory();
-                    Console.WriteLine("Current directory: " + currentDir);
 
                     if (!Directory.Exists(rutaUploads))
                         Directory.CreateDirectory(rutaUploads);

@@ -56,7 +56,6 @@ namespace Data.Repository
             }
             catch (Exception ex)
             {
-                list = new List<Specialty>();
                 Console.WriteLine(ex.Message);
             }
 
