@@ -305,6 +305,15 @@ namespace Data.Repository
 
             bool HasColumn(string name) => columns.Contains(name, StringComparer.OrdinalIgnoreCase);
 
+            MedicalRecord medicalRecord = null;
+            if (HasColumn("ID_RECORD") && !reader.IsDBNull(reader.GetOrdinal("ID_RECORD")))
+            {
+                medicalRecord = new MedicalRecord
+                {
+                    IdRecord = reader.GetInt32(reader.GetOrdinal("ID_RECORD"))
+                };
+            }
+
             return new Appointment()
             {
                 IdAppointment = reader.GetInt32(reader.GetOrdinal("ID_APPOINTMENT")),
@@ -324,7 +333,8 @@ namespace Data.Repository
                 {
                     NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),
                 },
-                AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE"))
+                AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE")),
+                MedicalRecord = medicalRecord
             };
         }
         private Appointment ConvertReaderToFullAppointment(SqlDataReader reader)
@@ -365,7 +375,7 @@ namespace Data.Repository
                 AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE")),
                 Office = new Office
                 {
-                    NroOffice = reader.GetString(reader.GetOrdinal("NUMERO_CONSULTORIO")),
+                    NroOffice = reader.GetString(reader.GetOrdinal("NUMBER_CONSULTORIES")),
                     FloorNumber = reader.GetInt32(reader.GetOrdinal("FLOOR_NUMBER"))
                 },
                 Doctor = new User

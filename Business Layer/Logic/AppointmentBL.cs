@@ -18,9 +18,9 @@ namespace Logic
             this.service = service;
         }
 
-        public async Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state)
+        public async Task<ResultResponse<string>> ChangeStateAppointment(int IdAppointment, string State)
         {
-            return await service.ChangeStateAppointment(idAppointment, state);
+            return await service.ChangeStateAppointment(IdAppointment, State);
         }
 
         public async Task<int> CountAppointmentsTodayByDoctor(int doctorId)

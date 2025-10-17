@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTO;
+using Microsoft.CodeAnalysis.Scripting;
 using Web.Extensions;
 using Web.Models;
+using Web.Models.DTO;
 using Web.Models.ViewModels.DoctorVM;
 using Web.Services.Implementation;
 using Web.Services.Interface;
@@ -15,13 +17,15 @@ namespace Web.Controllers
         private readonly IService service;
         private readonly IUser user;
         private readonly ISpecialty specialty;
+        private readonly IMedicalRecord medicalRecordService;
 
-        public DoctorController(IAppointment appointment, IService service, IUser user, ISpecialty specialty)
+        public DoctorController(IAppointment appointment, IService service, IUser user, ISpecialty specialty, IMedicalRecord medicalRecordService)
         {
             this.appointment = appointment;
             this.service = service;
             this.user = user;
             this.specialty = specialty;
+            this.medicalRecordService = medicalRecordService;
         }
 
         #region
@@ -40,6 +44,53 @@ namespace Web.Controllers
             var appointments = await appointment.ListAppointmentDateByDoctor(doctorId, date);
             return Json(appointments);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetSpecialties()
+        {
+            try
+            {
+                var specialties = await specialty.ListSpecialties();
+                return Json(specialties);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<Specialty>());
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetServicesBySpecialty(int idSpecialty)
+        {
+            try
+            {
+                var services = await service.ListServicesBySpecialty(idSpecialty);
+                return Json(services);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<Service>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterMedicalRecord([FromBody] MedicalRecord medicalRecord)
+        {
+            try
+            {
+                medicalRecord.DateReport = DateTime.Now;
+                var result = await medicalRecordService.RegisterRecordWithServicesAsync(medicalRecord);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResultResponse<int>
+                {
+                    Value = false,
+                    Message = $"Error al registrar historia médica: {ex.Message}"
+                });
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAppointmentsChartData()
         {
@@ -62,32 +113,50 @@ namespace Web.Controllers
 
             return Json(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetInformationAppointment(int idAppointment)
+        {
+            var detail = await appointment.GetAppointmentById(idAppointment);
 
+            if (detail == null)
+                return NotFound();
+
+            return Json(detail);
+        }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeAppointmentState(ChangeAppointmentStateRequest request)
+        public async Task<IActionResult> UpdateProfileDoctor([FromForm] DoctorDTO doctorDto)
         {
             try
             {
-                var result = await appointment.ChangeStateAppointment(request.IdAppointment, request.State);
-
-                if (result.Value)
+                if (doctorDto.file != null && doctorDto.file.Length > 0)
                 {
-                    TempData["GoodMessage"] = result.Message;
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = result.Message;
+                    string uploadsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+
+                    if (!Directory.Exists(uploadsPath))
+                        Directory.CreateDirectory(uploadsPath);
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(doctorDto.file.FileName);
+                    string fullPath = Path.Combine(uploadsPath, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await doctorDto.file.CopyToAsync(stream);
+                    }
+
+                    doctorDto.ProfilePicture = "/uploads/" + fileName;
                 }
 
-                return RedirectToAction("Dashboard");
+                // Ya con imagen guardada localmente, llamamos a la API
+                var result = await userService.UpdateProfileDoctor(doctorDto);
+
+                return Json(new { success = result.Value, message = result.Message });
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error al cambiar el estado: " + ex.Message;
-                return RedirectToAction("Dashboard");
+                return Json(new { success = false, message = ex.Message });
             }
         }
+
         #endregion
         public async Task<IActionResult> Dashboard()
         {
@@ -215,9 +284,44 @@ namespace Web.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> DescargarComprobante(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAppointmentState(ChangeAppointmentStateRequest request)
+        {
+            try
+            {
+                var result = await appointment.ChangeStateAppointment(request.IdAppointment, request.State);
+
+                if (result.Value)
+                {
+                    TempData["GoodMessage"] = result.Message;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.Message;
+                }
+
+                return RedirectToAction("Dashboard");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error al cambiar el estado: " + ex.Message;
+                return RedirectToAction("Dashboard");
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DownloadPDFAppointment(int id)
         {
             var (pdfBytes, fileName) = await appointment.DownloadSingleAppointmentPdf(id);
+
+            if (pdfBytes == null || pdfBytes.Length == 0)
+                return NotFound("No se pudo generar el PDF.");
+
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DownloadPDFMedicalRecord(int id)
+        {
+            var (pdfBytes, fileName) = await appointment.DownloadMedicalRecordPdf(id);
 
             if (pdfBytes == null || pdfBytes.Length == 0)
                 return NotFound("No se pudo generar el PDF.");

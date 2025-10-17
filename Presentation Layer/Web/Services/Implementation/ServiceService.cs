@@ -15,6 +15,25 @@ namespace Web.Services.Implementation
             _httpClient = httpClient;
         }
 
+        public async Task<List<Service>> ListServicesBySpecialty(int idSpecialty)
+        {
+            var url = $"service/services-by-specialty?idSpecialty={idSpecialty}";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var appointments = JsonSerializer.Deserialize<List<Service>>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return appointments ?? new List<Service>();
+            }
+            return new List<Service>();
+        }
+
         public async Task<List<Service>> ListServicesForDoctor(int idDoctor)
         {
             var url = $"service/service-by-doctor?idDoctor={idDoctor}";

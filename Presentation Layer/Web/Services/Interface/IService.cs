@@ -7,5 +7,6 @@ namespace Web.Services.Interface
         Task<List<Service>> ListServicesForDoctor(int idDoctor);
         Task<int> minDurationService();
         Task<int> totalServices();
+        Task<List<Service>> ListServicesBySpecialty(int idSpecialty);
     }
 }

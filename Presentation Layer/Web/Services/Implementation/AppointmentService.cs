@@ -81,6 +81,27 @@ namespace Web.Services.Implementation
             return 0;
         }
 
+        public async Task<(byte[] FileBytes, string FileName)> DownloadMedicalRecordPdf(int appointmentId)
+        {
+            var url = $"appointment/appointment-for-id/{appointmentId}/medical-record-pdf";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                var contentDisposition = response.Content.Headers.ContentDisposition;
+                string fileName = contentDisposition?.FileNameStar
+                    ?? contentDisposition?.FileName?.Trim('"')
+                    ?? $"Cita_{appointmentId}.pdf";
+
+                return (fileBytes, fileName);
+            }
+
+            return (Array.Empty<byte>(), $"Cita_{appointmentId}.pdf");
+        }
+
         public async Task<(byte[] FileBytes, string FileName)> DownloadSingleAppointmentPdf(int appointmentId)
         {
             var url = $"appointment/appointment-for-id/{appointmentId}/pdf";
@@ -101,6 +122,30 @@ namespace Web.Services.Implementation
 
             return (Array.Empty<byte>(), $"Cita_{appointmentId}.pdf");
         }
+
+        public async Task<Appointment> GetAppointmentById(int appointmentId)
+        {
+            if (appointmentId <= 0)
+                return null;
+
+            var url = $"appointment/appointment-for-id/{appointmentId}";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var appointment = JsonSerializer.Deserialize<Appointment>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return appointment;
+            }
+
+            return null;
+        }
+
 
         public async Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId)
         {

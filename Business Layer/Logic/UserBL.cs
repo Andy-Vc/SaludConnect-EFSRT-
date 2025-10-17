@@ -27,5 +27,10 @@ namespace Logic
         {
             return await service.totalDoctors();
         }
+
+        public async Task<ResultResponse<object>> UpdateProfileDoctor(DoctorDTO doctor)
+        {
+            return await service.UpdateProfileDoctor(doctor);
+        }
     }
 }

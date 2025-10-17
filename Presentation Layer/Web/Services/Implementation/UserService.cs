@@ -42,5 +42,37 @@ namespace Web.Services.Implementation
             }
             return 0;
         }
+
+        public async Task<ResultResponse<object>> UpdateProfileDoctor(DoctorDTO doctor)
+        {
+            using var formData = new MultipartFormDataContent();
+
+            formData.Add(new StringContent(doctor.IdUser.ToString()), nameof(doctor.IdUser));
+
+            if (!string.IsNullOrEmpty(doctor.Email))
+                formData.Add(new StringContent(doctor.Email), nameof(doctor.Email));
+
+            if (!string.IsNullOrEmpty(doctor.PasswordHash))
+                formData.Add(new StringContent(doctor.PasswordHash), nameof(doctor.PasswordHash));
+
+
+            if (doctor.file != null && doctor.file.Length > 0)
+            {
+                var fileContent = new StreamContent(doctor.file.OpenReadStream());
+                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(doctor.file.ContentType);
+                formData.Add(fileContent, nameof(doctor.file), doctor.file.FileName);
+            }
+
+            var response = await _httpClient.PutAsync("user/update-profile-doctor", formData);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                return new ResultResponse<object>($"Error: {response.StatusCode} - {errorContent}", false);
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<ResultResponse<object>>();
+            return result ?? new ResultResponse<object>("Error al procesar la respuesta", false);
+        }
+
     }
 }

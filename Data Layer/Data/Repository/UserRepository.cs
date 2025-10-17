@@ -125,5 +125,45 @@ namespace Data.Repository
             }
             return count;
         }
+
+        public async Task<ResultResponse<object>> UpdateProfileDoctor(DoctorDTO doctor)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(stringConexion))
+                {
+                    await conn.OpenAsync();
+
+                    using (var cmd = new SqlCommand("SP_UPDATE_PROFILE_DOCTOR", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@ID_USER", doctor.IdUser);
+                        cmd.Parameters.AddWithValue("@Email", string.IsNullOrEmpty(doctor.Email) ? (object)DBNull.Value : doctor.Email);
+                        cmd.Parameters.AddWithValue("@ProfilePicture", string.IsNullOrEmpty(doctor.ProfilePicture) ? (object)DBNull.Value : doctor.ProfilePicture);
+                        cmd.Parameters.AddWithValue("@PasswordHash", string.IsNullOrEmpty(doctor.PasswordHash) ? (object)DBNull.Value : doctor.PasswordHash);
+
+                        await cmd.ExecuteNonQueryAsync();
+
+                        return new ResultResponse<object>
+                        {
+                            Message = "Perfil actualizado correctamente",
+                            Value = true,
+                            Data = null
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResultResponse<object>
+                {
+                    Message = "Error al actualizar perfil: " + ex.Message,
+                    Value = false,
+                    Data = null
+                };
+            }
+        }
+
     }
 }

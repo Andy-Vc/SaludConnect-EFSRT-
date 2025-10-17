@@ -12,5 +12,6 @@ namespace Data.Interface
     {
         Task<int> totalDoctors();
         Task<ResultResponse<User>> GetProfile(int idUser);
+        Task<ResultResponse<object>> UpdateProfileDoctor(DoctorDTO doctor);
     }
 }

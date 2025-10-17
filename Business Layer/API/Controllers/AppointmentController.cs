@@ -76,6 +76,8 @@ namespace API.Controllers
         [HttpPost("change-state")]
         public async Task<IActionResult> ChangeStateAppointment([FromBody] ChangeAppointmentStateRequest response)
         {
+            Console.WriteLine($"ID recibido: {response.IdAppointment}, Estado: {response.State}");
+
             if (response.IdAppointment <= 0)
                 return BadRequest("ID de cita no válido.");
 
@@ -97,7 +99,6 @@ namespace API.Controllers
                 return BadRequest("Cita id no válido.");
 
             var appointments = await serviceBL.GetAppointmentForId(appointmentId);
-
             return Ok(appointments);
         }
 
@@ -325,10 +326,13 @@ namespace API.Controllers
         }, new BaseColor(34, 197, 94));
 
                 AddCard("👨‍⚕️ Médico Asignado", new List<(string, string)>
-        {
-            ("Doctor(a)", $"Dr(a). {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}"),
-            ("Especialidad", appointment.Specialty.NameSpecialty)
-        }, new BaseColor(139, 92, 246));
+{
+    (
+        $"{(appointment.Doctor.Gender == "F" ? "Doctora" : "Doctor")}",
+        $"{(appointment.Doctor.Gender == "F" ? "Dra." : "Dr.")} {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}"
+    ),
+    ("Especialidad", appointment.Specialty.NameSpecialty)
+}, new BaseColor(139, 92, 246));
 
                 AddCard("📍 Ubicación", new List<(string, string)>
         {
@@ -585,7 +589,8 @@ namespace API.Controllers
         {
             ("Fecha de Atención", appointment.DateAppointment.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))),
             ("Hora", appointment.DateAppointment.ToString("hh:mm tt")),
-            ("Médico Tratante", $"Dr(a). {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}"),
+            ("Médico Tratante",
+            $"{(appointment.Doctor.Gender == "F" ? "Dra." : "Dr.")} {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}"),
             ("Especialidad", appointment.Specialty.NameSpecialty),
             ("Consultorio", $"{appointment.Office.NroOffice} - Piso {appointment.Office.FloorNumber}"),
             ("Fecha de Reporte", appointment.MedicalRecord.DateReport.ToString("dd/MM/yyyy HH:mm"))
@@ -806,7 +811,6 @@ namespace API.Controllers
                     document.Add(totalTable);
                 }
 
-                // ==================== CUADRO DE ADVERTENCIA ====================
                 var warningBox = new PdfPTable(1)
                 {
                     WidthPercentage = 100,
@@ -830,7 +834,6 @@ namespace API.Controllers
                 warningBox.AddCell(warningCell);
                 document.Add(warningBox);
 
-                // ==================== FIRMA DEL MÉDICO ====================
                 document.Add(new Paragraph(" ") { SpacingBefore = 30 });
 
                 var signatureTable = new PdfPTable(1)
@@ -852,16 +855,15 @@ namespace API.Controllers
                 cb.RestoreState();
 
                 var signatureText = new Paragraph(
-                    $"Dr(a). {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}\n" +
-                    $"{appointment.Specialty.NameSpecialty}",
-                    bodyFont)
+                $"{(appointment.Doctor.Gender == "F" ? "Dra." : "Dr.")} {appointment.Doctor.FirstName} {appointment.Doctor.LastNamePat} {appointment.Doctor.LastNameMat}\n" +
+                $"{appointment.Specialty.NameSpecialty}",
+                bodyFont)
                 {
                     Alignment = Element.ALIGN_CENTER,
                     SpacingBefore = 35
                 };
                 document.Add(signatureText);
 
-                // ==================== PIE DE PÁGINA ====================
                 var footer = new Paragraph(
                     $"Documento generado el: {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
                     "SaludConnect - Sistema de Gestión Médica",
@@ -874,8 +876,12 @@ namespace API.Controllers
 
                 document.Close();
 
-                var fileName = $"HistoriaClinica_{appointment.Patient.LastNamePat}_{appointment.DateAppointment:yyyyMMdd}_{appointment.MedicalRecord.IdRecord}.pdf";
-                return File(memoryStream.ToArray(), "application/pdf", fileName);
+                var fileName = $"Cita_{appointment.Patient.LastNamePat}_{appointment.DateAppointment:yyyyMMdd}_{appointment.IdAppointment}.pdf";
+
+                Response.Headers.Add("Content-Disposition",
+                    "attachment; filename*=UTF-8''" + Uri.EscapeDataString(fileName));
+
+                return File(memoryStream.ToArray(), "application/pdf");
             }
         }
     }

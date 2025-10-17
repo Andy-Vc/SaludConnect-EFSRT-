@@ -10,6 +10,62 @@
 		margin: auto;
 	}
 
+	.modal.fade .modal-dialog {
+		transition: transform 0.3s ease-out;
+	}
+
+	#specialtySelect:hover, #serviceSelect:hover {
+		background-color: #e2e8f0 !important;
+	}
+
+	#specialtySelect:focus, #serviceSelect:focus {
+		background-color: white !important;
+		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+		border-color: #3b82f6 !important;
+	}
+
+	#observations:focus, #diagnosis:focus, #treatment:focus {
+		background-color: white !important;
+		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+		border-color: #3b82f6 !important;
+	}
+
+	#servicesTableBody tr:hover {
+		background-color: #f1f5f9 !important;
+		transition: background-color 0.2s ease;
+	}
+
+	#servicesTableBody .btn-danger {
+		background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+		border: none;
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		transition: all 0.2s ease;
+	}
+
+		#servicesTableBody .btn-danger:hover {
+			transform: scale(1.05);
+			box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+		}
+
+	.modal-body::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	.modal-body::-webkit-scrollbar-track {
+		background: #f1f5f9;
+		border-radius: 10px;
+	}
+
+	.modal-body::-webkit-scrollbar-thumb {
+		background: #cbd5e1;
+		border-radius: 10px;
+	}
+
+		.modal-body::-webkit-scrollbar-thumb:hover {
+			background: #94a3b8;
+		}
+
 	.flatpickr-calendar.inline {
 		border: none;
 		box-shadow: none;
@@ -22,7 +78,6 @@
 		border-radius: 6px;
 	}
 
-	/* Día seleccionado */
 	.flatpickr-day.selected,
 	.flatpickr-day.startRange,
 	.flatpickr-day.endRange {
@@ -32,13 +87,11 @@
 		border: none;
 	}
 
-	/* Mejora hover */
 	.flatpickr-day:hover {
 		background: #f0f0f0;
 		border-radius: 6px;
 	}
 
-	/* Eliminar bordes molestos */
 	.flatpickr-day {
 		border: none;
 		margin: 2px;
@@ -181,8 +234,217 @@
 					<path d="M3 10h18" />
 				</svg>
 				<span class="text-black">Resumen de citas - Últimos 7 días</span>
-			</h5>			
+			</h5>
 			<canvas id="appointmentsChart" height="300"></canvas>
+		</div>
+	</div>
+	<div class="modal fade" id="medicalRecordModal" tabindex="-1" aria-labelledby="medicalRecordModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-scrollable">
+			<div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
+				<div class="modal-header text-white border-0" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 1rem 1rem 0 0; padding: 1.5rem 2rem;">
+					<h5 class="modal-title fw-bold d-flex align-items-center" id="medicalRecordModalLabel">
+						<div class="bg-white bg-opacity-25 rounded-circle p-2 me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+								 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+								<polyline points="14 2 14 8 20 8"></polyline>
+								<line x1="16" y1="13" x2="8" y2="13"></line>
+								<line x1="16" y1="17" x2="8" y2="17"></line>
+								<line x1="10" y1="9" x2="8" y2="9"></line>
+							</svg>
+						</div>
+						<span style="font-size: 1.25rem;">Registrar Historia Médica</span>
+					</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body" style="padding: 2rem; background-color: #f8fafc;">
+					<div class="alert border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%); border-left: 4px solid #3b82f6 !important; border-radius: 0.75rem;">
+						<div class="d-flex align-items-center">
+							<div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+									<circle cx="12" cy="7" r="4"></circle>
+								</svg>
+							</div>
+							<div>
+								<small class="text-muted fw-semibold d-block mb-1">PACIENTE</small>
+								<strong class="text-dark" style="font-size: 1.1rem;" id="modalPatientName"></strong>
+							</div>
+						</div>
+					</div>
+
+					<div class="card border-0 shadow-sm mb-4" style="border-radius: 1rem; overflow: hidden;">
+						<div class="card-header text-white border-0" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 1rem 1.5rem;">
+							<h6 class="mb-0 fw-bold d-flex align-items-center">
+								<div class="bg-white bg-opacity-25 rounded-circle p-1 me-2" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M9 4.5V6h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V7H6.5a.5.5 0 0 1 0-1H8V4.5a.5.5 0 0 1 1 0z" />
+										<path d="M10 1.5V3h2a1 1 0 0 1 1 1v1H3V4a1 1 0 0 1 1-1h2V1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5zM9 2h-2v1h2V2z" />
+										<path d="M3 6h10v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z" />
+									</svg>
+
+								</div>
+								Servicios Adicionales
+							</h6>
+						</div>
+						<div class="card-body" style="padding: 1.5rem;">
+							<div class="row g-3 mb-4">
+								<div class="col-md-5">
+									<label for="specialtySelect" class="form-label fw-semibold text-dark">
+										<svg fill="#000000" width="20" height="20" viewBox="0 0 24 24" id="medical-insurance-2" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color"><path id="secondary" d="M12,14V10m2,2H10" style="fill: none; stroke: rgb(44, 169, 188); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M19.94,5.8l-.43,5.52a11,11,0,0,1-6.63,9.26L12,21l-.88-.42a11,11,0,0,1-6.63-9.26L4.06,5.8a1,1,0,0,1,.76-1L12,3l7.18,1.8A1,1,0,0,1,19.94,5.8Z" style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg>
+										Especialidad
+									</label>
+									<select class="form-select form-select-lg shadow-sm border-0" id="specialtySelect" onchange="loadServicesBySpecialtyGlobal()" style="border-radius: 0.75rem; background-color: #f1f5f9;">
+										<option value="">Seleccione una especialidad</option>
+									</select>
+								</div>
+								<div class="col-md-5">
+									<label for="serviceSelect" class="form-label fw-semibold text-dark">
+										<svg fill="#000000" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M14,11H13V10a1,1,0,0,0-2,0v1H10a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0V13h1a1,1,0,0,0,0-2Zm6.16-6A6.29,6.29,0,0,0,12,4.41a6.27,6.27,0,0,0-8.16,9.48l6,6.05a3,3,0,0,0,4.24,0l6-6.05A6.27,6.27,0,0,0,20.16,5Zm-1.41,7.46-6,6a1,1,0,0,1-1.42,0l-6-6a4.29,4.29,0,0,1,0-6,4.27,4.27,0,0,1,6,0,1,1,0,0,0,1.42,0,4.27,4.27,0,0,1,6,0A4.29,4.29,0,0,1,18.75,12.48Z" /></svg>
+										Servicio
+									</label>
+									<select class="form-select form-select-lg shadow-sm border-0" id="serviceSelect" style="border-radius: 0.75rem; background-color: #f1f5f9;">
+										<option value="">Seleccione una especialidad primero</option>
+									</select>
+								</div>
+								<div class="col-md-2 d-flex align-items-end">
+									<button type="button" class="btn btn-success btn-lg w-100 shadow-sm fw-semibold" onclick="addServiceToTableGlobal()" style="border-radius: 0.75rem; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border: none;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+											<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+											<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+										</svg>
+										Agregar
+									</button>
+								</div>
+							</div>
+
+							<div class="table-responsive" style="border-radius: 0.75rem; overflow: hidden;">
+								<table class="table table-hover mb-0 align-middle" style="background-color: white;">
+									<thead style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);">
+										<tr>
+											<th class="fw-bold text-dark" style="width: 10%; padding: 1rem;">#</th>
+											<th class="fw-bold text-dark" style="padding: 1rem;">
+												<svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M4.03553 1C1.80677 1 0 2.80677 0 5.03553C0 6.10582 0.42517 7.13228 1.18198 7.88909L7.14645 13.8536C7.34171 14.0488 7.65829 14.0488 7.85355 13.8536L13.818 7.88909C14.5748 7.13228 15 6.10582 15 5.03553C15 2.80677 13.1932 1 10.9645 1C9.89418 1 8.86772 1.42517 8.11091 2.18198L7.5 2.79289L6.88909 2.18198C6.13228 1.42517 5.10582 1 4.03553 1Z" fill="#000000" />
+												</svg>												<span>
+													Servicio
+												</span>
+											</th>
+											<th class="text-center fw-bold text-dark" style="width: 15%; padding: 1rem;">Acción</th>
+										</tr>
+									</thead>
+									<tbody id="servicesTableBody">
+										<tr>
+											<td colspan="3" class="text-center text-muted py-4">
+												<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50 mb-2">
+													<circle cx="12" cy="12" r="10"></circle>
+													<path d="m4.93 4.93 14.14 14.14"></path>
+												</svg>
+												<p class="mb-0">No hay servicios agregados</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- Campos de la Historia Médica -->
+					<div class="row g-3">
+						<div class="col-12">
+							<label for="observations" class="form-label fw-semibold text-dark">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
+									<path d="M5 4h6v1H5V4zm0 2h6v1H5V6z" />
+									<path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2zm1 0v13h8V2H4z" />
+								</svg>
+
+								Observaciones <span class="text-danger">*</span>
+							</label>
+							<textarea class="form-control shadow-sm border-0" id="observations" rows="4" required
+									  placeholder="Describa los síntomas, hallazgos y observaciones de la consulta..."
+									  style="border-radius: 0.75rem; background-color: #f1f5f9; padding: 1rem;"></textarea>
+						</div>
+
+						<div class="col-md-6">
+							<label for="diagnosis" class="form-label fw-semibold text-dark">
+								<svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="Sleep_test_tracking"><path d="M136.395,148.3011H76.249a6,6,0,0,0,0,12h60.146a6,6,0,0,0,0-12Z" /><path d="M106.2842,167.2089H76.249a6,6,0,0,0,0,12h30.0352a6,6,0,1,0,0-12Z" /><path d="M430.2051,160.7465H412.4092l-3.8408-8.6954a10.2223,10.2223,0,0,0-18.3965-.6279l-4.9043,9.3233H369.6162l-6.418-20.9888a10.2216,10.2216,0,0,0-19.8359,1.1855l-8.05,44.8985c-.0576.3237-.14.5761-.6914.5674-.5889-.0122-.624-.27-.669-.5948l-5.7812-42.1689a10.2215,10.2215,0,0,0-19.9414-1.4663l-5.2363,17.998H286.1963a6,6,0,0,0,0,12h18.1328a10.2722,10.2722,0,0,0,9.8135-7.3667l3.2744-11.2553,4.6465,33.89a12.4789,12.4789,0,0,0,12.3105,10.9619q.1422.003.2842.0029a12.4717,12.4717,0,0,0,12.4668-10.45l6.751-37.6543,4.65,15.209a10.1674,10.1674,0,0,0,9.7744,7.232h18.041a10.1994,10.1994,0,0,0,9.0469-5.4629l3.69-7.0161,2.8223,6.3891a10.2272,10.2272,0,0,0,9.3486,6.09h18.9551a6,6,0,0,0,0-12Z" /><path d="M311.63,273.6127H330.396a4.6143,4.6143,0,0,1,4.6143,4.6143V333.723a4.6143,4.6143,0,0,1-4.6143,4.6143H311.63a4.6143,4.6143,0,0,1-4.6143-4.6143V278.2272A4.6145,4.6145,0,0,1,311.63,273.6127Z" /><path d="M350.2537,299.0985H369.02a4.6147,4.6147,0,0,1,4.6147,4.6147v30.01a4.6143,4.6143,0,0,1-4.6143,4.6143H350.2534a4.6143,4.6143,0,0,1-4.6143-4.6143v-30.01A4.6145,4.6145,0,0,1,350.2537,299.0985Z" /><path d="M388.8772,258.046h18.7659a4.6147,4.6147,0,0,1,4.6147,4.6147V333.723a4.6143,4.6143,0,0,1-4.6143,4.6143H388.8774a4.6147,4.6147,0,0,1-4.6147-4.6147v-71.062A4.6145,4.6145,0,0,1,388.8772,258.046Z" /><path d="M451.0874,38.1183h-185.78A31.2326,31.2326,0,0,0,234.0747,69.351v90.1162h-67.563v-15.32a19.8357,19.8357,0,0,0-19.8135-19.8134H65.87a19.8357,19.8357,0,0,0-19.8135,19.8134v42.64A19.8358,19.8358,0,0,0,65.87,206.6005h80.8281a19.8358,19.8358,0,0,0,19.8135-19.8135v-15.32h67.563V263.786H189.4341a34.9617,34.9617,0,0,0-34.9224,34.9219v14.67a6,6,0,0,0,12,0v-14.67a22.9483,22.9483,0,0,1,22.9224-22.9219h44.6406v75.3389a9.0683,9.0683,0,0,0-9.0684-9.0681H123.22a9.0644,9.0644,0,0,0-9.0293,8.2956v-.8613a22.2133,22.2133,0,0,0-22.1875-22.1885H72.1147V292.368a12.627,12.627,0,0,0-12.6123-12.6123h-17.21A12.627,12.627,0,0,0,29.68,292.368V461.2694a12.627,12.627,0,0,0,12.6123,12.6123h17.21a12.627,12.627,0,0,0,12.6123-12.6123V439.327h42.0372v2.8471a9.0682,9.0682,0,0,0,9.0683,9.0681h98.8936v10.0223a12.627,12.627,0,0,0,12.6123,12.6123h20.2148a12.6038,12.6038,0,0,0,10.7168-5.9952h185.43A31.2326,31.2326,0,0,0,482.32,436.649V69.351A31.2326,31.2326,0,0,0,451.0874,38.1183ZM154.5117,186.787a7.8221,7.8221,0,0,1-7.8135,7.8135H65.87a7.8221,7.8221,0,0,1-7.8135-7.8135v-42.64a7.822,7.822,0,0,1,7.8135-7.8134h80.8281a7.822,7.822,0,0,1,7.8135,7.8134ZM60.1147,461.2694a.6126.6126,0,0,1-.6123.6123h-17.21a.6126.6126,0,0,1-.6123-.6123V292.368a.6127.6127,0,0,1,.6123-.6123h17.21a.6127.6127,0,0,1,.6123.6123Zm12-122.0962c.0606.0438.1236.0847.1832.1294H92.0034a10.2,10.2,0,0,1,10.1875,10.1885v4.4814H72.1147Zm42.0372,88.1538H72.1147V402.6493h42.0372Zm0-36.6777H72.1147V365.9725h42.0372ZM376.6138,53.735h11.29a6,6,0,0,1,0,12h-11.29a6,6,0,0,1,0-12Zm-48.1241,0h28.2256a6,6,0,0,1,0,12H328.49a6,6,0,0,1,0-12Zm-72.9365,407.53a.6126.6126,0,0,1-.6123.6123H234.7261a.6126.6126,0,0,1-.6123-.6123v-95.292h20.8271a.62.62,0,0,1,.6123.6123Zm210.3789-29.0053a17.9507,17.9507,0,0,1-17.95,17.95H268.4126c-.29,0-.5728-.0293-.8594-.043V366.5848a12.627,12.627,0,0,0-12.6123-12.6123h-4.4785V275.786h28.7769c.1738,0,.3447-.0115.5151-.026v66.558a21.7241,21.7241,0,0,0,21.7241,21.7242H417.7949A21.724,21.724,0,0,0,439.519,342.318V244.7648a21.7241,21.7241,0,0,0-21.7241-21.7243H301.4785a21.7241,21.7241,0,0,0-21.7241,21.7243V263.812c-.17-.0145-.3413-.026-.5151-.026H250.4624V171.4672h11.7588a6,6,0,0,0,0-12H250.4624V98.433a17.9506,17.9506,0,0,1,17.95-17.95H447.9819a17.9506,17.9506,0,0,1,17.95,17.95ZM291.7544,342.318V244.7648a9.7353,9.7353,0,0,1,9.7241-9.7243H417.7949a9.7353,9.7353,0,0,1,9.7241,9.7243V342.318a9.7352,9.7352,0,0,1-9.7241,9.7242H301.4785A9.7352,9.7352,0,0,1,291.7544,342.318Z" /></g></svg>
+								Diagnóstico
+							</label>
+							<textarea class="form-control shadow-sm border-0" id="diagnosis" rows="4"
+									  placeholder="Ingrese el diagnóstico médico (opcional)"
+									  style="border-radius: 0.75rem; background-color: #f1f5f9; padding: 1rem;"></textarea>
+						</div>
+
+						<div class="col-md-6">
+							<label for="treatment" class="form-label fw-semibold text-dark">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
+									<path d="M9.5 1.05a5 5 0 0 0-7.07 7.07l5.657 5.657a5 5 0 0 0 7.07-7.07L9.5 1.05zM2.636 2.636a4 4 0 0 1 5.656 0L10.95 5.293 5.293 10.95 2.636 8.293a4 4 0 0 1 0-5.657z" />
+								</svg>
+
+								Tratamiento
+							</label>
+							<textarea class="form-control shadow-sm border-0" id="treatment" rows="4"
+									  placeholder="Ingrese el plan de tratamiento y medicación (opcional)"
+									  style="border-radius: 0.75rem; background-color: #f1f5f9; padding: 1rem;"></textarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer border-0" style="padding: 1.5rem 2rem; background-color: #f8fafc;">
+					<button type="button" class="btn btn-light btn-lg px-4 shadow-sm fw-semibold" data-bs-dismiss="modal" style="border-radius: 0.75rem;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+							<path d="M18 6 6 18"></path>
+							<path d="m6 6 12 12"></path>
+						</svg>
+						Cancelar
+					</button>
+					<button type="button" class="btn btn-primary btn-lg px-5 shadow fw-bold" onclick="saveMedicalRecordGlobal()" style="border-radius: 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+							<path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+						</svg>
+						Guardar Historia
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-scrollable">
+			<div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
+				<div class="modal-header text-white border-0" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 1rem 1rem 0 0;">
+					<h5 class="modal-title fw-bold d-flex align-items-center" id="detailsModalLabel">
+						<div class="bg-white bg-opacity-25 rounded-circle p-2 me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M8 2v4" />
+								<path d="M16 2v4" />
+								<rect width="18" height="18" x="3" y="4" rx="2" />
+								<path d="M3 10h18" />
+								<path d="M8 14h.01" />
+								<path d="M12 14h.01" />
+								<path d="M16 14h.01" />
+								<path d="M8 18h.01" />
+								<path d="M12 18h.01" />
+								<path d="M16 18h.01" />
+							</svg>
+						</div>
+						<span style="font-size: 1.25rem;">Detalles de la Cita</span>
+					</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+				</div>
+				<div class="modal-body" id="modalContentDetail" style=" background-color: #f8fafc;">
+				</div>
+
+				<div class="modal-footer border-0" style="padding: 1.5rem 2rem; background-color: #f8fafc;">
+					<button type="button" class="btn btn-light btn-lg px-4 shadow-sm fw-semibold" data-bs-dismiss="modal" style="border-radius: 0.75rem;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+							<path d="M18 6 6 18"></path>
+							<path d="m6 6 12 12"></path>
+						</svg>
+						Cerrar
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 
