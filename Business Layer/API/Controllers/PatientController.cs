@@ -1,4 +1,6 @@
-﻿using Logic;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Logic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -11,11 +13,51 @@ namespace API.Controllers
     public class PatientController : ControllerBase
     {
         private readonly PatientBL _patientBL;
+        private string? _urlCloudinary;
 
-        public PatientController(PatientBL serviceBL)
+        public PatientController(PatientBL serviceBL, IConfiguration config)
         {
             this._patientBL = serviceBL;
+            this._urlCloudinary = config.GetSection("Cloudinary").GetSection("URL").Value;
         }
+
+        [HttpPut("UpdateInformationPatient")]
+        public async Task<IActionResult> UpdateInformationPatient([FromForm] PatientUpdate patient, IFormFile photo)
+        {
+
+            System.Diagnostics.Debug.WriteLine("----------------INICIANDO METODO DE ACTUALIZAR INFORMACION PACIENTE-----------");
+
+            try
+            {
+                if (photo != null)
+                {
+                    Cloudinary cloudinary = new Cloudinary(_urlCloudinary);
+
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(photo.FileName, photo.OpenReadStream()),
+                        UseFilename = true,
+                        Overwrite = true,
+                        Folder = "SaludConnect/Patient"
+
+                    };
+                    var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                    patient.imageProfile = uploadResult.SecureUrl.ToString();
+
+                }
+                System.Diagnostics.Debug.WriteLine("FOTO PASANDO DESDE SWAGER: " + photo);
+                System.Diagnostics.Debug.WriteLine("FOTO GUARDANDO EN EL CAMPO IMAGEPROFILE" + patient.imageProfile);
+
+                var patientUpdate = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
+                return Ok(patientUpdate);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet("CountAppointments")]
         public async Task<IActionResult> CountAppointments(int idPatient) {
@@ -78,14 +120,7 @@ namespace API.Controllers
             return Ok(listMostrar);
         }
 
-        [HttpPut("UpdateInformationPatient")]
-        public async Task<IActionResult> UpdateInformationPatient(PatientUpdate patient) {
-            PatientUpdate patientInformation = new PatientUpdate();
-
-            patientInformation = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
-
-            return Ok(patientInformation);
-        }
+     
 
 
     }

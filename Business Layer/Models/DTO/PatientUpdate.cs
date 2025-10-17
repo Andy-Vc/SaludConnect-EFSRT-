@@ -15,7 +15,7 @@ namespace Models.DTO
         public string? document { get; set; }
         public string? phone { get; set; }
         public string? email { get; set; }
-        public string imageProfile { get; set; }
+        public string? imageProfile { get; set; }
         public EmergencyContact Emergency { get; set; }
        
     }

@@ -70,13 +70,13 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE DOCUMENT = @DOCUMENT)
     BEGIN
-        RAISERROR('El n√∫mero de documento %s ya existe', 16, 1, @DOCUMENT);
+        RAISERROR('El n˙mero de documento %s ya existe', 16, 1, @DOCUMENT);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE EMAIL = @EMAIL)
     BEGIN
-        RAISERROR('El correo electr√≥nico %s ya existe', 16, 1, @EMAIL);
+        RAISERROR('El correo electrÛnico %s ya existe', 16, 1, @EMAIL);
         RETURN;
     END
 
@@ -367,7 +367,7 @@ BEGIN
 
     IF @STATE NOT IN ('A', 'P', 'X', 'N')
     BEGIN
-        RAISERROR('Estado inv√°lido. Use: A=Atendido, P=Pendiente, X=Cancelado, N=No asisti√≥', 16, 1);
+        RAISERROR('Estado inv·lido. Use: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiÛ', 16, 1);
         RETURN;
     END
 
@@ -488,15 +488,15 @@ END
 GO
 
 /* ============================================
-   PROCEDURES PACIENTE-CLIENTE
-   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asisti√≥
+   PROCEDURES PATIENT
+   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiÛ
    ============================================ */
 
 IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
 
-CREATE or alter PROCEDURE sp_total_citas
+CREATE PROCEDURE sp_total_citas
     @idPaciente INT
 AS
 BEGIN
@@ -512,7 +512,7 @@ IF OBJECT_ID('sp_total_citas_asistidas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_asistidas;
 GO
 
-CREATE or alter  PROCEDURE sp_total_citas_asistidas
+CREATE PROCEDURE sp_total_citas_asistidas
     @idPaciente INT
 AS
 BEGIN
@@ -528,7 +528,7 @@ IF OBJECT_ID('sp_total_citas_pendientes', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_pendientes;
 GO
 
-CREATE or alter PROCEDURE sp_total_citas_pendientes
+CREATE PROCEDURE sp_total_citas_pendientes
     @idPaciente INT
 AS
 BEGIN
@@ -544,108 +544,129 @@ IF OBJECT_ID('sp_total_citas_canceladas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas_canceladas;
 GO
 
-CREATE or alter PROCEDURE sp_total_citas_canceladas
+CREATE PROCEDURE sp_total_citas_canceladas
     @idPaciente INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-	 SELECT COUNT(*) AS Citas_Pendientes 
+    SELECT COUNT(*) AS Citas_Canceladas 
     FROM TB_APPOINTMENTS
     WHERE ID_PATIENT = @idPaciente AND STATE = 'X';
 END
 GO
 
-
-CREATE OR ALTER PROC sp_total_doctores
-as
-begin
-	select COUNT(*) as total_Doctores from TB_USERS where ID_ROLE = 3
-end
-go
-
-
-create or alter proc sp_patient_information
-@idUser int
-as
-begin
-	select 
-	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
-	us.PHONE, us.EMAIL,us.DATE_REGISTER,us.PROFILE_PICTURE,
-	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
-	ec.ID_RELATIONSHIP, ec.PHONE_EMERGENCY, rl.DESCRIPTION_RELATIONSHIP
-	from TB_USERS us 
-	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
-	INNER JOIN TB_RELATIONSHIP rl on ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
-	where ID_USER = @idUser
-end
-go
-
-CREATE OR ALTER PROC sp_update_information_patient 
---VARIABLES USER
-@idUser int, 
-@firstname VARCHAR(50),
-@lastNamePat VARCHAR(50),
-@lastNameMat VARCHAR(50),
-@document VARCHAR(50),
-@phone VARCHAR(50),
-@email VARCHAR(50),
-@profilePicture VARCHAR(50),
---VARIABLES CONTACTO
-@namesContact varchar(50),
-@contacNamePat varchar(50),
-@contacNameMat varchar(50),
-@idRelation int,
-@phoneEmergency varchar(50)
-as
-begin
-	begin try
-		begin TRANSACTION
-			DECLARE @idContact INT;
-				Select @idContact = ID_E_CONTACT --OBTENER EL ID_CONTACT DEL USER
-				from TB_USERS where ID_USER = @idUser
-					
-					UPDATE TB_USERS
-					set FIRST_NAME = @firstname,LAST_NAME_PAT = @lastNamePat, 
-						LAST_NAME_MAT = @lastNameMat, DOCUMENT = @document, PHONE = @phone,
-						EMAIL = @email, PROFILE_PICTURE = @profilePicture 
-						where ID_USER = @idUser
-
-					if @idContact IS NOT NULL
-						BEGIN
-							UPDATE TB_EMERGENCY_CONTACT
-								set NAMES_CONTACT = @namesContact,
-									LAST_NAME_PAT = @contacNamePat,
-									LAST_NAME_MAT = @contacNameMat,
-									ID_RELATIONSHIP = @idRelation,
-									PHONE_EMERGENCY = @phoneEmergency
-						END
-		COMMIT TRANSACTION;
-	end try
-	
-	begin catch
-		ROLLBACK TRANSACTION
-		THROW
-	end catch
-end
+IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_total_doctores;
 GO
 
---exec sp_patient_information 6
+CREATE PROCEDURE sp_total_doctores
+AS
+BEGIN
+    SET NOCOUNT ON;
 
---select * from TB_APPOINTMENTS
---select * from TB_USERS
---select * from TB_SPECIALTIES
---select * from TB_DOCTOR_SPECIALTIES
---select * from TB_EMERGENCY_CONTACT
---SELECT * FROM TB_RELATIONSHIP
+    SELECT COUNT(*) AS total_Doctores 
+    FROM TB_USERS 
+    WHERE ID_ROLE = 3 AND FLG_DELETE = 0;
+END
+GO
 
+IF OBJECT_ID('sp_patient_information', 'P') IS NOT NULL
+    DROP PROCEDURE sp_patient_information;
+GO
 
+CREATE PROCEDURE sp_patient_information
+    @idUser INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        us.ID_USER, 
+        us.FIRST_NAME, 
+        us.LAST_NAME_PAT, 
+        us.LAST_NAME_MAT,
+        us.DOCUMENT,
+        us.PHONE, 
+        us.EMAIL,
+        us.DATE_REGISTER,
+        us.PROFILE_PICTURE,
+        ec.NAMES_CONTACT, 
+        ec.LAST_NAME_PAT, 
+        ec.LAST_NAME_MAT,
+        ec.ID_RELATIONSHIP, 
+        ec.PHONE_EMERGENCY, 
+        rl.DESCRIPTION_RELATIONSHIP
+    FROM TB_USERS us 
+    INNER JOIN TB_EMERGENCY_CONTACT ec ON us.ID_E_CONTACT = ec.ID_E_CONTACT
+    INNER JOIN TB_RELATIONSHIP rl ON ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
+    WHERE ID_USER = @idUser;
+END
+GO
+
+IF OBJECT_ID('sp_update_information_patient', 'P') IS NOT NULL
+    DROP PROCEDURE sp_update_information_patient;
+GO
+
+CREATE PROCEDURE sp_update_information_patient 
+    -- VARIABLES USER
+    @idUser INT, 
+    @firstname VARCHAR(50),
+    @lastNamePat VARCHAR(50),
+    @lastNameMat VARCHAR(50),
+    @document VARCHAR(50),
+    @phone VARCHAR(50),
+    @email VARCHAR(50),
+    @profilePicture VARCHAR(150) = '',
+    -- VARIABLES CONTACTO
+    @idContact INT,
+    @namesContact VARCHAR(50) = '',
+    @contacNamePat VARCHAR(50) = '',
+    @contacNameMat VARCHAR(50) = '',
+    @idRelation INT,
+    @phoneEmergency VARCHAR(50) = ''	
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+                    
+            UPDATE TB_USERS
+            SET FIRST_NAME = @firstname,
+                LAST_NAME_PAT = @lastNamePat, 
+                LAST_NAME_MAT = @lastNameMat,
+                DOCUMENT = @document,
+                PHONE = @phone,
+                EMAIL = @email,
+                PROFILE_PICTURE = @profilePicture 
+            WHERE ID_USER = @idUser;
+
+            IF @idContact IS NOT NULL
+            BEGIN
+                UPDATE TB_EMERGENCY_CONTACT
+                SET NAMES_CONTACT = @namesContact,
+                    LAST_NAME_PAT = @contacNamePat,
+                    LAST_NAME_MAT = @contacNameMat,
+                    ID_RELATIONSHIP = @idRelation,
+                    PHONE_EMERGENCY = @phoneEmergency
+                WHERE ID_E_CONTACT = @idContact;
+            END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
+--select * from tb_users
 IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_proximas_citas;
 GO
 
-
-CREATE OR ALTER PROCEDURE sp_proximas_citas
+CREATE PROCEDURE sp_proximas_citas
     @idPaciente INT
 AS
 BEGIN
@@ -672,25 +693,6 @@ BEGIN
 END
 GO
 
-
-
---EXEC sp_proximas_citas 5
-
-IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
-    DROP PROCEDURE sp_total_doctores;
-GO
-
-CREATE or alter PROCEDURE sp_total_doctores
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT COUNT(*) AS total_Doctores 
-    FROM TB_USERS 
-    WHERE ID_ROLE = 3 AND FLG_DELETE = 0;
-END
-GO
-
 /* ============================================
    PROCEDURES SCHEDULES
    ============================================ */
@@ -699,7 +701,7 @@ IF OBJECT_ID('SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO', 'P') IS NOT NULL
     DROP PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO;
 GO
 
-CREATE or alter PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
+CREATE PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
     @ScheduleID INT
 AS
 BEGIN
@@ -736,7 +738,7 @@ BEGIN
             0 AS MaxCapacity, 
             @TotalMinutes AS TotalMinutesInShift,
             @SlotDuration AS SlotDurationMinutes,
-            'Error: Duraci√≥n de cita inv√°lida.' AS StatusMessage;
+            'Error: DuraciÛn de cita inv·lida.' AS StatusMessage;
         RETURN;
     END
 
@@ -746,7 +748,7 @@ BEGIN
         @MaxCapacity AS MaxCapacity,
         @TotalMinutes AS TotalMinutesInShift,
         @SlotDuration AS SlotDurationMinutes,
-        'C√°lculo exitoso' AS StatusMessage;
+        'C·lculo exitoso' AS StatusMessage;
 END
 GO
 

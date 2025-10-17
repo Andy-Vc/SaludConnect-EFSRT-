@@ -285,6 +285,7 @@ namespace Data.Repository
                     cmd.Parameters.AddWithValue("@email", patient.email);
                     cmd.Parameters.AddWithValue("@profilePicture", patient.imageProfile );
                     //parameters contact
+                    cmd.Parameters.AddWithValue("@idContact", patient.Emergency.idEContact);
                     cmd.Parameters.AddWithValue("@namesContact", patient.Emergency.namesContact);
                     cmd.Parameters.AddWithValue("@contacNamePat", patient.Emergency.lastNamePat);
                     cmd.Parameters.AddWithValue("@contacNameMat", patient.Emergency.lastNameMat);
@@ -292,42 +293,6 @@ namespace Data.Repository
                     cmd.Parameters.AddWithValue("@phoneEmergency", patient.Emergency.phoneEmergency);
 
                     await cmd.ExecuteNonQueryAsync();
-
-                    /*
-                    using (SqlCommand cmd2 = new SqlCommand("sp_patient_information", cn))
-                    {
-
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@idUser", patient.idUser);
-                        using (SqlDataReader rd = cmd.ExecuteReader())
-                        {
-                            if (await rd.ReadAsync())
-                            {
-                                    updatePatient = new PatientUpdate
-                                    {
-                                        firstName= rd.GetString(0),
-                                        lastNamePat = rd.GetString(1),
-                                        lastNameMat = rd.GetString(2),
-                                        document = rd.GetString(3),
-                                        phone = rd.GetString(4),
-                                        email = rd.GetString(5),
-                                        imageProfile = rd.IsDBNull(7) ? "" : rd.GetString(7),
-                                        Emergency = new EmergencyContact {
-                                            namesContact = rd.IsDBNull(8) ? "" : rd.GetString(8),
-                                            lastNamePat = rd.IsDBNull(9) ? "" : rd.GetString(9),
-                                            lastNameMat = rd.IsDBNull(10) ? "" : rd.GetString(10),
-                                            relationShip  = new RelationShip { 
-                                                idRelationShip = rd.GetInt32(11)
-                                            },
-                                            phoneEmergency = rd.GetString(12),
-                                        },
-                                        
-                                    };
-                            }
-                        }
-                    }
-                */
 
                     updatePatient = patient;
                 }
