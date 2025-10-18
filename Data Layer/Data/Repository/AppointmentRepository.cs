@@ -120,9 +120,9 @@ namespace Data.Repository
             }
             return count;
         }
-        public async Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
+        public async Task<List<AppointmentDTO>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
         {
-            var list = new List<Appointment>();
+            var list = new List<AppointmentDTO>();
             try
             {
                 using (var conexion = new SqlConnection(stringConexion))
@@ -150,7 +150,7 @@ namespace Data.Repository
             }
             catch (Exception ex)
             {
-                list = new List<Appointment>();
+                list = new List<AppointmentDTO>();
 
             }
             return list;
@@ -192,9 +192,9 @@ namespace Data.Repository
 
             return result;
         }
-        public async Task<Appointment> GetAppointmentForId(int idAppointment)
+        public async Task<AppointmentDTO> GetAppointmentForId(int idAppointment)
         {
-            Appointment appointment = null;
+            AppointmentDTO appointment = null;
 
             try
             {
@@ -287,7 +287,7 @@ namespace Data.Repository
                 }
             }
         }
-        private Appointment ConvertReaderToAppointment(SqlDataReader reader)
+        private AppointmentDTO ConvertReaderToAppointment(SqlDataReader reader)
         {
             var dateOnly = reader.GetDateTime(reader.GetOrdinal("DateOnly"));
             var timeStr = reader.GetString(reader.GetOrdinal("AppointmentTime"));
@@ -314,7 +314,7 @@ namespace Data.Repository
                 };
             }
 
-            return new Appointment()
+            return new AppointmentDTO()
             {
                 IdAppointment = reader.GetInt32(reader.GetOrdinal("ID_APPOINTMENT")),
                 Patient = new User
@@ -337,7 +337,7 @@ namespace Data.Repository
                 MedicalRecord = medicalRecord
             };
         }
-        private Appointment ConvertReaderToFullAppointment(SqlDataReader reader)
+        private AppointmentDTO ConvertReaderToFullAppointment(SqlDataReader reader)
         {
             var dateOnly = reader.GetDateTime(reader.GetOrdinal("DateOnly"));
             var timeStr = reader.GetString(reader.GetOrdinal("AppointmentTime"));
@@ -350,7 +350,7 @@ namespace Data.Repository
 
             var dateAppointment = dateOnly.Date + time;
 
-            var appointment = new Appointment()
+            var appointment = new AppointmentDTO()
             {
                 IdAppointment = reader.GetInt32(reader.GetOrdinal("ID_APPOINTMENT")),
                 Patient = new User

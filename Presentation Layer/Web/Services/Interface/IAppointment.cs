@@ -10,9 +10,9 @@ namespace Web.Services.Interface
         Task<int> CountPatientsByDoctor(int doctorId);
         Task<int> CountCompletedAppointmentByDoctor(int doctorId);
         Task<int> CountUpcomingAppointmentsByDoctor(int doctorId);
-        Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date);
+        Task<List<AppointmentDTO>> ListAppointmentDateByDoctor(int doctorId, DateTime? date);
         Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId);
-        Task<Appointment> GetAppointmentById(int appointmentId);
+        Task<AppointmentDTO> GetAppointmentById(int appointmentId);
         Task<(byte[] FileBytes, string FileName)> DownloadSingleAppointmentPdf(int appointmentId);
         Task<(byte[] FileBytes, string FileName)> DownloadMedicalRecordPdf(int appointmentId);
         Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state);

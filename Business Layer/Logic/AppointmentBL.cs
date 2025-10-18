@@ -43,7 +43,7 @@ namespace Logic
             return await service.CountUpcomingAppointmentsByDoctor(doctorId);
         }
 
-        public async Task<Appointment> GetAppointmentForId(int idUser)
+        public async Task<AppointmentDTO> GetAppointmentForId(int idUser)
         {
             return await service.GetAppointmentForId(idUser);
         }
@@ -53,7 +53,7 @@ namespace Logic
             return await service.GetAppointmentsSummaryLast7Days(doctorId);
         }
 
-        public async Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
+        public async Task<List<AppointmentDTO>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
         {
             return await service.ListAppointmentDateByDoctor(doctorId, date);
         }

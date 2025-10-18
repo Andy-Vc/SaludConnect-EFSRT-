@@ -123,7 +123,7 @@ namespace Web.Services.Implementation
             return (Array.Empty<byte>(), $"Cita_{appointmentId}.pdf");
         }
 
-        public async Task<Appointment> GetAppointmentById(int appointmentId)
+        public async Task<AppointmentDTO> GetAppointmentById(int appointmentId)
         {
             if (appointmentId <= 0)
                 return null;
@@ -135,7 +135,7 @@ namespace Web.Services.Implementation
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var appointment = JsonSerializer.Deserialize<Appointment>(content, new JsonSerializerOptions
+                var appointment = JsonSerializer.Deserialize<AppointmentDTO>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
@@ -166,7 +166,7 @@ namespace Web.Services.Implementation
             return new List<AppointmentSummaryByDate>();
         }
 
-        public async Task<List<Appointment>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
+        public async Task<List<AppointmentDTO>> ListAppointmentDateByDoctor(int doctorId, DateTime? date)
         {
             string? dateString = date.HasValue ? date.Value.ToString("yyyy-MM-dd") : null;
             var url = $"appointment/appointments-by-doctor/{doctorId}?date={dateString}";
@@ -176,14 +176,14 @@ namespace Web.Services.Implementation
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var appointments = JsonSerializer.Deserialize<List<Appointment>>(content, new JsonSerializerOptions
+                var appointments = JsonSerializer.Deserialize<List<AppointmentDTO>>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return appointments ?? new List<Appointment>();
+                return appointments ?? new List<AppointmentDTO>();
             }
-            return new List<Appointment>();
+            return new List<AppointmentDTO>();
         }
     }
 }
