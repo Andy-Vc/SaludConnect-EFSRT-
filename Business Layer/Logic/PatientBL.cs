@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
+using Models;
+using Models.DTO;
 
 namespace Logic
 {
@@ -15,9 +17,50 @@ namespace Logic
         {
             this._patient = service;
         }
-        public async Task<int> CountAppoitments(int idPatient)
+        public async Task<int> CountAppointments(int idPatient)
         {
-            return await _patient.CountAppoitments(idPatient);
+            return await _patient.CountAppointments(idPatient);
+        }
+
+        public async Task<int> CountAppointmentsAssisted(int idPatient)
+        {
+            return await _patient.CountAppointmentsAssisted(idPatient);
+        }
+
+        public async Task<int> CountAppointmentsCanceled(int idPatient)
+        {
+            return await _patient.CountAppointmentsCanceled(idPatient);
+        }
+
+        public async Task<int> CountAppointmentsEarring(int idPatient)
+        {
+            return await _patient.CountAppointmentsEarring(idPatient);
+        }
+
+        public async Task<int> TotalDoctors()
+        {
+            return await _patient.TotalDoctors();
+        }
+
+        public async Task<List<UpcomingAppointments>> UpcomingAppointmentsPatient(int idPatient)
+        {
+          return await _patient.UpcomingAppointmentsPatient(idPatient);
+        }
+
+
+        public async Task<List<PatientInformation>> PatientInformation(int idUser)
+        {
+            return await _patient.PatientInformation(idUser);
+        }
+
+        public async Task<List<RelationShip>> CompletListOfRelationShips()
+        {
+            return await _patient.CompletListOfRelationShips();
+        }
+
+        public async Task<PatientUpdate> UpdateInformationPatient(PatientUpdate patient, int idUser)
+        {
+            return await _patient.UpdateInformationPatient(patient, patient.idUser);
         }
     }
 }
