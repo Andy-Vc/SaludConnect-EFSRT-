@@ -24,9 +24,6 @@ namespace API.Controllers
         [HttpPut("UpdateInformationPatient")]
         public async Task<IActionResult> UpdateInformationPatient([FromForm] PatientUpdate patient, IFormFile photo)
         {
-
-            System.Diagnostics.Debug.WriteLine("----------------INICIANDO METODO DE ACTUALIZAR INFORMACION PACIENTE-----------");
-
             try
             {
                 if (photo != null)
@@ -43,11 +40,7 @@ namespace API.Controllers
                     };
                     var uploadResult = await cloudinary.UploadAsync(uploadParams);
                     patient.imageProfile = uploadResult.SecureUrl.ToString();
-
                 }
-                System.Diagnostics.Debug.WriteLine("FOTO PASANDO DESDE SWAGER: " + photo);
-                System.Diagnostics.Debug.WriteLine("FOTO GUARDANDO EN EL CAMPO IMAGEPROFILE" + patient.imageProfile);
-
                 var patientUpdate = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
                 return Ok(patientUpdate);
 
