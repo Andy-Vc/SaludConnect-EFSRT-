@@ -157,8 +157,8 @@ BEGIN
         ROLLBACK;
         THROW;
     END CATCH
-END;
-
+	END
+GO
 /* ============================================
    PROCEDURES SPECIALTY
    ============================================ */
@@ -583,7 +583,7 @@ END
 GO
 
 /* ============================================
-   PROCEDURES PATIENT
+   PROCEDURES PACIENTE-CLIENTE
    Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistió
    ============================================ */
 
@@ -651,112 +651,6 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
-    DROP PROCEDURE sp_total_doctores;
-GO
-
-CREATE PROCEDURE sp_total_doctores
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT COUNT(*) AS total_Doctores 
-    FROM TB_USERS 
-    WHERE ID_ROLE = 3 AND FLG_DELETE = 0;
-END
-GO
-
-IF OBJECT_ID('sp_patient_information', 'P') IS NOT NULL
-    DROP PROCEDURE sp_patient_information;
-GO
-
-CREATE PROCEDURE sp_patient_information
-    @idUser INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT 
-        us.ID_USER, 
-        us.FIRST_NAME, 
-        us.LAST_NAME_PAT, 
-        us.LAST_NAME_MAT,
-        us.DOCUMENT,
-        us.PHONE, 
-        us.EMAIL,
-        us.DATE_REGISTER,
-        us.PROFILE_PICTURE,
-        ec.NAMES_CONTACT, 
-        ec.LAST_NAME_PAT, 
-        ec.LAST_NAME_MAT,
-        ec.ID_RELATIONSHIP, 
-        ec.PHONE_EMERGENCY, 
-        rl.DESCRIPTION_RELATIONSHIP
-    FROM TB_USERS us 
-    INNER JOIN TB_EMERGENCY_CONTACT ec ON us.ID_E_CONTACT = ec.ID_E_CONTACT
-    INNER JOIN TB_RELATIONSHIP rl ON ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
-    WHERE ID_USER = @idUser;
-END
-GO
-
-IF OBJECT_ID('sp_update_information_patient', 'P') IS NOT NULL
-    DROP PROCEDURE sp_update_information_patient;
-GO
-
-CREATE PROCEDURE sp_update_information_patient 
-    -- VARIABLES USER
-    @idUser INT, 
-    @firstname VARCHAR(50),
-    @lastNamePat VARCHAR(50),
-    @lastNameMat VARCHAR(50),
-    @document VARCHAR(50),
-    @phone VARCHAR(50),
-    @email VARCHAR(50),
-    @profilePicture VARCHAR(150) = '',
-    -- VARIABLES CONTACTO
-    @idContact INT,
-    @namesContact VARCHAR(50) = '',
-    @contacNamePat VARCHAR(50) = '',
-    @contacNameMat VARCHAR(50) = '',
-    @idRelation INT,
-    @phoneEmergency VARCHAR(50) = ''	
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    BEGIN TRY
-        BEGIN TRANSACTION
-                    
-            UPDATE TB_USERS
-            SET FIRST_NAME = @firstname,
-                LAST_NAME_PAT = @lastNamePat, 
-                LAST_NAME_MAT = @lastNameMat,
-                DOCUMENT = @document,
-                PHONE = @phone,
-                EMAIL = @email,
-                PROFILE_PICTURE = @profilePicture 
-            WHERE ID_USER = @idUser;
-
-            IF @idContact IS NOT NULL
-            BEGIN
-                UPDATE TB_EMERGENCY_CONTACT
-                SET NAMES_CONTACT = @namesContact,
-                    LAST_NAME_PAT = @contacNamePat,
-                    LAST_NAME_MAT = @contacNameMat,
-                    ID_RELATIONSHIP = @idRelation,
-                    PHONE_EMERGENCY = @phoneEmergency
-                WHERE ID_E_CONTACT = @idContact;
-            END
-
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END
-GO
---select * from tb_users
 IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_proximas_citas;
 GO
@@ -775,16 +669,31 @@ BEGIN
         FORMAT(a.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Fecha_Cita,
         a.STATE,
         a.APPOINTMENT_PRICE,
-        c.NUMBER_CONSULTORIES,
+        c.NUMERO_CONSULTORIO,
         c.FLOOR_NUMBER
     FROM TB_APPOINTMENTS a
     INNER JOIN TB_USERS d ON a.ID_DOCTOR = d.ID_USER
     INNER JOIN TB_SPECIALTIES s ON a.ID_SPECIALTY = s.ID_SPECIALTY
-    INNER JOIN TB_CONSULTORIES c ON a.ID_CONSULTORIES = c.ID_CONSULTORIES
+    INNER JOIN TB_CONSULTORIOS c ON a.ID_CONSULTORIO = c.ID_CONSULTORIO
     WHERE a.ID_PATIENT = @idPaciente 
         AND a.DATE_APPOINTMENT >= CAST(GETDATE() AS DATE)
         AND a.STATE = 'P'
     ORDER BY a.DATE_APPOINTMENT ASC;
+END
+GO
+
+IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_total_doctores;
+GO
+
+CREATE PROCEDURE sp_total_doctores
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT COUNT(*) AS total_Doctores 
+    FROM TB_USERS 
+    WHERE ID_ROLE = 3 AND FLG_DELETE = 0;
 END
 GO
 

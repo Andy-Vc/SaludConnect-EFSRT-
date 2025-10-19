@@ -230,4 +230,4 @@ GO
 
 INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT, DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE, ID_E_CONTACT, DATE_REGISTER, PROFILE_PICTURE)
 VALUES
-('', 'PacienteNuevo', 'PacienteNuevo', '98898989', '10/05/1990', '912345290', 'M', 'apacientenuevo@gmail.com', 'clave123', 1, 2, '10/10/2024 10:00:00', NULL);
+('PacienteNuevo', 'PacienteNuevo', 'PacienteNuevo', '98898989', '10/05/1990', '912345290', 'M', 'apacientenuevo@gmail.com', 'clave123', 1, 2, '10/10/2024 10:00:00', NULL);
