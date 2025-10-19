@@ -43,7 +43,7 @@ namespace Logic
         }
 
 
-        public async Task<List<PatientInformation>> PatientInformation(int idUser)
+        public async Task<PatientInformation> PatientInformation(int idUser)
         {
             return await _patient.PatientInformation(idUser);
         }

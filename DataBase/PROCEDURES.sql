@@ -569,6 +569,23 @@ BEGIN
 END
 GO
 
+create or alter proc sp_patient_information
+@idUser int
+as
+begin
+	select 
+	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
+	us.PHONE, us.EMAIL,us.DATE_REGISTER,us.PROFILE_PICTURE,
+	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
+	ec.ID_RELATIONSHIP, ec.PHONE_EMERGENCY, rl.DESCRIPTION_RELATIONSHIP
+	from TB_USERS us 
+	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
+	INNER JOIN TB_RELATIONSHIP rl on ec.ID_RELATIONSHIP = rl.ID_RELATIONSHIP
+	where ID_USER = @idUser
+end
+go
+select * from TB_USERS
+
 /* ============================================
    PROCEDURES USER
    ============================================ */

@@ -143,9 +143,9 @@ namespace Data.Repository
             }
             return count;
         }
-        public async Task<List<PatientInformation>> PatientInformation(int idUser)
+        public async Task<PatientInformation> PatientInformation(int idUser)
         {
-            List<PatientInformation> listPatInfo = new List<PatientInformation>();
+            var patientInformation = new PatientInformation();
             try 
             {
                 using (SqlConnection cnx = new SqlConnection(conexion))
@@ -164,7 +164,7 @@ namespace Data.Repository
                             {
                                 while (rd.Read())
                                 {
-                                    listPatInfo.Add(new PatientInformation()
+                                    patientInformation = new PatientInformation
                                     {
                                         idUser = rd.GetInt32(0),
                                         firstName = rd.GetString(1),
@@ -181,7 +181,7 @@ namespace Data.Repository
                                         idRelationShip = rd.GetInt32(12),
                                         phoneContactEmergency = rd.GetString(13),
                                         description_relationShip = rd.GetString(14),
-                                    });
+                                    };
                                 }
                             }
                         }
@@ -192,7 +192,7 @@ namespace Data.Repository
             {
                 System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
             }
-            return listPatInfo;
+            return patientInformation;
 
         }
         public async Task<List<RelationShip>> CompletListOfRelationShips()

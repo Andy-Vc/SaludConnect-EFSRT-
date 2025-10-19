@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
 using Web.Models;
 using Web.Services.Interface;
@@ -63,8 +64,27 @@ namespace Web.Controllers
             return View();
         }
 
-        public IActionResult Record() 
+        public async  Task<IActionResult> Record() 
         {
+            var user = HttpContext.Session.GetObjectFromJson<User>("User"); //Obtener al usuario logeado
+            if (user == null) 
+            {
+                return RedirectToAction("Login", "UserAuth");
+            } //validacion
+
+            var idUserPatient = user.IdUser;
+
+            var totalApointments    = await _patient.CountAppointments(idUserPatient);
+            var ApointmentsAssisted = await _patient.CountAppointmentsAssisted(idUserPatient);
+            var ApointmentsCanceled = await _patient.CountAppointmentsCanceled(idUserPatient);
+            var ApointmentsEarring  = await _patient.CountAppointmentsEarring(idUserPatient);
+
+            ViewBag.TotalAppointments   = totalApointments;
+            ViewBag.ApointmentsAssisted = ApointmentsAssisted;
+            ViewBag.ApointmentsCanceled = ApointmentsCanceled;
+            ViewBag.ApointmentsEarring  = ApointmentsEarring;
+
+
             return View();
         }
         public IActionResult AppointmentsDetails() 
@@ -76,9 +96,18 @@ namespace Web.Controllers
             return View();
         }
 
-        public IActionResult Profile() 
+        public async Task<IActionResult> Profile() 
         {
-            return View();
+            var user = HttpContext.Session.GetObjectFromJson<User>("User"); 
+            if (user == null)
+            {
+                return RedirectToAction("Login", "UserAuth");
+            }
+           
+            var idUserPatient = user.IdUser;
+            var patient = await _patient.PatientInformation(idUserPatient);
+            
+            return View(patient);
         }
 
         public IActionResult Notifications() 

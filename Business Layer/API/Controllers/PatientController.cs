@@ -88,11 +88,11 @@ namespace API.Controllers
 
         [HttpGet("PatientInformation")]
         public async Task<IActionResult> PatientInformation(int idUser)
-        { 
-            List<PatientInformation>listMostrar = new List<PatientInformation>();
+        {
+            var patientInformation = new PatientInformation();
 
-            listMostrar = await _patientBL.PatientInformation(idUser);
-            return Ok(listMostrar);
+            patientInformation = await _patientBL.PatientInformation(idUser);
+            return Ok(patientInformation);
         }
 
         [HttpGet("CompletListRelation")]

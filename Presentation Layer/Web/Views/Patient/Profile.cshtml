@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Web.Models.DTO
+@{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+    @model PatientInformation
 }
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
@@ -34,8 +36,8 @@
                     </button>
                     <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="handlePhotoUpload(event)">
                 </div>
-                <h3 class="text-lg font-semibold text-text-primary mb-1">María García López</h3>
-                <p class="text-text-secondary text-sm mb-4">Paciente desde Enero 2023</p>
+                <h3 class="text-lg font-semibold text-text-primary mb-1">@($"{Model.firstName} {Model.lastNamePat} {Model.lastNameMat}")</h3>
+                <p class="text-text-secondary text-sm mb-4">Paciente desde @Model.dateRegister</p>
                 <div class="text-xs text-text-secondary">
                     <p class="mb-1">Tamaño máximo: 5MB</p>
                     <p>Formatos: JPG, PNG</p>
@@ -107,28 +109,30 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="form-label">Nombre Completo *</label>
-                                <input type="text" class="form-input" value="María García López" disabled id="fullName" required>
+                                <input type="text" class="form-input" value="@Model.firstName" disabled id="fullName" required>
                                 <div class="validation-message hidden text-error text-sm mt-1"></div>
                             </div>
+                            <div>
+                                <label class="form-label">Apellido Paterno *</label>
+                                <input type="text" class="form-input" value="@Model.lastNamePat" disabled id="fullName" required>
+                                <div class="validation-message hidden text-error text-sm mt-1"></div>
+                            </div>
+
+                            <div>
+                                <label class="form-label">Apellido Materno *</label>
+                                <input type="text" class="form-input" value="@Model.lastNameMat" disabled id="fullName" required>
+                                <div class="validation-message hidden text-error text-sm mt-1"></div>
+                            </div>
+
                             <div>
                                 <label class="form-label">Fecha de Nacimiento *</label>
-                                <input type="date" class="form-input" value="1985-03-15" disabled id="birthDate" required>
+                                <input type="date" class="form-input" value="" disabled id="birthDate" required>
                                 <div class="validation-message hidden text-error text-sm mt-1"></div>
                             </div>
-                            <div>
-                                <label class="form-label">Género *</label>
-                                <select class="form-input" disabled id="gender" required>
-                                    <option value="">Seleccionar género</option>
-                                    <option value="femenino" selected>Femenino</option>
-                                    <option value="masculino">Masculino</option>
-                                    <option value="otro">Otro</option>
-                                    <option value="prefiero-no-decir">Prefiero no decir</option>
-                                </select>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
+                            
                             <div>
                                 <label class="form-label">Número de Identificación *</label>
-                                <input type="text" class="form-input" value="12345678A" disabled id="idNumber" required>
+                                <input type="text" class="form-input" value="@Model.document" disabled id="idNumber" required>
                                 <div class="validation-message hidden text-error text-sm mt-1"></div>
                             </div>
                         </div>
@@ -138,7 +142,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="form-label">Nombre del Contacto</label>
-                                    <input type="text" class="form-input" value="Carlos García" disabled id="emergencyName">
+                                    <input type="text" class="form-input" value="@Model.namesContact" disabled id="emergencyName">
                                 </div>
                                 <div>
                                     <label class="form-label">Relación</label>
