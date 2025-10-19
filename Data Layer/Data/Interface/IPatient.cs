@@ -14,11 +14,11 @@ namespace Data.Interface
         Task<int> CountAppointmentsAssisted(int idPatient);
         Task<int> CountAppointmentsEarring(int idPatient);
         Task<int> CountAppointmentsCanceled(int idPatient);
-        Task<List<UpcomingAppointments>> UpcomingAppointmentsPatient(int idPatient);
         Task<int> TotalDoctors();
         Task<List<PatientInformation>>PatientInformation(int idUser);
         Task<List<RelationShip>> CompletListOfRelationShips();
-
         Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, int idUser);
+        Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient);
+        
     }
 }                                                                                               
