@@ -42,11 +42,6 @@ namespace Logic
             return await _patient.TotalDoctors();
         }
 
-        public async Task<List<UpcomingAppointments>> UpcomingAppointmentsPatient(int idPatient)
-        {
-          return await _patient.UpcomingAppointmentsPatient(idPatient);
-        }
-
 
         public async Task<List<PatientInformation>> PatientInformation(int idUser)
         {
@@ -62,5 +57,10 @@ namespace Logic
         {
             return await _patient.UpdateInformationPatient(patient, patient.idUser);
         }
+
+        public async Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient)
+        {
+            return await _patient.PatientNextAppointement(idPatient);
+        }   
     }
 }

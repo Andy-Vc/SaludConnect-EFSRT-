@@ -143,51 +143,6 @@ namespace Data.Repository
             }
             return count;
         }
-        public async Task<List<UpcomingAppointments>> UpcomingAppointmentsPatient(int idPatient)
-        {
-            List<UpcomingAppointments> listUComAppoint = new List<UpcomingAppointments>();
-
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(conexion))
-                {
-                    await cn.OpenAsync();
-                    using (SqlCommand cmd = new SqlCommand("sp_proximas_citas", cn))
-                    {
-
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@idPaciente", idPatient);
-
-                        using (SqlDataReader r = cmd.ExecuteReader())
-                        {
-                            if (r.HasRows)
-                            {
-                                while (r.Read())
-                                {
-                                    listUComAppoint.Add(new UpcomingAppointments()
-                                    {
-                                        idAppointments = r.GetInt32(0),
-                                        fullNames = r.GetString(1),
-                                        specialty = r.GetString(2),
-                                        hourAppointments = r.GetString(3),
-                                        dateAppointments = r.GetString(4),
-                                    });
-                                }
-                            }
-                        }
-
-                    }
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
-            }
-            return listUComAppoint;
-        }
         public async Task<List<PatientInformation>> PatientInformation(int idUser)
         {
             List<PatientInformation> listPatInfo = new List<PatientInformation>();
@@ -264,7 +219,6 @@ namespace Data.Repository
 
             return listRelation;
         }
-
         public async Task<PatientUpdate> UpdateInformationPatient(PatientUpdate patient, int idUser)
         {
             PatientUpdate updatePatient = new PatientUpdate();
@@ -298,6 +252,52 @@ namespace Data.Repository
                 }
             }
             return updatePatient;
+        }
+        public async Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient) {
+
+            var listNextAppointment = new List<PatientNextAppointements>();
+            
+            try {
+                using (SqlConnection c = new SqlConnection(conexion))
+                {
+                    await c.OpenAsync();
+                    using (SqlCommand cd = new SqlCommand("sp_proximas_citas", c))
+                    {
+
+                        cd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        cd.Parameters.AddWithValue("@idPaciente", idPatient);
+
+                        using (SqlDataReader rd = await cd.ExecuteReaderAsync())
+                        {
+                            if (rd.HasRows)
+                            {
+                                while (await rd.ReadAsync())
+                                {
+                                    listNextAppointment.Add(new PatientNextAppointements
+                                    {
+                                        idAppointment = rd.GetInt32(0),
+                                        nombresCompletos = rd.GetString(1),
+                                        nameSpeciality = rd.GetString(2),
+                                        horaCita = rd.GetString(3),
+                                        fechaCita = rd.GetString(4),
+                                        state = rd.GetString(5),
+                                        appointmentPrice = rd.GetDecimal(6),
+                                        numberConsultories = rd.GetString(7),
+                                        floor_number = rd.GetInt32(8)
+                                    });
+                                }
+                            }
+                        }
+                    }
+               
+                }
+
+            } catch (Exception ex) 
+            {
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+            }
+            return listNextAppointment;
         }
     }
 }

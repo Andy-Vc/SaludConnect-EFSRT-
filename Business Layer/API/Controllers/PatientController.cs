@@ -86,15 +86,6 @@ namespace API.Controllers
             return Ok(count);
         }
 
-
-        [HttpGet("UpcomingAppointments")]
-        public async Task<IActionResult> UpcomingAppointmentsPatient(int idPatient) {
-            List<UpcomingAppointments> listaMostrar = new List<UpcomingAppointments>();
-
-            listaMostrar = await _patientBL.UpcomingAppointmentsPatient(idPatient);
-            return Ok(listaMostrar);
-        }
-
         [HttpGet("PatientInformation")]
         public async Task<IActionResult> PatientInformation(int idUser)
         { 
@@ -113,8 +104,14 @@ namespace API.Controllers
             return Ok(listMostrar);
         }
 
-     
+        [HttpGet("PatientNextAppointments")]
+        public async Task<IActionResult> PatientNextAppointments(int idPatient) 
+        { 
+            List<PatientNextAppointements>listView = new List<PatientNextAppointements>();
 
+            listView = await _patientBL.PatientNextAppointement(idPatient);
+            return Ok(listView);
+        }
 
     }
 }

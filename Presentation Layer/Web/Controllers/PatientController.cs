@@ -1,11 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Web.Extensions;
+using Web.Models;
+using Web.Services.Interface;
 
 namespace Web.Controllers
 {
     public class PatientController : Controller
     {
-        public IActionResult Index() 
+
+        private readonly IPatient _patient;
+
+
+        public PatientController(IPatient inyec)
         {
+            this._patient = inyec;
+        }
+
+        public async Task<IActionResult> Index() 
+        {
+            var user = HttpContext.Session.GetObjectFromJson<User>("User"); //Obtener al usuario logeado
+            if (user == null) 
+            {
+                return RedirectToAction("Login", "UserAuth");
+            } //validacion
+
+            var idUserPatient = user.IdUser;
+
+            var totalApointments    = await _patient.CountAppointments(idUserPatient);
+            var ApointmentsAssisted = await _patient.CountAppointmentsAssisted(idUserPatient);
+            var ApointmentsCanceled = await _patient.CountAppointmentsCanceled(idUserPatient);
+            var ApointmentsEarring  = await _patient.CountAppointmentsEarring(idUserPatient);
+
+            var nextAppointments    = await _patient.PatientNextAppointement(idUserPatient);
+
+            ViewBag.TotalAppointments   = totalApointments;
+            ViewBag.ApointmentsAssisted = ApointmentsAssisted;
+            ViewBag.ApointmentsCanceled = ApointmentsCanceled;
+            ViewBag.ApointmentsEarring  = ApointmentsEarring;
+            ViewBag.NextAppointments = nextAppointments;
+
+
             return View();
         }
 

@@ -712,7 +712,7 @@ IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_proximas_citas;
 GO
 
-CREATE PROCEDURE sp_proximas_citas
+CREATE or alter PROCEDURE sp_proximas_citas
     @idPaciente INT
 AS
 BEGIN
@@ -726,18 +726,22 @@ BEGIN
         FORMAT(a.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Fecha_Cita,
         a.STATE,
         a.APPOINTMENT_PRICE,
-        c.NUMERO_CONSULTORIO,
+        c.NUMBER_CONSULTORIES,
         c.FLOOR_NUMBER
     FROM TB_APPOINTMENTS a
     INNER JOIN TB_USERS d ON a.ID_DOCTOR = d.ID_USER
     INNER JOIN TB_SPECIALTIES s ON a.ID_SPECIALTY = s.ID_SPECIALTY
-    INNER JOIN TB_CONSULTORIOS c ON a.ID_CONSULTORIO = c.ID_CONSULTORIO
+    INNER JOIN TB_CONSULTORIES c ON a.ID_CONSULTORIES = c.ID_CONSULTORIES
     WHERE a.ID_PATIENT = @idPaciente 
         AND a.DATE_APPOINTMENT >= CAST(GETDATE() AS DATE)
         AND a.STATE = 'P'
     ORDER BY a.DATE_APPOINTMENT ASC;
 END
 GO
+
+exec sp_proximas_citas 2
+
+select * from TB_USERS where ID_USER = 2
 
 IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_doctores;
