@@ -18,5 +18,5 @@ namespace Models.DTO
         public string? imageProfile { get; set; }
         public EmergencyContact Emergency { get; set; }
        
-    }
+    }   
 }

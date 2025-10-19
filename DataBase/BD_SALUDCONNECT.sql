@@ -120,7 +120,8 @@ VALUES
 ('Juan', 'Pérez', 'González', '123456789', '10/05/1990', '923457890', 'M', 'juan.perez@example.com', 'clave123', 1, 1, '15/01/2025 14:30:00', NULL),
 ('María', 'López', 'Hernández', '987654321', '25/08/1985', '987654322', 'F', 'maria.lopez@example.com', 'clave123', 3, 2, '01/12/2024 08:00:00', NULL),
 ('Carlos', 'Ramírez', 'Sánchez', '456789123', '15/12/1992', '987654323', 'M', 'carlos.ramirez@example.com', 'clave123', 3, 2, '05/12/2024 09:15:00', NULL),
-('Ana', 'García', 'Díaz', '111222333', '01/01/2000', '900111222', 'F', 'ana.garcia@example.com', 'clave123', 1, 2, '20/02/2025 17:00:00', NULL);
+('Ana', 'García', 'Díaz', '111222333', '01/01/2000', '900111222', 'F', 'ana.garcia@example.com', 'clave123', 1, 2, '20/02/2025 17:00:00', NULL),
+('PacienteNuevo', 'PacienteNuevo', 'PacienteNuevo', '98898989', '10/05/1990', '912345290', 'M', 'apacientenuevo@gmail.com', 'clave123', 1, 2, '10/10/2024 10:00:00', NULL);
 GO
 
 CREATE TABLE TB_DOCTOR_SPECIALTIES (
@@ -228,6 +229,3 @@ INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE)
 (1, 6, 60.00, 'P');
 GO
 
-INSERT INTO TB_USERS (FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT, DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE, ID_E_CONTACT, DATE_REGISTER, PROFILE_PICTURE)
-VALUES
-('PacienteNuevo', 'PacienteNuevo', 'PacienteNuevo', '98898989', '10/05/1990', '912345290', 'M', 'apacientenuevo@gmail.com', 'clave123', 1, 2, '10/10/2024 10:00:00', NULL);

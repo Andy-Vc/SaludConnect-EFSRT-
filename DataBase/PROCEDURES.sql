@@ -55,7 +55,7 @@ IF OBJECT_ID('SP_REGISTER_PATIENTS', 'P') IS NOT NULL
     DROP PROCEDURE SP_REGISTER_PATIENTS;
 GO
 
-CREATE PROCEDURE SP_REGISTER_PATIENTS
+CREATE or alter PROCEDURE SP_REGISTER_PATIENTS
     @FIRST_NAME VARCHAR(50),
     @LAST_NAME_PAT VARCHAR(50),
     @LAST_NAME_MAT VARCHAR(50),
@@ -69,6 +69,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+	DECLARE @default_image_profile VARCHAR(150) = 'https://res.cloudinary.com/dheqy208f/image/upload/v1760897993/SaludConnect/Patient/no_image_wjvdlr.png';
+
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE DOCUMENT = @DOCUMENT)
     BEGIN
         RAISERROR('El número de documento %s ya existe', 16, 1, @DOCUMENT);
@@ -81,8 +83,9 @@ BEGIN
         RETURN;
     END
 
-    INSERT INTO TB_USERS(FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT, DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE)
-    VALUES(@FIRST_NAME, @LAST_NAME_PAT, @LAST_NAME_MAT, @DOCUMENT, @BIRTHDATE, @PHONE, @GENDER, @EMAIL, @PASSWORD_HASH, 1);
+    INSERT INTO TB_USERS(FIRST_NAME, LAST_NAME_PAT, LAST_NAME_MAT,
+	DOCUMENT, BIRTHDATE, PHONE, GENDER, EMAIL, PASSWORD_HASH, ID_ROLE,DATE_REGISTER,PROFILE_PICTURE)
+    VALUES(@FIRST_NAME, @LAST_NAME_PAT, @LAST_NAME_MAT, @DOCUMENT, @BIRTHDATE, @PHONE, @GENDER, @EMAIL, @PASSWORD_HASH, 1, GETDATE(),@default_image_profile);
 
     SELECT SCOPE_IDENTITY() AS ID_USER;
 END
@@ -496,6 +499,60 @@ GO
 /* ============================================
    PROCEDURES DOCTOR
    ============================================ */
+
+   CREATE PROCEDURE sp_update_information_patient 
+    -- VARIABLES USER
+    @idUser INT, 
+    @firstname VARCHAR(50),
+    @lastNamePat VARCHAR(50),
+    @lastNameMat VARCHAR(50),
+    @document VARCHAR(50),
+    @phone VARCHAR(50),
+    @email VARCHAR(50),
+    @profilePicture VARCHAR(150) = '',
+    -- VARIABLES CONTACTO
+    @idContact INT,
+    @namesContact VARCHAR(50) = '',
+    @contacNamePat VARCHAR(50) = '',
+    @contacNameMat VARCHAR(50) = '',
+    @idRelation INT,
+    @phoneEmergency VARCHAR(50) = ''	
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+                    
+            UPDATE TB_USERS
+            SET FIRST_NAME = @firstname,
+                LAST_NAME_PAT = @lastNamePat, 
+                LAST_NAME_MAT = @lastNameMat,
+                DOCUMENT = @document,
+                PHONE = @phone,
+                EMAIL = @email,
+                PROFILE_PICTURE = @profilePicture 
+            WHERE ID_USER = @idUser;
+
+            IF @idContact IS NOT NULL
+            BEGIN
+                UPDATE TB_EMERGENCY_CONTACT
+                SET NAMES_CONTACT = @namesContact,
+                    LAST_NAME_PAT = @contacNamePat,
+                    LAST_NAME_MAT = @contacNameMat,
+                    ID_RELATIONSHIP = @idRelation,
+                    PHONE_EMERGENCY = @phoneEmergency
+                WHERE ID_E_CONTACT = @idContact;
+            END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
 
 IF OBJECT_ID('SP_TOTAL_DOCTOR', 'P') IS NOT NULL
     DROP PROCEDURE SP_TOTAL_DOCTOR;
@@ -998,3 +1055,5 @@ BEGIN
     WHERE ADS.ID_RECORD = @ID_RECORD AND ADS.STATE != 'X';
 END
 GO
+
+select * from tb_user

@@ -21,4 +21,4 @@ namespace Data.Interface
 
         Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, int idUser);
     }
-}
+}                                                                                               
