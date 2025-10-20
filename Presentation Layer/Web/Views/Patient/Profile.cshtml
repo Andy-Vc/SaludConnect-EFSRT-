@@ -1,382 +1,454 @@
 ﻿@using Web.Models.DTO
+@model PatientInformation
 @{
-    ViewData["Title"] = "Profile";
-    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
-    @model PatientInformation
+	ViewData["Title"] = "Profile";
+	Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+
 }
 
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-    <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
-                <h2 class="text-2xl font-semibold text-text-primary mb-2">Mi Perfil</h2>
-                <p class="text-text-secondary">Gestiona tu información personal y configuración de cuenta</p>
-            </div>
-            <div class="mt-4 md:mt-0">
-                <div class="flex items-center space-x-2">
-                    <div class="bg-success-50 px-3 py-1 rounded-full">
-                        <span class="text-success text-sm font-medium">Perfil 85% completo</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="mb-8">
+		<div class="flex flex-col md:flex-row md:items-center md:justify-between">
+			<div>
+				<h2 class="text-2xl font-semibold text-text-primary mb-2">Mi Perfil</h2>
+				<p class="text-text-secondary">Gestiona tu información personal y configuración de cuenta</p>
+			</div>
+			<div class="mt-4 md:mt-0">
+				<div class="flex items-center space-x-2">
+					<div class="bg-success-50 px-3 py-1 rounded-full">
+						<span class="text-success text-sm font-medium">Perfil 85% completo</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-1">
-            <div class="bg-surface rounded-lg shadow-md p-6 text-center">
-                <div class="relative inline-block mb-4">
-                    <img id="profilePhoto" src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="Foto de perfil"
-                         class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-primary-50"
-                         onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
-                    <button class="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-md hover:bg-primary-700 transition-colors"
-                            onclick="document.getElementById('photoInput').click()">
-                        <i class="fas fa-camera text-sm"></i>
-                    </button>
-                    <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="handlePhotoUpload(event)">
-                </div>
-                <h3 class="text-lg font-semibold text-text-primary mb-1">@($"{Model.firstName} {Model.lastNamePat} {Model.lastNameMat}")</h3>
-                <p class="text-text-secondary text-sm mb-4">Paciente desde @Model.dateRegister</p>
-                <div class="text-xs text-text-secondary">
-                    <p class="mb-1">Tamaño máximo: 5MB</p>
-                    <p>Formatos: JPG, PNG</p>
-                </div>
-            </div>
+	<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+		<div class="lg:col-span-1">
+			<div class="bg-surface rounded-lg shadow-md p-6 text-center">
+				<div class="relative inline-block mb-4">
+					
+					<img id="profilePhoto"
+						src="@(string.IsNullOrEmpty(Model.imageProfile)
+						? "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3"
+						: Model.imageProfile)"
+						 alt="Foto de perfil"
+						 class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-primary-50">
+				</div>
+				<h3 class="text-lg font-semibold text-text-primary mb-1">@Model.firstName @Model.lastNamePat @Model.lastNameMat</h3>
+				<p class="text-text-secondary text-sm mb-4">Paciente desde @Model.dateRegister</p>
+				<div class="text-xs text-text-secondary">
+					<p class="mb-1">Tamaño máximo: 5MB</p>
+					<p>Formatos: JPG, PNG</p>
+				</div>
+			</div>
 
-            <div class="bg-surface rounded-lg shadow-md p-6 mt-6">
-                <h4 class="font-medium text-text-primary mb-4">Completar Perfil</h4>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">Información personal</span>
-                        <span class="text-success font-medium">100%</span>
-                    </div>
-                    <div class="w-full bg-secondary-200 rounded-full h-2">
-                        <div class="bg-success h-2 rounded-full" style="width: 100%"></div>
-                    </div>
+			<div class="bg-surface rounded-lg shadow-md p-6 mt-6">
+				<h4 class="font-medium text-text-primary mb-4">Completar Perfil</h4>
+				<div class="space-y-3">
+					<div class="flex items-center justify-between text-sm">
+						<span class="text-text-secondary">Información personal</span>
+						<span class="text-success font-medium">100%</span>
+					</div>
+					<div class="w-full bg-secondary-200 rounded-full h-2">
+						<div class="bg-success h-2 rounded-full" style="width: 100%"></div>
+					</div>
 
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">Contacto de emergencia</span>
-                        <span class="text-warning font-medium">75%</span>
-                    </div>
-                    <div class="w-full bg-secondary-200 rounded-full h-2">
-                        <div class="bg-warning h-2 rounded-full" style="width: 75%"></div>
-                    </div>
+					<div class="flex items-center justify-between text-sm">
+						<span class="text-text-secondary">Contacto de emergencia</span>
+						<span class="text-warning font-medium">75%</span>
+					</div>
+					<div class="w-full bg-secondary-200 rounded-full h-2">
+						<div class="bg-warning h-2 rounded-full" style="width: 75%"></div>
+					</div>
 
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">Preferencias</span>
-                        <span class="text-error font-medium">50%</span>
-                    </div>
-                    <div class="w-full bg-secondary-200 rounded-full h-2">
-                        <div class="bg-error h-2 rounded-full" style="width: 50%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+					<div class="flex items-center justify-between text-sm">
+						<span class="text-text-secondary">Preferencias</span>
+						<span class="text-error font-medium">50%</span>
+					</div>
+					<div class="w-full bg-secondary-200 rounded-full h-2">
+						<div class="bg-error h-2 rounded-full" style="width: 50%"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="lg:col-span-3">
-            <div class="bg-surface rounded-lg shadow-md">
-                <div class="border-b border-secondary-200">
-                    <nav class="flex space-x-8 px-6" aria-label="Tabs">
-                        <button class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors active border-primary text-primary"
-                                onclick="switchTab('personal')" data-tab="personal">
-                            <i class="fas fa-user mr-2"></i>
-                            Información Personal
-                        </button>
-                        <button class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
-                                onclick="switchTab('contact')" data-tab="contact">
-                            <i class="fas fa-envelope mr-2"></i>
-                            Contacto
-                        </button>
-                        <button class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
-                                onclick="switchTab('account')" data-tab="account">
-                            <i class="fas fa-cog mr-2"></i>
-                            Configuración
-                        </button>
-                    </nav>
-                </div>
+		<div class="lg:col-span-3">
+			<div class="bg-surface rounded-lg shadow-md">
+				<div class="border-b border-secondary-200">
+					<nav class="flex space-x-8 px-6" aria-label="Tabs">
+						<button type="button" class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors active border-primary text-primary"
+								onclick="switchTab('personal')" data-tab="personal">
+							<i class="fas fa-user mr-2"></i>
+							Información Personal
+						</button>
+						<button type="button" class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
+								onclick="switchTab('contact')" data-tab="contact">
+							<i class="fas fa-envelope mr-2"></i>
+							Contacto
+						</button>
+						<button type="button" class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
+								onclick="switchTab('account')" data-tab="account">
+							<i class="fas fa-cog mr-2"></i>
+							Configuración
+						</button>
+					</nav>
+				</div>
+				<!-- Personal Information Tab -->
+				<div id="personalTab" class="tab-content p-6">
+					<div class="flex items-center justify-between mb-6">
+						<h3 class="text-lg font-semibold text-text-primary">Información Personal</h3>
+						<button type="button" id="editPersonalBtn" class="btn-secondary" onclick="toggleEdit('personal')">
+							<i class="fas fa-edit mr-2"></i>
+							Editar
+						</button>
+					</div>
 
-                <div id="personalTab" class="tab-content p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-text-primary">Información Personal</h3>
-                        <button id="editPersonalBtn" class="btn-secondary" onclick="toggleEdit('personal')">
-                            <i class="fas fa-edit mr-2"></i>
-                            Editar
-                        </button>
-                    </div>
+					<form asp-action="UpdateInformationPatient" asp-controller="Patient" enctype="multipart/form-data" method="post" id="personalForm" class="space-y-6">
 
-                    <form id="personalForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="form-label">Nombre Completo *</label>
-                                <input type="text" class="form-input" value="@Model.firstName" disabled id="fullName" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
-                            <div>
-                                <label class="form-label">Apellido Paterno *</label>
-                                <input type="text" class="form-input" value="@Model.lastNamePat" disabled id="fullName" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
+						<input type="hidden" name="idUser" value="@Model.idUser" />
+						<input type="hidden" name="Emergency.idEContact" value="2" />
+						<input type="hidden" name="currentImage" value="@Model.imageProfile" />
 
-                            <div>
-                                <label class="form-label">Apellido Materno *</label>
-                                <input type="text" class="form-input" value="@Model.lastNameMat" disabled id="fullName" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div>
+								<label class="form-label">Nombre Completo *</label>
+								<input type="text" name="firstName" class="form-input bg-secondary-50" value="@Model.firstName" required>
+							</div>
+							<div>
+								<label class="form-label">Apellido Paterno *</label>
+								<input type="text" name="lastNamePat" class="form-input bg-secondary-50" value="@Model.lastNamePat" required>
+							</div>
+							<div>
+								<label class="form-label">Apellido Materno *</label>
+								<input type="text" name="lastNameMat" class="form-input bg-secondary-50" value="@Model.lastNameMat" required>
+							</div>
+							<div>
+								<label class="form-label">Número de Identificación *</label>
+								<input type="text" name="document" class="form-input bg-secondary-50" value="@Model.document" required>
+							</div>
+							<div>
+								<label class="form-label">Telefono *</label>
+								<input type="text" name="phone" class="form-input bg-secondary-50" value="@Model.phone" required>
+							</div>
+							<div>
+								<label class="form-label">Email *</label>
+								<input type="text" name="email" class="form-input bg-secondary-50" value="@Model.email" required>
+							</div>
+							<div>
+								<label class="form-label">Seleccionar una nueva imagen(Opcional)</label>
+							<input type="file" id="photoInput" name="photoFile"  accept="image/*">
+							</div>
+						</div>
 
-                            <div>
-                                <label class="form-label">Fecha de Nacimiento *</label>
-                                <input type="date" class="form-input" value="" disabled id="birthDate" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
-                            
-                            <div>
-                                <label class="form-label">Número de Identificación *</label>
-                                <input type="text" class="form-input" value="@Model.document" disabled id="idNumber" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
-                        </div>
+						<div class="border-t border-secondary-200 pt-6">
+							<h4 class="font-medium text-text-primary mb-4">Contacto de Emergencia</h4>
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label class="form-label">Nombre del Contacto</label>
+									<input type="text" name="Emergency.namesContact" class="form-input bg-secondary-50" value="@Model.namesContact">
+								</div>
+								<div>
+									<label class="form-label">Apellido Paterno</label>
+									<input type="text" name="Emergency.lastNamePat" class="form-input bg-secondary-50" value="@Model.lastNamePatContact">
+								</div>
+								<div>
+									<label class="form-label">Apellido Materno</label>
+									<input type="text" name="Emergency.lastNameMat" class="form-input bg-secondary-50" value="@Model.lastNameMatContact">
+								</div>
+								<div>
+									<label class="form-label">Relación</label>
+									<select name="Emergency.relationShip.idRelationship" id="relationshipSelect" class="form-input bg-secondary-50">
+										<option value="">Seleccionar una relacion</option>
 
-                        <div class="border-t border-secondary-200 pt-6">
-                            <h4 class="font-medium text-text-primary mb-4">Contacto de Emergencia</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="form-label">Nombre del Contacto</label>
-                                    <input type="text" class="form-input" value="@Model.namesContact" disabled id="emergencyName">
-                                </div>
-                                <div>
-                                    <label class="form-label">Relación</label>
-                                    <select class="form-input" disabled id="emergencyRelation">
-                                        <option value="">Seleccionar relación</option>
-                                        <option value="esposo" selected>Esposo</option>
-                                        <option value="esposa">Esposa</option>
-                                        <option value="padre">Padre</option>
-                                        <option value="madre">Madre</option>
-                                        <option value="hijo">Hijo/a</option>
-                                        <option value="hermano">Hermano/a</option>
-                                        <option value="otro">Otro</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="form-label">Teléfono de Emergencia</label>
-                                    <input type="tel" class="form-input" value="+34 654 321 987" disabled id="emergencyPhone">
-                                </div>
-                            </div>
-                        </div>
+										@foreach (var rel in ViewBag.ListRelations as List<RelationShip>)
+										{
+											if (rel.idRelationShip == Model.idRelationShip)
+											{
+												<option value="@rel.idRelationShip" selected>
+													@rel.descriptionRelationShip
+												</option>
+											}
+											else
+											{
+												<option value="@rel.idRelationShip">
+													@rel.descriptionRelationShip
+												</option>
+											}
+										}
+										}
+									</select>
+								</div>
+								<div>
+									<label class="form-label">Teléfono de Emergencia</label>
+									<input type="tel" name="Emergency.phoneEmergency" class="form-input bg-secondary-50" value="@Model.phoneContactEmergency">
+								</div>
+							</div>
+						</div>
 
-                        <div id="personalActions" class="hidden flex space-x-4 pt-6 border-t border-secondary-200">
-                            <button type="button" class="btn-primary" onclick="savePersonalInfo()">
-                                <i class="fas fa-save mr-2"></i>
-                                Guardar Cambios
-                            </button>
-                            <button type="button" class="btn-secondary" onclick="cancelEdit('personal')">
-                                <i class="fas fa-times mr-2"></i>
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
+						<div id="personalActions" class="flex space-x-4 pt-6 border-t border-secondary-200">
+							<button type="submit" class="btn-primary">
+								<i class="fas fa-save mr-2"></i>
+								Guardar Cambios
+							</button>
+							<button type="button" class="btn-secondary" onclick="cancelEdit('personal')">
+								<i class="fas fa-times mr-2"></i>
+								Cancelar
+							</button>
+						</div>
+					</form>
+				</div>
+				<!-- Account Settings Tab -->
+				<div id="accountTab" class="tab-content hidden p-6">
+					<div class="flex items-center justify-between mb-6">
+						<h3 class="text-lg font-semibold text-text-primary">Configuración de Cuenta</h3>
+					</div>
 
-                <!-- Contact Information Tab -->
-                <div id="contactTab" class="tab-content hidden p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-text-primary">Información de Contacto</h3>
-                        <button id="editContactBtn" class="btn-secondary" onclick="toggleEdit('contact')">
-                            <i class="fas fa-edit mr-2"></i>
-                            Editar
-                        </button>
-                    </div>
+					<!-- Change Password Section -->
+					<div class="bg-secondary-50 rounded-lg p-6 mb-6">
+						<h4 class="font-medium text-text-primary mb-4">Cambiar Contraseña</h4>
+						<form asp-action="ChangePassword" asp-controller="Patient" method="post" id="passwordForm" class="space-y-4">
+							<input type="hidden" name="idUser" value="@Model.idUser" />
 
-                    <form id="contactForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="form-label">Correo Electrónico *</label>
-                                <input type="email" class="form-input" value="maria.garcia@email.com" disabled id="email" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                                <div class="flex items-center mt-2">
-                                    <i class="fas fa-check-circle text-success mr-2"></i>
-                                    <span class="text-success text-sm">Verificado</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="form-label">Teléfono Móvil *</label>
-                                <input type="tel" class="form-input" value="+34 612 345 678" disabled id="phone" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                                <div class="flex items-center mt-2">
-                                    <i class="fas fa-check-circle text-success mr-2"></i>
-                                    <span class="text-success text-sm">Verificado</span>
-                                </div>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="form-label">Dirección</label>
-                                <input type="text" class="form-input" value="Calle Mayor 123, 28001 Madrid" disabled id="address">
-                            </div>
-                        </div>
+							<div>
+								<label class="form-label">Contraseña Actual</label>
+								<input type="password" name="currentPassword" class="form-input" id="currentPassword" required>
+								<div class="validation-message hidden text-error text-sm mt-1"></div>
+							</div>
+							<div>
+								<label class="form-label">Nueva Contraseña</label>
+								<input type="password" name="newPassword" class="form-input" id="newPassword" required>
+								<div class="validation-message hidden text-error text-sm mt-1"></div>
+								<div class="text-xs text-text-secondary mt-1">
+									Mínimo 8 caracteres, incluir mayúsculas, minúsculas y números
+								</div>
+							</div>
+							<div>
+								<label class="form-label">Confirmar Nueva Contraseña</label>
+								<input type="password" name="confirmPassword" class="form-input" id="confirmPassword" required>
+								<div class="validation-message hidden text-error text-sm mt-1"></div>
+							</div>
+							<button type="button" class="btn-primary" onclick="validateAndSubmitPassword()">
+								<i class="fas fa-key mr-2"></i>
+								Cambiar Contraseña
+							</button>
+						</form>
+					</div>
 
-                        <div class="border-t border-secondary-200 pt-6">
-                            <h4 class="font-medium text-text-primary mb-4">Preferencias de Comunicación</h4>
-                            <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="emailNotifications" class="h-4 w-4 text-primary focus:ring-primary border-secondary-300 rounded" checked disabled>
-                                    <label for="emailNotifications" class="ml-3 text-sm text-text-primary">
-                                        Recibir notificaciones por correo electrónico
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="smsNotifications" class="h-4 w-4 text-primary focus:ring-primary border-secondary-300 rounded" checked disabled>
-                                    <label for="smsNotifications" class="ml-3 text-sm text-text-primary">
-                                        Recibir recordatorios por SMS
-                                    </label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="callReminders" class="h-4 w-4 text-primary focus:ring-primary border-secondary-300 rounded" disabled>
-                                    <label for="callReminders" class="ml-3 text-sm text-text-primary">
-                                        Recibir llamadas de recordatorio
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+					<!-- Notifications Settings -->
+					<div class="bg-secondary-50 rounded-lg p-6 mb-6">
+						<h4 class="font-medium text-text-primary mb-4">Configuración de Notificaciones</h4>
+						<div class="space-y-4">
+							<div class="flex items-center justify-between">
+								<div>
+									<h5 class="text-sm font-medium text-text-primary">Recordatorios de Citas</h5>
+									<p class="text-xs text-text-secondary">Recibir recordatorios 24h y 1h antes de la cita</p>
+								</div>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input type="checkbox" class="sr-only peer" checked>
+									<div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+								</label>
+							</div>
+							<div class="flex items-center justify-between">
+								<div>
+									<h5 class="text-sm font-medium text-text-primary">Confirmaciones de Citas</h5>
+									<p class="text-xs text-text-secondary">Notificaciones cuando se confirme o cancele una cita</p>
+								</div>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input type="checkbox" class="sr-only peer" checked>
+									<div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+								</label>
+							</div>
+							<div class="flex items-center justify-between">
+								<div>
+									<h5 class="text-sm font-medium text-text-primary">Promociones y Ofertas</h5>
+									<p class="text-xs text-text-secondary">Recibir información sobre servicios y promociones</p>
+								</div>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input type="checkbox" class="sr-only peer">
+									<div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+								</label>
+							</div>
+						</div>
+					</div>
 
-                        <div id="contactActions" class="hidden flex space-x-4 pt-6 border-t border-secondary-200">
-                            <button type="button" class="btn-primary" onclick="saveContactInfo()">
-                                <i class="fas fa-save mr-2"></i>
-                                Guardar Cambios
-                            </button>
-                            <button type="button" class="btn-secondary" onclick="cancelEdit('contact')">
-                                <i class="fas fa-times mr-2"></i>
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Account Settings Tab -->
-                <div id="accountTab" class="tab-content hidden p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-text-primary">Configuración de Cuenta</h3>
-                    </div>
-
-                    <!-- Change Password Section -->
-                    <div class="bg-secondary-50 rounded-lg p-6 mb-6">
-                        <h4 class="font-medium text-text-primary mb-4">Cambiar Contraseña</h4>
-                        <form id="passwordForm" class="space-y-4">
-                            <div>
-                                <label class="form-label">Contraseña Actual</label>
-                                <input type="password" class="form-input" id="currentPassword" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
-                            <div>
-                                <label class="form-label">Nueva Contraseña</label>
-                                <input type="password" class="form-input" id="newPassword" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                                <div class="text-xs text-text-secondary mt-1">
-                                    Mínimo 8 caracteres, incluir mayúsculas, minúsculas y números
-                                </div>
-                            </div>
-                            <div>
-                                <label class="form-label">Confirmar Nueva Contraseña</label>
-                                <input type="password" class="form-input" id="confirmPassword" required>
-                                <div class="validation-message hidden text-error text-sm mt-1"></div>
-                            </div>
-                            <button type="button" class="btn-primary" onclick="changePassword()">
-                                <i class="fas fa-key mr-2"></i>
-                                Cambiar Contraseña
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Notifications Settings -->
-                    <div class="bg-secondary-50 rounded-lg p-6 mb-6">
-                        <h4 class="font-medium text-text-primary mb-4">Configuración de Notificaciones</h4>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="text-sm font-medium text-text-primary">Recordatorios de Citas</h5>
-                                    <p class="text-xs text-text-secondary">Recibir recordatorios 24h y 1h antes de la cita</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="text-sm font-medium text-text-primary">Confirmaciones de Citas</h5>
-                                    <p class="text-xs text-text-secondary">Notificaciones cuando se confirme o cancele una cita</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="text-sm font-medium text-text-primary">Promociones y Ofertas</h5>
-                                    <p class="text-xs text-text-secondary">Recibir información sobre servicios y promociones</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Privacy Settings -->
-                    <div class="bg-secondary-50 rounded-lg p-6">
-                        <h4 class="font-medium text-text-primary mb-4">Configuración de Privacidad</h4>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="text-sm font-medium text-text-primary">Compartir Datos con Especialistas</h5>
-                                    <p class="text-xs text-text-secondary">Permitir que los médicos accedan a tu historial médico</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="text-sm font-medium text-text-primary">Análisis de Uso</h5>
-                                    <p class="text-xs text-text-secondary">Ayudar a mejorar la plataforma compartiendo datos de uso anónimos</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					<!-- Privacy Settings -->
+					<div class="bg-secondary-50 rounded-lg p-6">
+						<h4 class="font-medium text-text-primary mb-4">Configuración de Privacidad</h4>
+						<div class="space-y-4">
+							<div class="flex items-center justify-between">
+								<div>
+									<h5 class="text-sm font-medium text-text-primary">Compartir Datos con Especialistas</h5>
+									<p class="text-xs text-text-secondary">Permitir que los médicos accedan a tu historial médico</p>
+								</div>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input type="checkbox" class="sr-only peer" checked>
+									<div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+								</label>
+							</div>
+							<div class="flex items-center justify-between">
+								<div>
+									<h5 class="text-sm font-medium text-text-primary">Análisis de Uso</h5>
+									<p class="text-xs text-text-secondary">Ayudar a mejorar la plataforma compartiendo datos de uso anónimos</p>
+								</div>
+								<label class="relative inline-flex items-center cursor-pointer">
+									<input type="checkbox" class="sr-only peer" checked>
+									<div class="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
 
 <!-- Success Toast Notification -->
 <div id="successToast" class="fixed top-4 right-4 toast toast-success hidden z-50">
-    <div class="flex items-center">
-        <i class="fas fa-check-circle text-success mr-3"></i>
-        <div>
-            <p class="font-medium text-text-primary">¡Cambios guardados!</p>
-            <p class="text-sm text-text-secondary">Tu información ha sido actualizada correctamente</p>
-        </div>
-    </div>
+	<div class="flex items-center">
+		<i class="fas fa-check-circle text-success mr-3"></i>
+		<div>
+			<p class="font-medium text-text-primary">¡Cambios guardados!</p>
+			<p class="text-sm text-text-secondary">Tu información ha sido actualizada correctamente</p>
+		</div>
+	</div>
 </div>
 
 <!-- Error Toast Notification -->
 <div id="errorToast" class="fixed top-4 right-4 toast toast-error hidden z-50">
-    <div class="flex items-center">
-        <i class="fas fa-exclamation-circle text-error mr-3"></i>
-        <div>
-            <p class="font-medium text-text-primary">Error al guardar</p>
-            <p class="text-sm text-text-secondary">Por favor, revisa los campos e inténtalo de nuevo</p>
-        </div>
-    </div>
+	<div class="flex items-center">
+		<i class="fas fa-exclamation-circle text-error mr-3"></i>
+		<div>
+			<p class="font-medium text-text-primary">Error al guardar</p>
+			<p class="text-sm text-text-secondary">Por favor, revisa los campos e inténtalo de nuevo</p>
+		</div>
+	</div>
 </div>
 
 <!-- Help Center Button -->
-<button class="fab" onclick="window.location.href='help_center.html'" title="Centro de Ayuda">
-    <i class="fas fa-question text-lg"></i>
+<button type="button" class="fab" onclick="window.location.href='/Patient/Help'" title="Centro de Ayuda">
+	<i class="fas fa-question text-lg"></i>
 </button>
+
+
+<!-- Success Toast Notification -->
+<div id="successToast" class="fixed top-4 right-4 toast toast-success hidden z-50">
+	<div class="flex items-center">
+		<i class="fas fa-check-circle text-success mr-3"></i>
+		<div>
+			<p class="font-medium text-text-primary">¡Cambios guardados!</p>
+			<p class="text-sm text-text-secondary">Tu información ha sido actualizada correctamente</p>
+		</div>
+	</div>
+</div>
+
+<!-- Error Toast Notification -->
+<div id="errorToast" class="fixed top-4 right-4 toast toast-error hidden z-50">
+	<div class="flex items-center">
+		<i class="fas fa-exclamation-circle text-error mr-3"></i>
+		<div>
+			<p class="font-medium text-text-primary">Error al guardar</p>
+			<p class="text-sm text-text-secondary">Por favor, revisa los campos e inténtalo de nuevo</p>
+		</div>
+	</div>
+</div>
+
+<!-- Help Center Button -->
+<button type="button" class="fab" onclick="window.location.href='help_center.html'" title="Centro de Ayuda">
+	<i class="fas fa-question text-lg"></i>
+</button>
+
+<script>
+	// Mobile menu toggle
+	function toggleMobileMenu() {
+		const mobileMenu = document.getElementById('mobileMenu');
+		mobileMenu.classList.toggle('hidden');
+	}
+
+	// Tab switching functionality
+	function switchTab(tabName) {
+		// Hide all tab contents
+		document.querySelectorAll('.tab-content').forEach(tab => {
+			tab.classList.add('hidden');
+		});
+
+		// Remove active class from all tab buttons
+		document.querySelectorAll('.tab-button').forEach(button => {
+			button.classList.remove('active', 'border-primary', 'text-primary');
+			button.classList.add('border-transparent', 'text-text-secondary', 'hover:text-text-primary', 'hover:border-secondary-300');
+		});
+
+		// Show selected tab content
+		document.getElementById(tabName + 'Tab').classList.remove('hidden');
+
+		// Add active class to selected tab button
+		const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+		activeButton.classList.add('active', 'border-primary', 'text-primary');
+		activeButton.classList.remove('border-transparent', 'text-text-secondary', 'hover:text-text-primary', 'hover:border-secondary-300');
+	}
+
+
+		// Validate password confirmation
+		if (newPassword.value !== confirmPassword.value) {
+			const validation = confirmPassword.closest('div').querySelector('.validation-message');
+			validation.textContent = 'Las contraseñas no coinciden';
+			validation.classList.remove('hidden');
+			isValid = false;
+		}
+
+		if (isValid) {
+			// Aquí puedes hacer submit o llamada AJAX
+			setTimeout(() => {
+				showToast('success');
+				document.getElementById('passwordForm').reset();
+			}, 500);
+		} else {
+			showToast('error');
+		}
+	}
+
+
+
+
+
+	// Toast notification system
+	function showToast(type) {
+		const toast = document.getElementById(type + 'Toast');
+		toast.classList.remove('hidden');
+
+		setTimeout(() => {
+			toast.classList.add('hidden');
+		}, 3000);
+	}
+
+	// Initialize page
+	document.addEventListener('DOMContentLoaded', function() {
+		// Set initial tab styles
+		switchTab('personal');
+
+		// Close mobile menu when clicking outside
+		document.addEventListener('click', function(event) {
+			const mobileMenu = document.getElementById('mobileMenu');
+			if (!mobileMenu) return;
+
+			const menuButton = event.target.closest('button[onclick*="toggleMobileMenu"]');
+
+			if (!menuButton && !mobileMenu.contains(event.target)) {
+				mobileMenu.classList.add('hidden');
+			}
+		});
+	});
+
+	function previewImage(event) {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = e => {
+				document.getElementById('profilePhoto').src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+	}
+</script>

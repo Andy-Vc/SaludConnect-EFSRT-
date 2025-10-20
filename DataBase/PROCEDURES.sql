@@ -1,6 +1,8 @@
 USE BD_SALUDCONNECT;
 GO
 
+select * from TB_USERS
+
 /* ============================================
    PROCEDURES SESSION
    ============================================ */
@@ -500,6 +502,9 @@ GO
    PROCEDURES DOCTOR
    ============================================ */
 
+	   select * from TB_USERS
+	   select * from TB_EMERGENCY_CONTACT
+
    CREATE PROCEDURE sp_update_information_patient 
     -- VARIABLES USER
     @idUser INT, 
@@ -554,6 +559,7 @@ BEGIN
 END
 GO
 
+
 IF OBJECT_ID('SP_TOTAL_DOCTOR', 'P') IS NOT NULL
     DROP PROCEDURE SP_TOTAL_DOCTOR;
 GO
@@ -576,7 +582,7 @@ begin
 	select 
 	us.ID_USER, us.FIRST_NAME, us.LAST_NAME_PAT, us.LAST_NAME_MAT,us.DOCUMENT,
 	us.PHONE, us.EMAIL,us.DATE_REGISTER,us.PROFILE_PICTURE,
-	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_PAT,
+	ec.NAMES_CONTACT, ec.LAST_NAME_PAT, ec.LAST_NAME_MAT,
 	ec.ID_RELATIONSHIP, ec.PHONE_EMERGENCY, rl.DESCRIPTION_RELATIONSHIP
 	from TB_USERS us 
 	INNER JOIN TB_EMERGENCY_CONTACT ec on us.ID_E_CONTACT = ec.ID_E_CONTACT
@@ -584,7 +590,11 @@ begin
 	where ID_USER = @idUser
 end
 go
-select * from TB_USERS
+
+select * from TB_EMERGENCY_CONTACT
+exec  sp_patient_information 6
+
+select * from TB_RELATIONSHIP
 
 /* ============================================
    PROCEDURES USER

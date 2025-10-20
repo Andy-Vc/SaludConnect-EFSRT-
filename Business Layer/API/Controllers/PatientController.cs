@@ -22,7 +22,7 @@ namespace API.Controllers
         }
 
         [HttpPut("UpdateInformationPatient")]
-        public async Task<IActionResult> UpdateInformationPatient([FromForm] PatientUpdate patient, IFormFile photo)
+        public async Task<IActionResult> UpdateInformationPatient([FromForm] PatientUpdate patient, IFormFile? photo)
         {
             try
             {
@@ -41,7 +41,8 @@ namespace API.Controllers
                     var uploadResult = await cloudinary.UploadAsync(uploadParams);
                     patient.imageProfile = uploadResult.SecureUrl.ToString();
                 }
-                var patientUpdate = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
+               
+                    var patientUpdate = await _patientBL.UpdateInformationPatient(patient, patient.idUser);
                 return Ok(patientUpdate);
 
             }

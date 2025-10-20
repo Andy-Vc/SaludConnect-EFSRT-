@@ -79,39 +79,46 @@ namespace Web.Services.Implementation
         {
             using var formData = new MultipartFormDataContent();
 
+            formData.Add(new StringContent(user.idUser.ToString() ?? ""), "idUser");
             formData.Add(new StringContent(user.firstName ?? ""), "firstName");
             formData.Add(new StringContent(user.lastNamePat ?? ""), "lastNamePat");
             formData.Add(new StringContent(user.lastNameMat ?? ""), "lastNameMat");
             formData.Add(new StringContent(user.document ?? ""), "document");
             formData.Add(new StringContent(user.phone ?? ""), "phone");
             formData.Add(new StringContent(user.email ?? ""), "email");
-            formData.Add(new StringContent(user.idUser.ToString()), "idUser");
-
-            if (user.Emergency != null) {
-                formData.Add(new StringContent(user.Emergency.idEContact.ToString()), "Emergency.idEContact");
-                formData.Add(new StringContent(user.Emergency.namesContact ?? ""), "Emergency.namesContact");
-                formData.Add(new StringContent(user.Emergency.lastNamePat ?? ""), "Emergency.lastNamePat");
-                formData.Add(new StringContent(user.Emergency.lastNameMat ?? ""), "Emergency.lastNameMat");
-                formData.Add(new StringContent(user.Emergency.phoneEmergency ?? ""), "Emergency.phoneEmergency");
-               
-                if (user.Emergency.relationShip != null)
-                {
-                    formData.Add(new StringContent(user.Emergency.relationShip.idRelationShip.ToString()), "Emergency.relationShip.idRelationShip");
-                    formData.Add(new StringContent(user.Emergency.relationShip.descriptionRelationShip ?? ""), "Emergency.relationShip.descriptionRelationShip");
-                }
-            }
+            
+            formData.Add(new StringContent(user.Emergency.idEContact.ToString() ?? ""), "Emergency.idEContact");
+            formData.Add(new StringContent(user.Emergency.namesContact ?? ""), "Emergency.namesContact");
+            formData.Add(new StringContent(user.Emergency.lastNamePat ?? ""), "Emergency.lastNamePat");
+            formData.Add(new StringContent(user.Emergency.lastNameMat ?? ""), "Emergency.lastNameMat");
+            formData.Add(new StringContent(user.Emergency.phoneEmergency ?? ""), "Emergency.phoneEmergency");
+            formData.Add(new StringContent(user.Emergency.relationShip.idRelationShip.ToString()), "Emergency.relationShip.idRelationShip");
 
             if (photoStream != null && fileName!=null) {
 
                 var imageContent = new StreamContent(photoStream);
 
-                imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+                var extension = Path.GetExtension(fileName).ToLower();
+                var contentType = extension switch
+                {
+                    ".jpg" or ".jpeg" => "image/jpeg",
+                    ".png" => "image/png",
+                    ".gif" => "image/gif",
+                    _ => "image/jpeg"
+                };
+
+                imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
                 formData.Add(imageContent, "photo", fileName);
             }
 
-
             var response = await _httpClient.PutAsync($"patient/UpdateInformationPatient", formData);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Error content: {errorContent}");
+                throw new Exception($"Error en la API: {errorContent}");
+            }
 
             var json = await response.Content.ReadAsStringAsync();
 
