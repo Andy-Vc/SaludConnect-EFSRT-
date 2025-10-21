@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Web.Extensions
+@{
     Layout = null;
+    var user = Context?.Session?.GetObjectFromJson<User>("User");
+    var nombreApellido = ($"{user.FirstName} {user.LastNamePat}");
 }
 
 <!DOCTYPE html>
@@ -91,7 +94,7 @@
                         <img class="h-8 w-8 rounded-full object-cover"
                              src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop"
                              alt="Perfil">
-                        <span class="ml-2 text-sm font-medium text-text-primary">María García</span>
+                        <span class="ml-2 text-sm font-medium text-text-primary">@nombreApellido</span>
                     </div>
                 </div>
             </div>

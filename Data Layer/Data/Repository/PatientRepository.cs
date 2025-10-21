@@ -299,5 +299,49 @@ namespace Data.Repository
             }
             return listNextAppointment;
         }
+
+        public async Task<List<RecordAppointmentsDTO>> RecordAppointments(int idPatient)
+        {
+            var lista = new List<RecordAppointmentsDTO>();
+
+            using (SqlConnection cn = new SqlConnection(conexion)) 
+            { 
+                await cn.OpenAsync();
+                using (SqlCommand cm = new SqlCommand("sp_historial_appointments", cn)) {
+
+                    cm.CommandType = System.Data.CommandType.StoredProcedure;
+                    cm.Parameters.AddWithValue("@idPatient", idPatient);
+
+                    using (SqlDataReader r = cm.ExecuteReader()) 
+                    {
+                        if (r.HasRows) {
+                            while (r.Read()) {
+                                lista.Add(new RecordAppointmentsDTO()
+                                {
+                                    idAppointment = r.GetInt32(0),
+                                    nombresDoctor = r.GetString(1),
+                                    gender = r.GetString(2),
+                                    profilePicture = r.IsDBNull(3) ? "" : r.GetString(3),
+                                    idSpeciality = r.GetInt32(4),
+                                    nameSpeciality = r.GetString(5),
+                                    horaCita = r.IsDBNull(6) ? "" : r.GetString(6),
+                                    fechaCita = r.IsDBNull(7) ? "" : r.GetString(7),
+                                    nameService = r.GetString(8),
+                                    descripcion = r.GetString(9),
+                                    duracionMinutes = r.IsDBNull(10) ? 0 : r.GetInt32(10),
+                                    consultorio = r.GetString(11),
+                                    state = r.GetString(12),
+                                    appointmentPrice = r.IsDBNull(13) ? 0 : r.GetDecimal(13),
+                                    diagnosis = r.IsDBNull(14) ? "" : r.GetString(14),
+                                    observations = r.IsDBNull(15) ? "" : r.GetString(15),
+                                    treatment = r.IsDBNull(16) ? "" : r.GetString(16)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
     }
 }
