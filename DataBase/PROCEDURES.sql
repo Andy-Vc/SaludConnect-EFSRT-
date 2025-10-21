@@ -1,7 +1,6 @@
 USE BD_SALUDCONNECT;
 GO
 
-select * from TB_USERS
 
 /* ============================================
    PROCEDURES SESSION
@@ -595,6 +594,51 @@ select * from TB_EMERGENCY_CONTACT
 exec  sp_patient_information 6
 
 select * from TB_RELATIONSHIP
+go
+
+
+CREATE OR ALTER PROC sp_historial_appointments
+@idPatient int 
+
+as 
+begin
+	
+	SELECT 
+		md.FIRST_NAME,
+		md.LAST_NAME_PAT,
+		md.GENDER,
+		md.PROFILE_PICTURE,
+		s.ID_SPECIALTY,
+		s.NAME_SPECIALTY,
+		FORMAT(ap.DATE_APPOINTMENT, 'HH:mm') AS Hora_Cita,
+		FORMAT(ap.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Hora_Cita,
+		ap.DATE_APPOINTMENT,
+		sv.NAME_SERVICE,
+		sv.DESCRIPTION,
+		sv.DURATION_MINUTES,
+		cs.NUMBER_CONSULTORIES,
+		ap.STATE,
+		ap.APPOINTMENT_PRICE,
+		mds.DIAGNOSIS, mds.OBSERVATIONS, mds.TREATMENT
+	FROM TB_APPOINTMENTS ap
+	INNER JOIN TB_USERS md ON ap.ID_DOCTOR = md.ID_USER
+	INNER JOIN TB_SPECIALTIES s ON ap.ID_SPECIALTY = s.ID_SPECIALTY
+	INNER JOIN TB_SERVICES sv ON sv.ID_SERVICE = (
+		SELECT TOP 1 sv2.ID_SERVICE
+		FROM TB_SERVICES sv2
+		WHERE sv2.ID_SPECIALTY = s.ID_SPECIALTY
+		ORDER BY sv2.ID_SERVICE
+	)
+	INNER JOIN TB_CONSULTORIES cs ON ap.ID_CONSULTORIES = cs.ID_CONSULTORIES
+	INNER JOIN TB_MEDICAL_RECORDS mds ON mds.ID_APPOINTMENT = ap.ID_APPOINTMENT 
+	WHERE ap.ID_PATIENT = @idPatient AND 
+	ap.STATE in ('A','P','N')
+end
+
+
+
+exec sp_historial_appointments 2
+
 
 /* ============================================
    PROCEDURES USER
