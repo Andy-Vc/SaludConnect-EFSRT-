@@ -1,7 +1,6 @@
 USE BD_SALUDCONNECT;
 GO
 
-select * from TB_USERS
 
 /* ============================================
    PROCEDURES SESSION
@@ -75,13 +74,13 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE DOCUMENT = @DOCUMENT)
     BEGIN
-        RAISERROR('El número de documento %s ya existe', 16, 1, @DOCUMENT);
+        RAISERROR('El nï¿½mero de documento %s ya existe', 16, 1, @DOCUMENT);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE EMAIL = @EMAIL)
     BEGIN
-        RAISERROR('El correo electrónico %s ya existe', 16, 1, @EMAIL);
+        RAISERROR('El correo electrï¿½nico %s ya existe', 16, 1, @EMAIL);
         RETURN;
     END
 
@@ -403,7 +402,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Información de la cita
+    -- Informaciï¿½n de la cita
     SELECT 
         A.ID_APPOINTMENT,
         P.ID_USER AS PatientId,
@@ -427,7 +426,7 @@ BEGIN
         D.FIRST_NAME AS DoctorFirstName,
         D.LAST_NAME_PAT AS DoctorLastNamePat,
         D.LAST_NAME_MAT AS DoctorLastNameMat,
-        -- Información del registro médico si existe
+        -- Informaciï¿½n del registro mï¿½dico si existe
         MR.ID_RECORD,
         MR.DATE_REPORT,
         MR.OBSERVATIONS,
@@ -441,7 +440,7 @@ BEGIN
     LEFT JOIN TB_MEDICAL_RECORDS MR ON A.ID_APPOINTMENT = MR.ID_APPOINTMENT
     WHERE A.ID_APPOINTMENT = @ID_APPOINTMENT;
 
-    -- Si existe registro médico, traer también los servicios adicionales
+    -- Si existe registro mï¿½dico, traer tambiï¿½n los servicios adicionales
     IF EXISTS (SELECT 1 FROM TB_MEDICAL_RECORDS WHERE ID_APPOINTMENT = @ID_APPOINTMENT)
     BEGIN
         SELECT 
@@ -501,14 +500,6 @@ GO
 /* ============================================
    PROCEDURES DOCTOR
    ============================================ */
-
-select * from TB_USERS
-select * from TB_EMERGENCY_CONTACT
-GO
-
-IF OBJECT_ID('sp_update_information_patient', 'P') IS NOT NULL
-    DROP PROCEDURE sp_update_information_patient;
-GO
 
 CREATE PROCEDURE sp_update_information_patient 
     -- VARIABLES USER
@@ -599,6 +590,49 @@ select * from TB_EMERGENCY_CONTACT
 exec  sp_patient_information 6
 
 select * from TB_RELATIONSHIP
+go
+
+
+CREATE OR ALTER PROC sp_historial_appointments
+@idPatient int 
+
+as 
+begin
+	
+	SELECT 
+		ap.ID_APPOINTMENT,
+		CONCAT(md.FIRST_NAME , ' ' , md.LAST_NAME_PAT) AS NombresDoctor,
+		md.GENDER,
+		md.PROFILE_PICTURE,
+		s.ID_SPECIALTY,
+		s.NAME_SPECIALTY,
+		FORMAT(ap.DATE_APPOINTMENT, 'HH:mm') AS Hora_Cita,
+		FORMAT(ap.DATE_APPOINTMENT, 'dd/MM/yyyy') AS fecha_cita,
+		sv.NAME_SERVICE,
+		sv.DESCRIPTION,
+		sv.DURATION_MINUTES,
+		cs.NUMBER_CONSULTORIES,
+		ap.STATE,
+		ap.APPOINTMENT_PRICE,
+		mds.DIAGNOSIS, mds.OBSERVATIONS, mds.TREATMENT
+	FROM TB_APPOINTMENTS ap
+	INNER JOIN TB_USERS md ON ap.ID_DOCTOR = md.ID_USER
+	INNER JOIN TB_SPECIALTIES s ON ap.ID_SPECIALTY = s.ID_SPECIALTY
+	INNER JOIN TB_SERVICES sv ON sv.ID_SERVICE = (
+		SELECT TOP 1 sv2.ID_SERVICE
+		FROM TB_SERVICES sv2
+		WHERE sv2.ID_SPECIALTY = s.ID_SPECIALTY
+		ORDER BY sv2.ID_SERVICE
+	)
+	INNER JOIN TB_CONSULTORIES cs ON ap.ID_CONSULTORIES = cs.ID_CONSULTORIES
+	INNER JOIN TB_MEDICAL_RECORDS mds ON mds.ID_APPOINTMENT = ap.ID_APPOINTMENT 
+	WHERE ap.ID_PATIENT = @idPatient 
+end
+go
+
+
+exec sp_historial_appointments 2
+
 
 /* ============================================
    PROCEDURES USER
@@ -672,12 +706,14 @@ GO
 
 /* ============================================
    PROCEDURES PACIENTE-CLIENTE
-   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistió
+   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiï¿½
    ============================================ */
 
 IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
+
+select * from TB_USERS
 
 CREATE PROCEDURE sp_total_citas
     @idPaciente INT
@@ -836,7 +872,7 @@ BEGIN
            AND CAST(DSS.FECHA_INICIO AS DATE) = @Today
            AND DSS.FECHA_FIN > GETDATE()
         ) AS AvailableToday,
-        -- Disponibilidad MAÑANA
+        -- Disponibilidad MAï¿½ANA
         (SELECT COUNT(*)
          FROM TB_DOCTOR_SCHEDULES DSS
          WHERE DSS.ID_DOCTOR = U.ID_USER
@@ -861,7 +897,7 @@ BEGIN
                 SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
                 WHERE DSS.ID_DOCTOR = U.ID_USER
                   AND CAST(DSS.FECHA_INICIO AS DATE) = @Tomorrow
-            ) THEN 'Mañana'
+            ) THEN 'Maï¿½ana'
             WHEN EXISTS (
                 SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
                 WHERE DSS.ID_DOCTOR = U.ID_USER
@@ -923,7 +959,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Si no se especifican fechas, buscar desde hoy hasta 30 días adelante
+    -- Si no se especifican fechas, buscar desde hoy hasta 30 dï¿½as adelante
     IF @StartDate IS NULL
         SET @StartDate = CAST(GETDATE() AS DATE);
     
@@ -1027,7 +1063,7 @@ BEGIN
       AND FECHA_FIN > GETDATE()
     ORDER BY FECHA_INICIO;
     
-    -- Si no hay horario, retornar vacío
+    -- Si no hay horario, retornar vacï¿½o
     IF @IdSchedule IS NULL
     BEGIN
         SELECT 
@@ -1135,7 +1171,7 @@ BEGIN
         SET @ErrorMessage = 'No se puede agendar citas en el pasado.';
     END
     
-    -- Retornar resultado de validación
+    -- Retornar resultado de validaciï¿½n
     SELECT 
         @IsAvailable AS IsAvailable,
         @ErrorMessage AS ErrorMessage,
@@ -1163,7 +1199,7 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
         
-        -- Validar disponibilidad (Se asume que este proc devuelve errores si no está disponible)
+        -- Validar disponibilidad (Se asume que este proc devuelve errores si no estï¿½ disponible)
         EXEC SP_VALIDATE_APPOINTMENT_AVAILABILITY 
             @IdPatient, 
             @IdDoctor, 
@@ -1181,7 +1217,7 @@ BEGIN
         
         IF @IdConsultory IS NULL
         BEGIN
-            RAISERROR('No se encontró consultorio disponible.', 16, 1);
+            RAISERROR('No se encontrï¿½ consultorio disponible.', 16, 1);
             RETURN;
         END
         
@@ -1214,7 +1250,7 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
         
-        -- Devolver información del error en caso de fallo
+        -- Devolver informaciï¿½n del error en caso de fallo
         SELECT 
             NULL AS IdAppointment,
             ERROR_MESSAGE() AS ErrorMessage,
@@ -1290,7 +1326,7 @@ BEGIN
         WHERE 
             ID_APPOINTMENT = @IdAppointment;
         
-        -- Si la edición fue exitosa, retorna el ID de la cita editada
+        -- Si la ediciï¿½n fue exitosa, retorna el ID de la cita editada
         SELECT @IdAppointment AS IdAppointmentEdited;
         
     END TRY
@@ -1369,7 +1405,7 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM TB_APPOINTMENTS WHERE ID_APPOINTMENT = @ID_APPOINTMENT AND STATE = 'A')
     BEGIN
-        RAISERROR('La cita debe estar en estado Atendida (A) para crear un registro médico', 16, 1);
+        RAISERROR('La cita debe estar en estado Atendida (A) para crear un registro mï¿½dico', 16, 1);
         RETURN;
     END
 
@@ -1385,7 +1421,7 @@ BEGIN
 
         SELECT 
             ID_RECORD,
-            'Registro médico actualizado exitosamente' AS Mensaje
+            'Registro mï¿½dico actualizado exitosamente' AS Mensaje
         FROM TB_MEDICAL_RECORDS
         WHERE ID_APPOINTMENT = @ID_APPOINTMENT;
     END
@@ -1396,7 +1432,7 @@ BEGIN
 
         SELECT 
             SCOPE_IDENTITY() AS ID_RECORD,
-            'Registro médico creado exitosamente' AS Mensaje;
+            'Registro mï¿½dico creado exitosamente' AS Mensaje;
     END
 END
 GO
@@ -1482,19 +1518,19 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM TB_MEDICAL_RECORDS WHERE ID_RECORD = @ID_RECORD)
     BEGIN
-        RAISERROR('El registro médico con ID %d no existe', 16, 1, @ID_RECORD);
+        RAISERROR('El registro mï¿½dico con ID %d no existe', 16, 1, @ID_RECORD);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM TB_SERVICES WHERE ID_SERVICE = @ID_SERVICE AND FLG_DELETE = 0)
     BEGIN
-        RAISERROR('El servicio con ID %d no existe o está eliminado', 16, 1, @ID_SERVICE);
+        RAISERROR('El servicio con ID %d no existe o estï¿½ eliminado', 16, 1, @ID_SERVICE);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_ADDITIONAL_SERVICES WHERE ID_RECORD = @ID_RECORD AND ID_SERVICE = @ID_SERVICE)
     BEGIN
-        RAISERROR('El servicio ya está asociado a este registro médico', 16, 1);
+        RAISERROR('El servicio ya estï¿½ asociado a este registro mï¿½dico', 16, 1);
         RETURN;
     END
 
@@ -1555,7 +1591,7 @@ BEGIN
 
     IF @STATE NOT IN ('P', 'A', 'X')
     BEGIN
-        RAISERROR('Estado inválido. Use: P=Pendiente, A=Aprobado, X=Cancelado', 16, 1);
+        RAISERROR('Estado invï¿½lido. Use: P=Pendiente, A=Aprobado, X=Cancelado', 16, 1);
         RETURN;
     END
 

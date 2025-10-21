@@ -52,7 +52,6 @@ namespace API.Controllers
             }
         }
 
-
         [HttpGet("CountAppointments")]
         public async Task<IActionResult> CountAppointments(int idPatient) {
             
@@ -114,5 +113,14 @@ namespace API.Controllers
             return Ok(listView);
         }
 
+        [HttpGet("RecordAppointments")]
+        public async Task<IActionResult> RecordAppointments(int idPatient) 
+        {
+            var lista = new List<RecordAppointmentsDTO>();
+
+            lista = await _patientBL.RecordAppointments(idPatient);
+            
+            return Ok(lista);
+        }
     }
 }
