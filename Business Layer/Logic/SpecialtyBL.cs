@@ -17,6 +17,11 @@ namespace Logic
             this.service = service;
         }
 
+        public async Task<List<Specialty>> ListSpecialitiesWithDescription()
+        {
+            return await service.ListSpecialitiesWithDescription();
+        }
+
         public async Task<List<Specialty>> ListSpecialties()
         {
             return await service.ListSpecialties();
@@ -26,5 +31,6 @@ namespace Logic
         {
             return await service.totalSpecialties();
         }
+
     }
 }

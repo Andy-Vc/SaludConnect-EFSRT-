@@ -23,6 +23,48 @@ namespace Data.Repository
             stringConexion = configuration["ConnectionStrings:DB"];
         }
 
+        public async Task<List<Specialty>> ListSpecialitiesWithDescription()
+        {
+            {
+                var list = new List<Specialty>();
+
+                try
+                {
+                    using (var conexion = new SqlConnection(stringConexion))
+                    {
+                        await conexion.OpenAsync();
+
+                        using (var cmd = new SqlCommand("SP_LIST_SPECIALTIES_WITH_DESCRIPTION", conexion))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            using (var reader = await cmd.ExecuteReaderAsync())
+                            {
+                                if (reader != null && reader.HasRows)
+                                {
+                                    while (await reader.ReadAsync())
+                                    {
+                                        list.Add(new Specialty
+                                        {
+                                            IdSpecialty = reader.GetInt32(reader.GetOrdinal("ID_SPECIALTY")),
+                                            NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),
+                                            Description = reader.GetString(reader.GetOrdinal("DESCRIPTION_SPECIALITY"))
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                return list;
+            }
+        }
+
         public async Task<List<Specialty>> ListSpecialties()
         {
             var list = new List<Specialty>();

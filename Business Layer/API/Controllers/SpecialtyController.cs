@@ -28,5 +28,12 @@ namespace API.Controllers
             var list = await serviceBL.ListSpecialties();
             return Ok(list);
         }
+
+        [HttpGet("list-specialties-with-description")]
+        public async Task<IActionResult> listSpecialtiesWithDescription()
+        {
+            var list = await serviceBL.ListSpecialitiesWithDescription();
+            return Ok(list);
+        }
     }
 }
