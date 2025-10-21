@@ -62,7 +62,9 @@ namespace Data.Repository
                                             },
                                             phone = reader.GetString(reader.GetOrdinal("PHONE")),
                                             email = reader.GetString(reader.GetOrdinal("EMAIL")),
-                                            imgProfile = reader.GetString(reader.GetOrdinal("ProfilePicture")),
+                                            imgProfile = reader.IsDBNull(reader.GetOrdinal("ProfilePicture"))
+                                                            ? string.Empty
+                                                            : reader.GetString(reader.GetOrdinal("ProfilePicture")),
                                             yearsExperience = (short)reader.GetInt32(reader.GetOrdinal("YearsExperience")),
                                             description = reader.GetString(reader.GetOrdinal("ExperienceDescription")),
                                             languagues = reader.GetString(reader.GetOrdinal("Languages")),
