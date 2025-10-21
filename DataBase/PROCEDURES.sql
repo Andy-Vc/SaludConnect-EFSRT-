@@ -715,6 +715,8 @@ IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
 
+select * from TB_USERS
+
 CREATE PROCEDURE sp_total_citas
     @idPaciente INT
 AS
@@ -1127,4 +1129,3 @@ BEGIN
 END
 GO
 
-select * from tb_user
