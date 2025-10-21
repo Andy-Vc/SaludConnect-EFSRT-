@@ -1,8 +1,9 @@
-﻿@{
+﻿@using Web.Models.DTO
+@{
 	ViewData["Title"] = "Panel Principal";
 	Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 
-	var nextAppointments = ViewBag.NextAppointments as List<Web.Models.DTO.PatientNextAppointements>;
+	var nextAppointments = ViewBag.NextAppointments as List<PatientNextAppointements>;
 }
 
 

@@ -501,10 +501,8 @@ GO
    PROCEDURES DOCTOR
    ============================================ */
 
-	   select * from TB_USERS
-	   select * from TB_EMERGENCY_CONTACT
 
-   CREATE PROCEDURE sp_update_information_patient 
+CREATE PROCEDURE sp_update_information_patient 
     -- VARIABLES USER
     @idUser INT, 
     @firstname VARCHAR(50),
@@ -604,15 +602,14 @@ as
 begin
 	
 	SELECT 
-		md.FIRST_NAME,
-		md.LAST_NAME_PAT,
+		ap.ID_APPOINTMENT,
+		CONCAT(md.FIRST_NAME , ' ' , md.LAST_NAME_PAT) AS NombresDoctor,
 		md.GENDER,
 		md.PROFILE_PICTURE,
 		s.ID_SPECIALTY,
 		s.NAME_SPECIALTY,
 		FORMAT(ap.DATE_APPOINTMENT, 'HH:mm') AS Hora_Cita,
-		FORMAT(ap.DATE_APPOINTMENT, 'dd/MM/yyyy') AS Hora_Cita,
-		ap.DATE_APPOINTMENT,
+		FORMAT(ap.DATE_APPOINTMENT, 'dd/MM/yyyy') AS fecha_cita,
 		sv.NAME_SERVICE,
 		sv.DESCRIPTION,
 		sv.DURATION_MINUTES,
@@ -631,10 +628,9 @@ begin
 	)
 	INNER JOIN TB_CONSULTORIES cs ON ap.ID_CONSULTORIES = cs.ID_CONSULTORIES
 	INNER JOIN TB_MEDICAL_RECORDS mds ON mds.ID_APPOINTMENT = ap.ID_APPOINTMENT 
-	WHERE ap.ID_PATIENT = @idPatient AND 
-	ap.STATE in ('A','P','N')
+	WHERE ap.ID_PATIENT = @idPatient 
 end
-
+go
 
 
 exec sp_historial_appointments 2

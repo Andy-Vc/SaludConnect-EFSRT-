@@ -21,46 +21,41 @@ namespace Logic
         {
             return await _patient.CountAppointments(idPatient);
         }
-
         public async Task<int> CountAppointmentsAssisted(int idPatient)
         {
             return await _patient.CountAppointmentsAssisted(idPatient);
         }
-
         public async Task<int> CountAppointmentsCanceled(int idPatient)
         {
             return await _patient.CountAppointmentsCanceled(idPatient);
         }
-
         public async Task<int> CountAppointmentsEarring(int idPatient)
         {
             return await _patient.CountAppointmentsEarring(idPatient);
         }
-
         public async Task<int> TotalDoctors()
         {
             return await _patient.TotalDoctors();
         }
-
-
         public async Task<PatientInformation> PatientInformation(int idUser)
         {
             return await _patient.PatientInformation(idUser);
         }
-
         public async Task<List<RelationShip>> CompletListOfRelationShips()
         {
             return await _patient.CompletListOfRelationShips();
         }
-
         public async Task<PatientUpdate> UpdateInformationPatient(PatientUpdate patient, int idUser)
         {
             return await _patient.UpdateInformationPatient(patient, patient.idUser);
         }
-
         public async Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient)
         {
             return await _patient.PatientNextAppointement(idPatient);
-        }   
+        }
+        public async Task<List<RecordAppointmentsDTO>> RecordAppointments(int idPatient)
+        {
+            return await _patient.RecordAppointments(idPatient);
+        }
     }
 }

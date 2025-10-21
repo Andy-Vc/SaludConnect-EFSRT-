@@ -19,6 +19,8 @@ namespace Data.Interface
         Task<List<RelationShip>> CompletListOfRelationShips();
         Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, int idUser);
         Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient);
-        
+        Task<List<RecordAppointmentsDTO>> RecordAppointments(int idPatient); 
+       
+
     }
 }                                                                                               

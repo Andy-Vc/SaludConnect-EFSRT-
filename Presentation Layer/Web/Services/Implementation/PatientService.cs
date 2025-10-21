@@ -24,7 +24,6 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<RelationShip>>(json);
         }
-     
         public async Task<int> CountAppointments(int idPatient)
         {
             var response = await _httpClient.GetAsync($"patient/CountAppointments?idPatient={idPatient}");
@@ -33,7 +32,6 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<int>(json);
         }
-
         public async Task<int> CountAppointmentsAssisted(int idPatient)
         {
             var response = await _httpClient.GetAsync($"patient/CountAppointmentsAssisted?idPatient={idPatient}");
@@ -42,7 +40,6 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<int>(json);
         }
-
         public async Task<int> CountAppointmentsCanceled(int idPatient)
         {
             var response = await _httpClient.GetAsync($"patient/CountAppointmentsCanceled?idPatient={idPatient}");
@@ -51,7 +48,6 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<int>(json);
         }
-
         public async Task<int> CountAppointmentsEarring(int idPatient)
         {
             var response = await _httpClient.GetAsync($"patient/CountAppointmentsEarring?idPatient={idPatient}");
@@ -60,7 +56,6 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<int>(json);
         }
-
         public async Task<PatientInformation> PatientInformation(int idUser)
         {
             var response = await _httpClient.GetAsync($"patient/PatientInformation?idUser={idUser}");
@@ -69,12 +64,10 @@ namespace Web.Services.Implementation
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<PatientInformation>(json);
         }
-
         public Task<int> TotalDoctors()
         {
             throw new NotImplementedException();
         }
-
         public async Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, Stream? photoStream, string? fileName)
         {
             using var formData = new MultipartFormDataContent();
@@ -129,7 +122,6 @@ namespace Web.Services.Implementation
 
             return result!;
         }
-
         public async Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient) {
             try 
             {
@@ -144,6 +136,15 @@ namespace Web.Services.Implementation
                 return new List<PatientNextAppointements>();
             }
            
+        }
+
+        public async Task<List<RecordAppointmentsDTO>> RecordAppointments(int idPatient)
+        {
+            var response = await _httpClient.GetAsync($"patient/RecordAppointments?idPatient={idPatient}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<RecordAppointmentsDTO>>(json);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿    using Web.Models.DTO;
+﻿using Web.Models.DTO;
 using Web.Models;
 
 
@@ -15,5 +15,7 @@ namespace Web.Services.Interface
         Task<List<RelationShip>> CompletListOfRelationShips();
         Task<PatientUpdate> UpdateInformationPatient(PatientUpdate user, Stream? photoStream, string? fileName);
         Task<List<PatientNextAppointements>> PatientNextAppointement(int idPatient);
+        Task<List<RecordAppointmentsDTO>> RecordAppointments(int idPatient);
+        
     }
 }

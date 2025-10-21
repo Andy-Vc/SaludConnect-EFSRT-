@@ -1,12 +1,9 @@
-﻿
+﻿@using Web.Models.DTO
 @{
     ViewData["Title"] = "Record";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
-}
 
-@{
-    ViewData["Title"] = "Record";
-    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+    var recordAppointments = ViewBag.ListAppointments as List<RecordAppointmentsDTO>;
 }
 
 <!-- Main Content -->
@@ -136,245 +133,366 @@
                     <div class="flex-1 border-t border-secondary-200"></div>
                 </div>
 
-                <!-- Appointment Card 1 - Attended -->
-                <div class="medical-card cursor-pointer appointment-card" data-status="asistido" data-specialty="cardiologia" data-date="2025-10-08" onclick="toggleAppointmentDetails('appointment1')" style="display: block;">
-                    <div class="flex items-start space-x-4">
-                        <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dr. Carlos Mendoza" class="w-12 h-12 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-sm font-medium text-text-primary">Cardiología - Consulta de Control</h4>
-                                <span class="status-success">Asistido</span>
-                            </div>
-                            <p class="text-sm text-text-secondary mb-1">Dr. Carlos Mendoza</p>
-                            <div class="flex items-center text-xs text-text-secondary mb-2">
-                                <i class="far fa-calendar-alt mr-1"></i>
-                                <span>08/10/2025</span>
-                                <i class="far fa-clock ml-3 mr-1"></i>
-                                <span>10:30</span>
-                                <i class="fas fa-map-marker-alt ml-3 mr-1"></i>
-                                <span>Consulta 205</span>
-                            </div>
-                            <p class="text-xs text-text-secondary">Control rutinario de presión arterial y medicación</p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment1"></i>
-                        </div>
-                    </div>
+                @if (recordAppointments != null && recordAppointments.Count > 0)
+                {
+                    @foreach ( var record in recordAppointments)
+                    {
+                        var estadoString = "";
+                        @switch (record.state)
+                        {
+                            case "A":
+                                estadoString = "Asistido";
+                                break;
+                            case "X":
+                                estadoString = "Cancelado";
+                                break;
+                            case "P":
+                                estadoString = "Pendiente";
+                                break;
+                            case "N":
+                                estadoString = "No asistio";
+                                break;
+                            default:
+                                estadoString = "Error estado";
+                                break;
+                        }
 
-                    <!-- Expandable Details -->
-                    <div id="details-appointment1" class="hidden mt-4 pt-4 border-t border-secondary-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h5 class="font-medium text-text-primary mb-2">Información de la Visita</h5>
-                                <ul class="text-sm text-text-secondary space-y-1">
-                                    <li>• Presión arterial: 120/80 mmHg</li>
-                                    <li>• Frecuencia cardíaca: 72 bpm</li>
-                                    <li>• Peso: 68 kg</li>
-                                    <li>• Medicación ajustada</li>
-                                </ul>
+                        var abreviaturaMedico = "";
+                        if (record.gender == "M")
+                        {
+                            abreviaturaMedico = "Dr.";
+                        }
+                        else
+                        {
+                            abreviaturaMedico = "Dra.";    
+                        }
+
+                        @switch (record.state)
+                            {
+                             case "A":
+                                    <div class="medical-card cursor-pointer appointment-card" data-status="asistido" data-specialty="cardiologia" data-date="2025-10-08" onclick="toggleAppointmentDetails('appointment1')" style="display: block;">
+                                        <div class="flex items-start space-x-4">
+                                            <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dr. Carlos Mendoza" class="w-12 h-12 rounded-full object-cover">
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <h4 class="text-sm font-medium text-text-primary">@record.nameService - @record.descripcion</h4>
+                                                    <span class="status-success">@estadoString</span>
+                                                </div>
+
+                                            <p class="text-sm text-text-secondary mb-1">@abreviaturaMedico @record.nombresDoctor</p>
+                                                <div class="flex items-center text-xs text-text-secondary mb-2">
+                                                    <i class="far fa-calendar-alt mr-1"></i>
+                                                    <span>@record.fechaCita</span>
+                                                    <i class="far fa-clock ml-3 mr-1"></i>
+                                                    <span>@record.horaCita</span>
+                                                    <i class="fas fa-map-marker-alt ml-3 mr-1"></i>
+                                                    <span>Consultorio @record.consultorio</span>
+                                                </div>
+                                                <p class="text-xs text-text-secondary">@record.descripcion</p>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment1"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Expandable Details -->
+                                        <div id="details-appointment1" class="hidden mt-4 pt-4 border-t border-secondary-200">
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <h5 class="font-medium text-text-primary mb-2">Información de la Visita</h5>
+                                                    <ul class="text-sm text-text-secondary space-y-1">
+                                                        <li>• Presión arterial: 120/80 mmHg</li>
+                                                        <li>• Frecuencia cardíaca: 72 bpm</li>
+                                                        <li>• Peso: 68 kg</li>
+                                                        <li>• Medicación ajustada</li>
+                                                    </ul>
+                                                </div>
+                                                <div>
+                                                    <h5 class="font-medium text-text-primary mb-2">Seguimiento</h5>
+                                                    <ul class="text-sm text-text-secondary space-y-1">
+                                                        <li>• Próxima cita en 3 meses</li>
+                                                        <li>• Continuar con medicación actual</li>
+                                                        <li>• Ejercicio moderado recomendado</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 flex items-center justify-between">
+                                                <div class="flex space-x-2">
+                                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                                        <i class="fas fa-file-medical mr-1"></i>
+                                                        Ver Informe
+                                                    </button>
+                                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                                        <i class="fas fa-prescription mr-1"></i>
+                                                        Receta
+                                                    </button>
+                                                </div>
+                                                <button class="btn-secondary text-sm" onclick="window.location.href='appointment_details.html'">
+                                                    Ver Detalles
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    break;
+                             case "P":
+                                    <div>Pendiente</div>
+                                    break;
+                             case "X":
+                                    <div>Cancelado</div>
+                                    break;
+                             case "N":
+                                    <div>Pendiente</div>
+                                    break;
+                             default:
+                                    <div>ERROR NO SE ENCUENTRA EL ESTADO</div>
+                                    break;
+                        }
+                    }
+                    }
+                    else
+                {
+
+                }
+
+                    <!-- Appointment Card 1 - Attended -->
+                    <div class="medical-card cursor-pointer appointment-card" data-status="asistido" data-specialty="cardiologia" data-date="2025-10-08" onclick="toggleAppointmentDetails('appointment1')" style="display: block;">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dr. Carlos Mendoza" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-sm font-medium text-text-primary">Cardiología - Consulta de Control</h4>
+                                    <span class="status-success">Asistido</span>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-1">Dr. Carlos Mendoza</p>
+                                <div class="flex items-center text-xs text-text-secondary mb-2">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    <span>08/10/2025</span>
+                                    <i class="far fa-clock ml-3 mr-1"></i>
+                                    <span>10:30</span>
+                                    <i class="fas fa-map-marker-alt ml-3 mr-1"></i>
+                                    <span>Consulta 205</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">Control rutinario de presión arterial y medicación</p>
                             </div>
-                            <div>
-                                <h5 class="font-medium text-text-primary mb-2">Seguimiento</h5>
-                                <ul class="text-sm text-text-secondary space-y-1">
-                                    <li>• Próxima cita en 3 meses</li>
-                                    <li>• Continuar con medicación actual</li>
-                                    <li>• Ejercicio moderado recomendado</li>
-                                </ul>
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment1"></i>
                             </div>
                         </div>
-                        <div class="mt-4 flex items-center justify-between">
-                            <div class="flex space-x-2">
-                                <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                    <i class="fas fa-file-medical mr-1"></i>
-                                    Ver Informe
+
+                        <!-- Expandable Details -->
+                        <div id="details-appointment1" class="hidden mt-4 pt-4 border-t border-secondary-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">Información de la Visita</h5>
+                                    <ul class="text-sm text-text-secondary space-y-1">
+                                        <li>• Presión arterial: 120/80 mmHg</li>
+                                        <li>• Frecuencia cardíaca: 72 bpm</li>
+                                        <li>• Peso: 68 kg</li>
+                                        <li>• Medicación ajustada</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">Seguimiento</h5>
+                                    <ul class="text-sm text-text-secondary space-y-1">
+                                        <li>• Próxima cita en 3 meses</li>
+                                        <li>• Continuar con medicación actual</li>
+                                        <li>• Ejercicio moderado recomendado</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div class="flex space-x-2">
+                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                        <i class="fas fa-file-medical mr-1"></i>
+                                        Ver Informe
+                                    </button>
+                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                        <i class="fas fa-prescription mr-1"></i>
+                                        Receta
+                                    </button>
+                                </div>
+                                <button class="btn-secondary text-sm" onclick="window.location.href='appointment_details.html'">
+                                    Ver Detalles
                                 </button>
-                                <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                    <i class="fas fa-prescription mr-1"></i>
-                                    Receta
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Card 2 - Attended -->
+                    <div class="medical-card cursor-pointer appointment-card" data-status="asistido" data-specialty="dermatologia" data-date="2025-09-22" onclick="toggleAppointmentDetails('appointment2')" style="display: block;">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=150&auto=format&fit=crop" alt="Dra. Ana Rodríguez" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-sm font-medium text-text-primary">Dermatología - Revisión de Lunares</h4>
+                                    <span class="status-success">Asistido</span>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-1">Dra. Ana Rodríguez</p>
+                                <div class="flex items-center text-xs text-text-secondary mb-2">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    <span>22/09/2025</span>
+                                    <i class="far fa-clock ml-3 mr-1"></i>
+                                    <span>14:15</span>
+                                    <i class="fas fa-map-marker-alt ml-3 mr-1"></i>
+                                    <span>Consulta 310</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">Revisión anual preventiva de lunares y manchas</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment2"></i>
+                            </div>
+                        </div>
+
+                        <!-- Expandable Details -->
+                        <div id="details-appointment2" class="hidden mt-4 pt-4 border-t border-secondary-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">Información de la Visita</h5>
+                                    <ul class="text-sm text-text-secondary space-y-1">
+                                        <li>• Dermatoscopia realizada</li>
+                                        <li>• 12 lunares examinados</li>
+                                        <li>• Ninguna anomalía detectada</li>
+                                        <li>• Piel en buen estado general</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-text-primary mb-2">Recomendaciones</h5>
+                                    <ul class="text-sm text-text-secondary space-y-1">
+                                        <li>• Usar protector solar diario</li>
+                                        <li>• Autoexamen mensual</li>
+                                        <li>• Próxima revisión en 12 meses</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div class="flex space-x-2">
+                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                        <i class="fas fa-file-medical mr-1"></i>
+                                        Ver Informe
+                                    </button>
+                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
+                                        <i class="fas fa-images mr-1"></i>
+                                        Fotografías
+                                    </button>
+                                </div>
+                                <button class="btn-secondary text-sm" onclick="window.location.href='appointment_details.html'">
+                                    Ver Detalles
                                 </button>
                             </div>
-                            <button class="btn-secondary text-sm" onclick="window.location.href='appointment_details.html'">
-                                Ver Detalles
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Appointment Card 2 - Attended -->
-                <div class="medical-card cursor-pointer appointment-card" data-status="asistido" data-specialty="dermatologia" data-date="2025-09-22" onclick="toggleAppointmentDetails('appointment2')" style="display: block;">
-                    <div class="flex items-start space-x-4">
-                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=150&auto=format&fit=crop" alt="Dra. Ana Rodríguez" class="w-12 h-12 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-sm font-medium text-text-primary">Dermatología - Revisión de Lunares</h4>
-                                <span class="status-success">Asistido</span>
-                            </div>
-                            <p class="text-sm text-text-secondary mb-1">Dra. Ana Rodríguez</p>
-                            <div class="flex items-center text-xs text-text-secondary mb-2">
-                                <i class="far fa-calendar-alt mr-1"></i>
-                                <span>22/09/2025</span>
-                                <i class="far fa-clock ml-3 mr-1"></i>
-                                <span>14:15</span>
-                                <i class="fas fa-map-marker-alt ml-3 mr-1"></i>
-                                <span>Consulta 310</span>
-                            </div>
-                            <p class="text-xs text-text-secondary">Revisión anual preventiva de lunares y manchas</p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment2"></i>
                         </div>
                     </div>
 
-                    <!-- Expandable Details -->
-                    <div id="details-appointment2" class="hidden mt-4 pt-4 border-t border-secondary-200">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h5 class="font-medium text-text-primary mb-2">Información de la Visita</h5>
-                                <ul class="text-sm text-text-secondary space-y-1">
-                                    <li>• Dermatoscopia realizada</li>
-                                    <li>• 12 lunares examinados</li>
-                                    <li>• Ninguna anomalía detectada</li>
-                                    <li>• Piel en buen estado general</li>
-                                </ul>
+                    <!-- Timeline Month Separator -->
+                    <div class="flex items-center">
+                        <div class="flex-1 border-t border-secondary-200"></div>
+                        <div class="px-4 text-sm font-medium text-text-secondary bg-background">Agosto 2025</div>
+                        <div class="flex-1 border-t border-secondary-200"></div>
+                    </div>
+
+                    <!-- Appointment Card 3 - Cancelled -->
+                    <div class="medical-card cursor-pointer appointment-card" data-status="cancelado" data-specialty="neurologia" data-date="2025-08-15" onclick="toggleAppointmentDetails('appointment3')" style="display: block;">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Dr. Miguel Torres" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-sm font-medium text-text-primary">Neurología - Consulta Inicial</h4>
+                                    <span class="status-error">Cancelado</span>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-1">Dr. Miguel Torres</p>
+                                <div class="flex items-center text-xs text-text-secondary mb-2">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    <span>15/08/2025</span>
+                                    <i class="far fa-clock ml-3 mr-1"></i>
+                                    <span>09:00</span>
+                                    <i class="fas fa-times-circle ml-3 mr-1 text-error"></i>
+                                    <span>Cancelado por el paciente</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">Consulta por dolores de cabeza frecuentes</p>
                             </div>
-                            <div>
-                                <h5 class="font-medium text-text-primary mb-2">Recomendaciones</h5>
-                                <ul class="text-sm text-text-secondary space-y-1">
-                                    <li>• Usar protector solar diario</li>
-                                    <li>• Autoexamen mensual</li>
-                                    <li>• Próxima revisión en 12 meses</li>
-                                </ul>
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment3"></i>
                             </div>
                         </div>
-                        <div class="mt-4 flex items-center justify-between">
-                            <div class="flex space-x-2">
-                                <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                    <i class="fas fa-file-medical mr-1"></i>
-                                    Ver Informe
-                                </button>
-                                <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                    <i class="fas fa-images mr-1"></i>
-                                    Fotografías
+
+                        <!-- Expandable Details -->
+                        <div id="details-appointment3" class="hidden mt-4 pt-4 border-t border-secondary-200">
+                            <div class="bg-error-50 border border-error-200 rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-info-circle text-error mr-2"></i>
+                                    <h5 class="font-medium text-error">Cita Cancelada</h5>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-2">
+                                    Cancelada el 14/08/2025 a las 16:30 por el paciente
+                                </p>
+                                <p class="text-sm text-text-secondary">
+                                    Motivo: Conflicto de horario laboral
+                                </p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-end">
+                                <button class="btn-primary text-sm" onclick="window.location.href='javascript:void(0)'">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Reagendar Cita
                                 </button>
                             </div>
-                            <button class="btn-secondary text-sm" onclick="window.location.href='appointment_details.html'">
-                                Ver Detalles
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Timeline Month Separator -->
-                <div class="flex items-center">
-                    <div class="flex-1 border-t border-secondary-200"></div>
-                    <div class="px-4 text-sm font-medium text-text-secondary bg-background">Agosto 2025</div>
-                    <div class="flex-1 border-t border-secondary-200"></div>
-                </div>
-
-                <!-- Appointment Card 3 - Cancelled -->
-                <div class="medical-card cursor-pointer appointment-card" data-status="cancelado" data-specialty="neurologia" data-date="2025-08-15" onclick="toggleAppointmentDetails('appointment3')" style="display: block;">
-                    <div class="flex items-start space-x-4">
-                        <img src="https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Dr. Miguel Torres" class="w-12 h-12 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-sm font-medium text-text-primary">Neurología - Consulta Inicial</h4>
-                                <span class="status-error">Cancelado</span>
-                            </div>
-                            <p class="text-sm text-text-secondary mb-1">Dr. Miguel Torres</p>
-                            <div class="flex items-center text-xs text-text-secondary mb-2">
-                                <i class="far fa-calendar-alt mr-1"></i>
-                                <span>15/08/2025</span>
-                                <i class="far fa-clock ml-3 mr-1"></i>
-                                <span>09:00</span>
-                                <i class="fas fa-times-circle ml-3 mr-1 text-error"></i>
-                                <span>Cancelado por el paciente</span>
-                            </div>
-                            <p class="text-xs text-text-secondary">Consulta por dolores de cabeza frecuentes</p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment3"></i>
                         </div>
                     </div>
 
-                    <!-- Expandable Details -->
-                    <div id="details-appointment3" class="hidden mt-4 pt-4 border-t border-secondary-200">
-                        <div class="bg-error-50 border border-error-200 rounded-lg p-4">
-                            <div class="flex items-center mb-2">
-                                <i class="fas fa-info-circle text-error mr-2"></i>
-                                <h5 class="font-medium text-error">Cita Cancelada</h5>
+                    <!-- Appointment Card 4 - No Show -->
+                    <div class="medical-card cursor-pointer appointment-card" data-status="inasistencia" data-specialty="traumatologia" data-date="2025-07-28" onclick="toggleAppointmentDetails('appointment4')" style="display: block;">
+                        <div class="flex items-start space-x-4">
+                            <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dra. Laura Martín" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-sm font-medium text-text-primary">Traumatología - Revisión Rodilla</h4>
+                                    <span class="status-warning">Inasistencia</span>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-1">Dra. Laura Martín</p>
+                                <div class="flex items-center text-xs text-text-secondary mb-2">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    <span>28/07/2025</span>
+                                    <i class="far fa-clock ml-3 mr-1"></i>
+                                    <span>11:45</span>
+                                    <i class="fas fa-exclamation-triangle ml-3 mr-1 text-warning"></i>
+                                    <span>No se presentó</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">Seguimiento post-operatorio de menisco</p>
                             </div>
-                            <p class="text-sm text-text-secondary mb-2">
-                                Cancelada el 14/08/2025 a las 16:30 por el paciente
-                            </p>
-                            <p class="text-sm text-text-secondary">
-                                Motivo: Conflicto de horario laboral
-                            </p>
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment4"></i>
+                            </div>
                         </div>
-                        <div class="mt-4 flex items-center justify-end">
-                            <button class="btn-primary text-sm" onclick="window.location.href='javascript:void(0)'">
-                                <i class="fas fa-plus mr-1"></i>
-                                Reagendar Cita
-                            </button>
+
+                        <!-- Expandable Details -->
+                        <div id="details-appointment4" class="hidden mt-4 pt-4 border-t border-secondary-200">
+                            <div class="bg-warning-50 border border-warning-200 rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                                    <h5 class="font-medium text-warning">Inasistencia Registrada</h5>
+                                </div>
+                                <p class="text-sm text-text-secondary mb-2">
+                                    El paciente no se presentó a la cita programada
+                                </p>
+                                <p class="text-sm text-text-secondary">
+                                    Se recomienda reagendar para continuar con el seguimiento
+                                </p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-end">
+                                <button class="btn-primary text-sm" onclick="window.location.href='javascript:void(0)'">
+                                    <i class="fas fa-plus mr-1"></i>
+                                    Reagendar Cita
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Appointment Card 4 - No Show -->
-                <div class="medical-card cursor-pointer appointment-card" data-status="inasistencia" data-specialty="traumatologia" data-date="2025-07-28" onclick="toggleAppointmentDetails('appointment4')" style="display: block;">
-                    <div class="flex items-start space-x-4">
-                        <img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dra. Laura Martín" class="w-12 h-12 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-sm font-medium text-text-primary">Traumatología - Revisión Rodilla</h4>
-                                <span class="status-warning">Inasistencia</span>
-                            </div>
-                            <p class="text-sm text-text-secondary mb-1">Dra. Laura Martín</p>
-                            <div class="flex items-center text-xs text-text-secondary mb-2">
-                                <i class="far fa-calendar-alt mr-1"></i>
-                                <span>28/07/2025</span>
-                                <i class="far fa-clock ml-3 mr-1"></i>
-                                <span>11:45</span>
-                                <i class="fas fa-exclamation-triangle ml-3 mr-1 text-warning"></i>
-                                <span>No se presentó</span>
-                            </div>
-                            <p class="text-xs text-text-secondary">Seguimiento post-operatorio de menisco</p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-chevron-down text-secondary-400 transition-transform" id="chevron-appointment4"></i>
-                        </div>
-                    </div>
-
-                    <!-- Expandable Details -->
-                    <div id="details-appointment4" class="hidden mt-4 pt-4 border-t border-secondary-200">
-                        <div class="bg-warning-50 border border-warning-200 rounded-lg p-4">
-                            <div class="flex items-center mb-2">
-                                <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
-                                <h5 class="font-medium text-warning">Inasistencia Registrada</h5>
-                            </div>
-                            <p class="text-sm text-text-secondary mb-2">
-                                El paciente no se presentó a la cita programada
-                            </p>
-                            <p class="text-sm text-text-secondary">
-                                Se recomienda reagendar para continuar con el seguimiento
-                            </p>
-                        </div>
-                        <div class="mt-4 flex items-center justify-end">
-                            <button class="btn-primary text-sm" onclick="window.location.href='javascript:void(0)'">
-                                <i class="fas fa-plus mr-1"></i>
-                                Reagendar Cita
-                            </button>
-                        </div>
+                    <!-- Load More Button -->
+                    <div class="text-center py-8">
+                        <button class="btn-secondary" onclick="loadMoreAppointments()">
+                            <i class="fas fa-spinner mr-2 hidden" id="loadingSpinner"></i>
+                            Cargar Más Citas
+                        </button>
                     </div>
                 </div>
-
-                <!-- Load More Button -->
-                <div class="text-center py-8">
-                    <button class="btn-secondary" onclick="loadMoreAppointments()">
-                        <i class="fas fa-spinner mr-2 hidden" id="loadingSpinner"></i>
-                        Cargar Más Citas
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </main>
@@ -383,75 +501,75 @@
 <div id="mobileFiltersOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
     <div class="fixed inset-y-0 right-0 w-80 bg-surface shadow-lg transform transition-transform duration-300" id="mobileFiltersPanel">
         <div class="p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-semibold text-text-primary">Filtros</h3>
-                <button class="text-text-secondary hover:text-text-primary" onclick="toggleFilters()">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-            <div class="space-y-6">
-                <!-- Date Range Filter -->
-                <div>
-                    <label class="form-label">Rango de Fechas</label>
-                    <div class="space-y-3">
-                        <input type="date" class="form-input" value="2024-01-01">
-                        <input type="date" class="form-input" value="2025-10-11">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-text-primary">Filtros</h3>
+                    <button class="text-text-secondary hover:text-text-primary" onclick="toggleFilters()">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+                <div class="space-y-6">
+                    <!-- Date Range Filter -->
+                    <div>
+                        <label class="form-label">Rango de Fechas</label>
+                        <div class="space-y-3">
+                            <input type="date" class="form-input" value="2024-01-01">
+                            <input type="date" class="form-input" value="2025-10-11">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Specialty Filter -->
-                <div>
-                    <label class="form-label">Especialidad</label>
-                    <select class="form-input">
-                        <option value="">Todas las especialidades</option>
-                        <option value="cardiologia">Cardiología</option>
-                        <option value="dermatologia">Dermatología</option>
-                        <option value="neurologia">Neurología</option>
-                        <option value="pediatria">Pediatría</option>
-                        <option value="traumatologia">Traumatología</option>
-                        <option value="ginecologia">Ginecología</option>
-                    </select>
-                </div>
-
-                <!-- Status Filter -->
-                <div>
-                    <label class="form-label">Estado</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" class="mr-2 text-primary" value="asistido" checked>
-                            <span class="text-sm text-text-primary">Asistido</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" class="mr-2 text-primary" value="cancelado" checked>
-                            <span class="text-sm text-text-primary">Cancelado</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" class="mr-2 text-primary" value="inasistencia" checked>
-                            <span class="text-sm text-text-primary">Inasistencia</span>
-                        </label>
+                    <!-- Specialty Filter -->
+                    <div>
+                        <label class="form-label">Especialidad</label>
+                        <select class="form-input">
+                            <option value="">Todas las especialidades</option>
+                            <option value="cardiologia">Cardiología</option>
+                            <option value="dermatologia">Dermatología</option>
+                            <option value="neurologia">Neurología</option>
+                            <option value="pediatria">Pediatría</option>
+                            <option value="traumatologia">Traumatología</option>
+                            <option value="ginecologia">Ginecología</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Doctor Search -->
-                <div>
-                    <label class="form-label">Buscar Doctor</label>
-                    <div class="relative">
-                        <input type="text" class="form-input pl-10" placeholder="Nombre del doctor...">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-secondary-400"></i>
+                    <!-- Status Filter -->
+                    <div>
+                        <label class="form-label">Estado</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 text-primary" value="asistido" checked>
+                                <span class="text-sm text-text-primary">Asistido</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 text-primary" value="cancelado" checked>
+                                <span class="text-sm text-text-primary">Cancelado</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2 text-primary" value="inasistencia" checked>
+                                <span class="text-sm text-text-primary">Inasistencia</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Doctor Search -->
+                    <div>
+                        <label class="form-label">Buscar Doctor</label>
+                        <div class="relative">
+                            <input type="text" class="form-input pl-10" placeholder="Nombre del doctor...">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-secondary-400"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mt-8 flex space-x-3">
-                <button class="btn-secondary flex-1" onclick="clearFilters()">
-                    Limpiar
-                </button>
-                <button class="btn-primary flex-1" onclick="applyFilters()">
-                    Aplicar
-                </button>
-            </div>
+                <div class="mt-8 flex space-x-3">
+                    <button class="btn-secondary flex-1" onclick="clearFilters()">
+                        Limpiar
+                    </button>
+                    <button class="btn-primary flex-1" onclick="applyFilters()">
+                        Aplicar
+                    </button>
+                </div>
         </div>
     </div>
 </div>
@@ -460,3 +578,230 @@
 <button class="fab" onclick="window.location.href='help_center.html'" title="Centro de Ayuda">
     <i class="fas fa-question text-lg"></i>
 </button>
+
+<script>
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    }
+
+    function toggleFilters() {
+        const overlay = document.getElementById('mobileFiltersOverlay');
+        const panel = document.getElementById('mobileFiltersPanel');
+
+        overlay.classList.toggle('hidden');
+
+        if (!overlay.classList.contains('hidden')) {
+            setTimeout(() => {
+                panel.classList.remove('translate-x-full');
+            }, 10);
+        } else {
+            panel.classList.add('translate-x-full');
+        }
+    }
+
+    function toggleAppointmentDetails(appointmentId) {
+        const details = document.getElementById(`details-${appointmentId}`);
+        const chevron = document.getElementById(`chevron-${appointmentId}`);
+
+        details.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+    }
+
+    function clearFilters() {
+        // Reset all filter inputs
+        document.getElementById('dateFrom').value = '2024-01-01';
+        document.getElementById('dateTo').value = '2025-10-11';
+        document.getElementById('specialtyFilter').value = '';
+        document.getElementById('doctorSearch').value = '';
+
+        // Reset checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+
+        // Update results count
+        document.getElementById('resultsCount').textContent = '24';
+
+        // Show all appointment cards
+        const cards = document.querySelectorAll('.appointment-card');
+        cards.forEach(card => {
+            card.style.display = 'block';
+        });
+    }
+
+    function applyFilters() {
+        // Get filter values
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+        const specialty = document.getElementById('specialtyFilter').value;
+        const doctorSearch = document.getElementById('doctorSearch').value.toLowerCase();
+
+        // Get checked statuses
+        const checkedStatuses = [];
+        const statusCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        statusCheckboxes.forEach(checkbox => {
+            checkedStatuses.push(checkbox.value);
+        });
+
+        // Filter appointment cards
+        const cards = document.querySelectorAll('.appointment-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const cardStatus = card.dataset.status;
+            const cardSpecialty = card.dataset.specialty;
+            const cardDate = card.dataset.date;
+            const doctorName = card.querySelector('p').textContent.toLowerCase();
+
+            let shouldShow = true;
+
+            // Check status filter
+            if (!checkedStatuses.includes(cardStatus)) {
+                shouldShow = false;
+            }
+
+            // Check specialty filter
+            if (specialty && cardSpecialty !== specialty) {
+                shouldShow = false;
+            }
+
+            // Check date range
+            if (dateFrom && cardDate < dateFrom) {
+                shouldShow = false;
+            }
+            if (dateTo && cardDate > dateTo) {
+                shouldShow = false;
+            }
+
+            // Check doctor search
+            if (doctorSearch && !doctorName.includes(doctorSearch)) {
+                shouldShow = false;
+            }
+
+            if (shouldShow) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update results count
+        document.getElementById('resultsCount').textContent = visibleCount;
+
+        // Close mobile filters
+        if (window.innerWidth < 768) {
+            toggleFilters();
+        }
+    }
+
+    function exportHistory() {
+        // Show loading state
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generando PDF...';
+        button.disabled = true;
+
+        // Simulate PDF generation
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+
+            // Show success message
+            showToast('Historial exportado correctamente', 'success');
+        }, 2000);
+    }
+
+    function loadMoreAppointments() {
+        const button = event.target.closest('button');
+        const spinner = document.getElementById('loadingSpinner');
+
+        // Show loading state
+        spinner.classList.remove('hidden');
+        button.disabled = true;
+
+        // Simulate loading more appointments
+        setTimeout(() => {
+            spinner.classList.add('hidden');
+            button.disabled = false;
+
+            // Hide button after loading (simulate no more data)
+            button.style.display = 'none';
+
+            // Show message
+            const message = document.createElement('p');
+            message.className = 'text-center text-text-secondary text-sm';
+            message.textContent = 'No hay más citas para mostrar';
+            button.parentNode.appendChild(message);
+        }, 1500);
+    }
+
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type} fixed top-4 right-4 z-50`;
+        toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-${type} mr-2"></i>
+                    <span>${message}
+                </span>
+            </div>
+        `;
+
+        document.body.appendChild(toast);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuButton = event.target.closest('button');
+
+        if (!menuButton && !mobileMenu.contains(event.target)) {
+            mobileMenu.classList.add('hidden');
+        }
+    });
+
+    // Close mobile filters when clicking overlay
+    document.getElementById('mobileFiltersOverlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+            toggleFilters();
+        }
+    });
+
+    // Real-time search functionality
+    document.getElementById('doctorSearch').addEventListener('input', function() {
+        applyFilters();
+    });
+
+    // Real-time filter updates
+    document.getElementById('specialtyFilter').addEventListener('change', function() {
+        applyFilters();
+    });
+
+    // Date filter updates
+    document.getElementById('dateFrom').addEventListener('change', function() {
+        applyFilters();
+    });
+
+    document.getElementById('dateTo').addEventListener('change', function() {
+        applyFilters();
+    });
+
+    // Checkbox filter updates
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            applyFilters();
+        });
+    });
+
+    // Initialize filters on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        applyFilters();
+    });
+</script>

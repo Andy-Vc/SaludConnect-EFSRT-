@@ -44,28 +44,24 @@ namespace Web.Controllers
 
             return View();
         }
-
         public IActionResult Booking() 
         {
             return View();
         }
-
         public IActionResult BookingDoctor()
         {
             return View();
         }
-
         public IActionResult BookingDate()
         {
             return View();
         }
-
         public IActionResult BookingSucces()
         {
             return View();
         }
 
-        public async  Task<IActionResult> Record() 
+        public async Task<IActionResult> Record() 
         {
             var user = HttpContext.Session.GetObjectFromJson<User>("User"); //Obtener al usuario logeado
             if (user == null) 
@@ -80,11 +76,13 @@ namespace Web.Controllers
             var ApointmentsCanceled = await _patient.CountAppointmentsCanceled(idUserPatient);
             var ApointmentsEarring  = await _patient.CountAppointmentsEarring(idUserPatient);
 
+            var recordAppointments = await _patient.RecordAppointments(idUserPatient);
+
             ViewBag.TotalAppointments   = totalApointments;
             ViewBag.ApointmentsAssisted = ApointmentsAssisted;
             ViewBag.ApointmentsCanceled = ApointmentsCanceled;
             ViewBag.ApointmentsEarring  = ApointmentsEarring;
-
+            ViewBag.ListAppointments = recordAppointments;
 
             return View();
         }
@@ -96,14 +94,13 @@ namespace Web.Controllers
         {
             return View();
         }
-
+        
         [HttpGet]
         public async Task<List<RelationShip>> CompletListRelations()
         {
             var Lista = await _patient.CompletListOfRelationShips();
             return Lista;
         }
-
         public async Task<IActionResult> Profile() 
         {
             var user = HttpContext.Session.GetObjectFromJson<User>("User"); 
@@ -122,7 +119,6 @@ namespace Web.Controllers
             
             return View(patient);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> UpdateInformationPatient(PatientUpdate updatePatient, IFormFile? photoFile, string? currentImage) 
