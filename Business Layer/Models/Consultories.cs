@@ -4,7 +4,7 @@
     {
         public int idConsultories { get; set; }
         public Specialty Specialty { get; set; }
-        public int numberConsultories { get; set; }
-        public int floorNumber { get; set; }
+        public string numberConsultories { get; set; }
+        public int FloorNumber { get; set; }
     }
 }

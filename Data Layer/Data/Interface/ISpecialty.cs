@@ -11,5 +11,6 @@ namespace Data.Interface
     {
         Task<int> totalSpecialties();
         Task<List<Specialty>> ListSpecialties();
+        Task<List<Specialty>> ListSpecialitiesWithDescription();
     }
 }

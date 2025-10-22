@@ -20,6 +20,8 @@ namespace Logic
             services.AddScoped<ISpecialty, SpecialtyRepository>();
             services.AddScoped<IPatient, PatientRepository>();
             services.AddScoped<IMedicalRecord, MedicalReportRepository>();
+            services.AddScoped<IDoctor, DoctorRepository>();
+
 
             services.AddScoped<PatientBL>();
             services.AddScoped<ServiceBL>();
@@ -28,6 +30,7 @@ namespace Logic
             services.AddScoped<UserBL>();
             services.AddScoped<SpecialtyBL>();
             services.AddScoped<MedicalRecordBL>();
+            services.AddScoped<DoctorBL>();
         }
     }
 }

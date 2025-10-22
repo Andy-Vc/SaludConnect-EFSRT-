@@ -56,7 +56,7 @@ IF OBJECT_ID('SP_REGISTER_PATIENTS', 'P') IS NOT NULL
     DROP PROCEDURE SP_REGISTER_PATIENTS;
 GO
 
-CREATE or alter PROCEDURE SP_REGISTER_PATIENTS
+CREATE PROCEDURE SP_REGISTER_PATIENTS
     @FIRST_NAME VARCHAR(50),
     @LAST_NAME_PAT VARCHAR(50),
     @LAST_NAME_MAT VARCHAR(50),
@@ -74,13 +74,13 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE DOCUMENT = @DOCUMENT)
     BEGIN
-        RAISERROR('El número de documento %s ya existe', 16, 1, @DOCUMENT);
+        RAISERROR('El nï¿½mero de documento %s ya existe', 16, 1, @DOCUMENT);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_USERS WHERE EMAIL = @EMAIL)
     BEGIN
-        RAISERROR('El correo electrónico %s ya existe', 16, 1, @EMAIL);
+        RAISERROR('El correo electrï¿½nico %s ya existe', 16, 1, @EMAIL);
         RETURN;
     END
 
@@ -402,7 +402,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Información de la cita
+    -- Informaciï¿½n de la cita
     SELECT 
         A.ID_APPOINTMENT,
         P.ID_USER AS PatientId,
@@ -426,7 +426,7 @@ BEGIN
         D.FIRST_NAME AS DoctorFirstName,
         D.LAST_NAME_PAT AS DoctorLastNamePat,
         D.LAST_NAME_MAT AS DoctorLastNameMat,
-        -- Información del registro médico si existe
+        -- Informaciï¿½n del registro mï¿½dico si existe
         MR.ID_RECORD,
         MR.DATE_REPORT,
         MR.OBSERVATIONS,
@@ -440,7 +440,7 @@ BEGIN
     LEFT JOIN TB_MEDICAL_RECORDS MR ON A.ID_APPOINTMENT = MR.ID_APPOINTMENT
     WHERE A.ID_APPOINTMENT = @ID_APPOINTMENT;
 
-    -- Si existe registro médico, traer también los servicios adicionales
+    -- Si existe registro mï¿½dico, traer tambiï¿½n los servicios adicionales
     IF EXISTS (SELECT 1 FROM TB_MEDICAL_RECORDS WHERE ID_APPOINTMENT = @ID_APPOINTMENT)
     BEGIN
         SELECT 
@@ -500,7 +500,9 @@ GO
 /* ============================================
    PROCEDURES DOCTOR
    ============================================ */
-
+IF OBJECT_ID('sp_update_information_patient', 'P') IS NOT NULL
+    DROP PROCEDURE sp_update_information_patient;
+GO
 
 CREATE PROCEDURE sp_update_information_patient 
     -- VARIABLES USER
@@ -555,7 +557,6 @@ BEGIN
     END CATCH
 END
 GO
-
 
 IF OBJECT_ID('SP_TOTAL_DOCTOR', 'P') IS NOT NULL
     DROP PROCEDURE SP_TOTAL_DOCTOR;
@@ -708,14 +709,12 @@ GO
 
 /* ============================================
    PROCEDURES PACIENTE-CLIENTE
-   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistió
+   Estados: A=Atendido, P=Pendiente, X=Cancelado, N=No asistiï¿½
    ============================================ */
 
 IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
-
-select * from TB_USERS
 
 CREATE PROCEDURE sp_total_citas
     @idPaciente INT
@@ -781,7 +780,7 @@ IF OBJECT_ID('sp_proximas_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_proximas_citas;
 GO
 
-CREATE or alter PROCEDURE sp_proximas_citas
+CREATE PROCEDURE sp_proximas_citas
     @idPaciente INT
 AS
 BEGIN
@@ -809,8 +808,7 @@ END
 GO
 
 exec sp_proximas_citas 2
-
-select * from TB_USERS where ID_USER = 2
+GO
 
 IF OBJECT_ID('sp_total_doctores', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_doctores;
@@ -827,64 +825,609 @@ BEGIN
 END
 GO
 
-/* ============================================
-   PROCEDURES SCHEDULES
-   ============================================ */
+-- Core
 
-IF OBJECT_ID('SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO', 'P') IS NOT NULL
-    DROP PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO;
+IF OBJECT_ID('SP_LIST_SPECIALTIES_WITH_DESCRIPTION', 'P') IS NOT NULL
+    DROP PROCEDURE SP_LIST_SPECIALTIES_WITH_DESCRIPTION;
 GO
 
-CREATE PROCEDURE SP_CALCULAR_CAPACIDAD_SEGUN_HORARIO
-    @ScheduleID INT
+CREATE PROC SP_LIST_SPECIALTIES_WITH_DESCRIPTION
+AS
+    SELECT S.ID_SPECIALTY, S.NAME_SPECIALTY, S.DESCRIPTION_SPECIALITY FROM TB_SPECIALTIES as S
+    WHERE S.FLG_DELETE = 0
+GO
+
+IF OBJECT_ID('SP_LIST_DOCTORS_BY_SPECIALTIES', 'P') IS NOT NULL
+    DROP PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES;
+GO
+
+IF OBJECT_ID('SP_LIST_DOCTORS_BY_SPECIALTIES', 'P') IS NOT NULL
+    DROP PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES;
+GO
+
+CREATE PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES
+    @IdSpecialty INT
 AS
 BEGIN
     SET NOCOUNT ON;
+    
+    DECLARE @Today DATETIME = CAST(GETDATE() AS DATE);
+    DECLARE @Tomorrow DATETIME = DATEADD(DAY, 1, @Today);
+    DECLARE @EndOfWeek DATETIME = DATEADD(DAY, 7, @Today);
+    
+    SELECT DISTINCT
+        U.ID_USER AS IdDoctor,
+        CONCAT(U.FIRST_NAME, ' ', U.LAST_NAME_PAT, ' ', U.LAST_NAME_MAT) AS FullName,
+        S.ID_SPECIALTY,
+        S.NAME_SPECIALTY,
+        U.EMAIL,
+        U.PHONE,
+        U.PROFILE_PICTURE AS ProfilePicture,
+        DS.YEARS_EXPERIENCE AS YearsExperience,
+        DS.EXPERIENCE AS ExperienceDescription,
+        DS.DOC_LANGUAGES AS Languages,
+        -- Disponibilidad HOY
+        (SELECT COUNT(*)
+         FROM TB_DOCTOR_SCHEDULES DSS
+         WHERE DSS.ID_DOCTOR = U.ID_USER
+           AND CAST(DSS.FECHA_INICIO AS DATE) = @Today
+           AND DSS.FECHA_FIN > GETDATE()
+        ) AS AvailableToday,
+        -- Disponibilidad MAï¿½ANA
+        (SELECT COUNT(*)
+         FROM TB_DOCTOR_SCHEDULES DSS
+         WHERE DSS.ID_DOCTOR = U.ID_USER
+           AND CAST(DSS.FECHA_INICIO AS DATE) = @Tomorrow
+        ) AS AvailableTomorrow,
+        -- Disponibilidad ESTA SEMANA
+        (SELECT COUNT(*)
+         FROM TB_DOCTOR_SCHEDULES DSS
+         WHERE DSS.ID_DOCTOR = U.ID_USER
+           AND DSS.FECHA_INICIO >= @Today
+           AND DSS.FECHA_INICIO < @EndOfWeek
+        ) AS AvailableThisWeek,
+        -- Etiqueta de disponibilidad
+        CASE 
+            WHEN EXISTS (
+                SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
+                WHERE DSS.ID_DOCTOR = U.ID_USER
+                  AND CAST(DSS.FECHA_INICIO AS DATE) = @Today
+                  AND DSS.FECHA_FIN > GETDATE()
+            ) THEN 'Hoy'
+            WHEN EXISTS (
+                SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
+                WHERE DSS.ID_DOCTOR = U.ID_USER
+                  AND CAST(DSS.FECHA_INICIO AS DATE) = @Tomorrow
+            ) THEN 'Maï¿½ana'
+            WHEN EXISTS (
+                SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
+                WHERE DSS.ID_DOCTOR = U.ID_USER
+                  AND DSS.FECHA_INICIO >= @Today
+                  AND DSS.FECHA_INICIO < @EndOfWeek
+            ) THEN 'Esta Semana'
+            ELSE 'Sin Disponibilidad'
+        END AS AvailabilityLabel
+    FROM TB_USERS U
+    INNER JOIN TB_DOCTOR_SPECIALTIES DS ON U.ID_USER = DS.ID_DOCTOR
+    INNER JOIN TB_SPECIALTIES S ON DS.ID_SPECIALTY = S.ID_SPECIALTY
+    WHERE DS.ID_SPECIALTY = @IdSpecialty
+        AND U.ID_ROLE = 3  -- Solo doctores
+        AND U.FLG_DELETE = 0
+    ORDER BY DS.YEARS_EXPERIENCE DESC;
+END
+GO
 
+IF OBJECT_ID('SP_LIST_DOCTOR_INFO', 'P') IS NOT NULL
+    DROP PROCEDURE SP_LIST_DOCTOR_INFO;
+GO
+
+CREATE PROCEDURE SP_LIST_DOCTOR_INFO
+    @IdDoctor INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        U.ID_USER AS IdDoctor,
+        CONCAT(U.FIRST_NAME, ' ', U.LAST_NAME_PAT, ' ', U.LAST_NAME_MAT) AS FullName,
+        U.EMAIL,
+        U.PHONE,
+        U.PROFILE_PICTURE AS ProfilePicture,
+        DS.ID_SPECIALTY AS IdSpecialty,
+        S.NAME_SPECIALTY AS SpecialtyName
+    FROM TB_USERS U
+    INNER JOIN TB_DOCTOR_SPECIALTIES DS ON U.ID_USER = DS.ID_DOCTOR
+    INNER JOIN TB_SPECIALTIES S ON DS.ID_SPECIALTY = S.ID_SPECIALTY
+    WHERE U.ID_ROLE = 3 
+        AND U.FLG_DELETE = 0
+        AND S.FLG_DELETE = 0
+        AND (@IdDoctor IS NULL OR U.ID_USER = @IdDoctor)
+    ORDER BY U.LAST_NAME_PAT, U.LAST_NAME_MAT, U.FIRST_NAME;
+END
+GO
+
+IF OBJECT_ID('SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS', 'P') IS NOT NULL
+    DROP PROCEDURE SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS;
+GO
+
+-- Calendario de fechas disponibles/ocupadas
+CREATE PROCEDURE SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS
+    @IdDoctor INT,
+    @IdSpecialty INT,
+    @StartDate DATE = NULL,
+    @EndDate DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Si no se especifican fechas, buscar desde hoy hasta 30 dï¿½as adelante
+    IF @StartDate IS NULL
+        SET @StartDate = CAST(GETDATE() AS DATE);
+    
+    IF @EndDate IS NULL
+        SET @EndDate = DATEADD(DAY, 30, @StartDate);
+    
+    -- Tabla temporal para almacenar fechas disponibles
+    CREATE TABLE #AvailableDates (
+        ScheduleDate DATE,
+        IdSchedule INT,
+        IdConsultory INT,
+        StartTime DATETIME,
+        EndTime DATETIME,
+        SlotDuration INT,
+        TotalSlots INT,
+        OccupiedSlots INT,
+        AvailableSlots INT
+    );
+    
+    -- Insertar horarios del doctor en el rango de fechas
+    INSERT INTO #AvailableDates (ScheduleDate, IdSchedule, IdConsultory, StartTime, EndTime, SlotDuration, TotalSlots, OccupiedSlots)
+    SELECT 
+        CAST(DS.FECHA_INICIO AS DATE) AS ScheduleDate,
+        DS.ID_SCHEDULE,
+        DS.ID_CONSULTORIES,
+        DS.FECHA_INICIO,
+        DS.FECHA_FIN,
+        DS.DURACION_CITA,
+        FLOOR(DATEDIFF(MINUTE, DS.FECHA_INICIO, DS.FECHA_FIN) / DS.DURACION_CITA) AS TotalSlots,
+        (SELECT COUNT(*) 
+         FROM TB_APPOINTMENTS A
+         WHERE A.ID_DOCTOR = @IdDoctor
+           AND A.ID_SPECIALTY = @IdSpecialty
+           AND A.DATE_APPOINTMENT >= DS.FECHA_INICIO
+           AND A.DATE_APPOINTMENT < DS.FECHA_FIN
+           AND A.STATE IN ('P', 'A')  -- Solo pendientes o atendidas
+        ) AS OccupiedSlots
+    FROM TB_DOCTOR_SCHEDULES DS
+    WHERE DS.ID_DOCTOR = @IdDoctor
+      AND CAST(DS.FECHA_INICIO AS DATE) BETWEEN @StartDate AND @EndDate
+      AND DS.FECHA_FIN > GETDATE();  -- Solo horarios futuros
+    
+    -- Calcular slots disponibles
+    UPDATE #AvailableDates
+    SET AvailableSlots = TotalSlots - OccupiedSlots;
+    
+    -- Retornar solo fechas con disponibilidad
+    SELECT 
+        ScheduleDate,
+        IdSchedule,
+        IdConsultory,
+        StartTime,
+        EndTime,
+        SlotDuration,
+        TotalSlots,
+        OccupiedSlots,
+        AvailableSlots,
+        DATENAME(WEEKDAY, ScheduleDate) AS DayOfWeek
+    FROM #AvailableDates
+    WHERE AvailableSlots > 0
+    ORDER BY ScheduleDate, StartTime;
+    
+    DROP TABLE #AvailableDates;
+END
+GO
+
+IF OBJECT_ID('SP_GET_AVAILABLE_TIME_SLOTS', 'P') IS NOT NULL
+    DROP PROCEDURE SP_GET_AVAILABLE_TIME_SLOTS;
+GO
+
+-- Grilla de slots de horas disponibles/ocupadas
+CREATE PROCEDURE SP_GET_AVAILABLE_TIME_SLOTS
+    @IdDoctor INT,
+    @IdSpecialty INT,
+    @ScheduleDate DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Tabla temporal para horarios
+    CREATE TABLE #TimeSlots (
+        SlotTime DATETIME,
+        IsAvailable BIT
+    );
+    
+    -- Obtener horarios del doctor para esa fecha
+    DECLARE @IdSchedule INT;
     DECLARE @StartTime DATETIME;
     DECLARE @EndTime DATETIME;
     DECLARE @SlotDuration INT;
-    DECLARE @TotalMinutes DECIMAL(10, 2);
-    DECLARE @MaxCapacity INT;
-
-    SELECT
+    DECLARE @CurrentSlot DATETIME;
+    
+    SELECT TOP 1
+        @IdSchedule = ID_SCHEDULE,
         @StartTime = FECHA_INICIO,
         @EndTime = FECHA_FIN,
         @SlotDuration = DURACION_CITA
     FROM TB_DOCTOR_SCHEDULES
-    WHERE ID_SCHEDULE = @ScheduleID;
-
-    IF @StartTime IS NULL
+    WHERE ID_DOCTOR = @IdDoctor
+      AND CAST(FECHA_INICIO AS DATE) = @ScheduleDate
+      AND FECHA_FIN > GETDATE()
+    ORDER BY FECHA_INICIO;
+    
+    -- Si no hay horario, retornar vacï¿½o
+    IF @IdSchedule IS NULL
     BEGIN
         SELECT 
-            0 AS MaxCapacity, 
-            0 AS TotalMinutesInShift,
-            0 AS SlotDurationMinutes,
-            'Error: Horario no encontrado.' AS StatusMessage;
+            'Sin horario disponible para esta fecha' AS Message;
         RETURN;
     END
-
-    SET @TotalMinutes = DATEDIFF(MINUTE, @StartTime, @EndTime);
-
-    IF @SlotDuration <= 0
+    
+    -- Generar todas las franjas horarias posibles
+    SET @CurrentSlot = @StartTime;
+    
+    WHILE @CurrentSlot < @EndTime
     BEGIN
-        SELECT 
-            0 AS MaxCapacity, 
-            @TotalMinutes AS TotalMinutesInShift,
-            @SlotDuration AS SlotDurationMinutes,
-            'Error: Duración de cita inválida.' AS StatusMessage;
-        RETURN;
+        INSERT INTO #TimeSlots (SlotTime, IsAvailable)
+        VALUES (@CurrentSlot, 1);
+        
+        SET @CurrentSlot = DATEADD(MINUTE, @SlotDuration, @CurrentSlot);
     END
-
-    SET @MaxCapacity = FLOOR(@TotalMinutes / @SlotDuration);
-
-    SELECT
-        @MaxCapacity AS MaxCapacity,
-        @TotalMinutes AS TotalMinutesInShift,
-        @SlotDuration AS SlotDurationMinutes,
-        'Cálculo exitoso' AS StatusMessage;
+    
+    -- Marcar como no disponibles las citas ya agendadas
+    UPDATE TS
+    SET TS.IsAvailable = 0
+    FROM #TimeSlots TS
+    WHERE EXISTS (
+        SELECT 1 
+        FROM TB_APPOINTMENTS A
+        WHERE A.ID_DOCTOR = @IdDoctor
+          AND A.ID_SPECIALTY = @IdSpecialty
+          AND A.DATE_APPOINTMENT = TS.SlotTime
+          AND A.STATE IN ('P', 'A')
+    );
+    
+    -- Retornar franjas horarias
+    SELECT 
+        SlotTime,
+        CONVERT(VARCHAR(5), SlotTime, 108) AS TimeSlot,
+        IsAvailable,
+        CASE WHEN IsAvailable = 1 THEN 'Disponible' ELSE 'Ocupado' END AS Status
+    FROM #TimeSlots
+    ORDER BY SlotTime;
+    
+    DROP TABLE #TimeSlots;
 END
 GO
+
+
+IF OBJECT_ID('SP_VALIDATE_APPOINTMENT_AVAILABILITY', 'P') IS NOT NULL
+    DROP PROCEDURE SP_VALIDATE_APPOINTMENT_AVAILABILITY;
+GO
+
+CREATE PROCEDURE SP_VALIDATE_APPOINTMENT_AVAILABILITY
+    @IdPatient INT,
+    @IdDoctor INT,
+    @IdSpecialty INT,
+    @DateAppointment DATETIME
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @IsAvailable BIT = 1;
+    DECLARE @ErrorMessage VARCHAR(500) = '';
+    
+    -- 1. Validar que el horario del doctor exista para esa fecha/hora
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM TB_DOCTOR_SCHEDULES DS
+        WHERE DS.ID_DOCTOR = @IdDoctor
+          AND @DateAppointment >= DS.FECHA_INICIO
+          AND @DateAppointment < DS.FECHA_FIN
+    )
+    BEGIN
+        SET @IsAvailable = 0;
+        SET @ErrorMessage = 'El doctor no tiene horario disponible en esa fecha/hora.';
+    END
+    
+    -- 2. Validar que no exista otra cita del doctor a esa hora
+    IF @IsAvailable = 1 AND EXISTS (
+        SELECT 1 
+        FROM TB_APPOINTMENTS A
+        WHERE A.ID_DOCTOR = @IdDoctor
+          AND A.DATE_APPOINTMENT = @DateAppointment
+          AND A.STATE IN ('P', 'A')
+    )
+    BEGIN
+        SET @IsAvailable = 0;
+        SET @ErrorMessage = 'El doctor ya tiene una cita agendada a esa hora.';
+    END
+    
+    -- 3. Validar que el paciente no tenga otra cita a esa misma hora
+    IF @IsAvailable = 1 AND EXISTS (
+        SELECT 1 
+        FROM TB_APPOINTMENTS A
+        WHERE A.ID_PATIENT = @IdPatient
+          AND A.DATE_APPOINTMENT = @DateAppointment
+          AND A.STATE IN ('P', 'A')
+    )
+    BEGIN
+        SET @IsAvailable = 0;
+        SET @ErrorMessage = 'Ya tienes una cita agendada a esa hora.';
+    END
+    
+    -- 4. Validar que la fecha no sea en el pasado
+    IF @IsAvailable = 1 AND @DateAppointment < GETDATE()
+    BEGIN
+        SET @IsAvailable = 0;
+        SET @ErrorMessage = 'No se puede agendar citas en el pasado.';
+    END
+    
+    -- Retornar resultado de validaciï¿½n
+    SELECT 
+        @IsAvailable AS IsAvailable,
+        @ErrorMessage AS ErrorMessage,
+        @IdPatient AS IdPatient,
+        @IdDoctor AS IdDoctor,
+        @IdSpecialty AS IdSpecialty,
+        @DateAppointment AS DateAppointment;
+END
+GO
+
+IF OBJECT_ID('SP_CREATE_APPOINTMENT', 'P') IS NOT NULL
+    DROP PROCEDURE SP_CREATE_APPOINTMENT;
+GO
+
+CREATE OR ALTER PROCEDURE SP_CREATE_APPOINTMENT
+    @IdPatient INT,
+    @IdDoctor INT,
+    @IdSpecialty INT,
+    @DateAppointment DATETIME,
+    @AppointmentPrice DECIMAL(10,2) = 20.00
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    BEGIN TRY
+      
+        IF EXISTS (
+            SELECT 1
+            FROM TB_APPOINTMENTS
+            WHERE ID_DOCTOR = @IdDoctor
+            AND DATE_APPOINTMENT = @DateAppointment
+            AND STATE IN ('P', 'A') -- P: Pendiente, A: Agendada. Excluye X: Cancelada
+        )
+        BEGIN
+            -- Se lanza un error si el doctor ya tiene una cita agendada a esa hora.
+            RAISERROR('La hora de la cita ya estÃ¡ ocupada por otra reserva. Por favor, seleccione otro horario.', 16, 1);
+            RETURN;
+        END
+
+        -- 1.2 Validar que la hora de la cita caiga dentro del horario de trabajo definido.
+        DECLARE @IdConsultory INT;
+        
+        SELECT TOP 1 @IdConsultory = ID_CONSULTORIES
+        FROM TB_DOCTOR_SCHEDULES
+        WHERE ID_DOCTOR = @IdDoctor
+          AND @DateAppointment >= FECHA_INICIO
+          AND @DateAppointment < FECHA_FIN;
+        
+        IF @IdConsultory IS NULL
+        BEGIN
+            -- Se lanza un error si el doctor no estÃ¡ trabajando a esa hora.
+            RAISERROR('El doctor no tiene horario disponible para la fecha y hora seleccionada.', 16, 1);
+            RETURN;
+        END
+        
+        BEGIN TRANSACTION;
+                
+        -- Insertar la cita
+        INSERT INTO TB_APPOINTMENTS (
+            ID_PATIENT, 
+            ID_DOCTOR, 
+            ID_SPECIALTY, 
+            DATE_APPOINTMENT, 
+            ID_CONSULTORIES,
+            STATE, 
+            APPOINTMENT_PRICE
+        )
+        VALUES (
+            @IdPatient,
+            @IdDoctor,
+            @IdSpecialty,
+            @DateAppointment,
+            @IdConsultory,
+            'P',   -- Estado Pendiente
+            @AppointmentPrice
+        );
+        
+        SELECT SCOPE_IDENTITY() AS IdAppointment;
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        
+        SELECT 
+            NULL AS IdAppointment,
+            ERROR_MESSAGE() AS ErrorMessage,
+            ERROR_NUMBER() AS ErrorNumber;
+    END CATCH
+END
+GO
+
+IF OBJECT_ID('SP_GET_APPOINTMENT_DETAILS', 'P') IS NOT NULL
+    DROP PROCEDURE SP_GET_APPOINTMENT_DETAILS;
+GO
+
+CREATE PROCEDURE SP_GET_APPOINTMENT_DETAILS
+    @IdAppointment INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        A.ID_APPOINTMENT,
+        A.ID_PATIENT,
+        CONCAT (P.FIRST_NAME, ' ', P.LAST_NAME_PAT, ' ', P.LAST_NAME_MAT) AS PatientFullName,
+        A.ID_DOCTOR,
+        CONCAT (U.FIRST_NAME, ' ', U.LAST_NAME_PAT, ' ', U.LAST_NAME_MAT) AS DoctorFullName,
+        A.ID_SPECIALTY,
+        S.NAME_SPECIALTY,
+        A.DATE_APPOINTMENT,
+        A.ID_CONSULTORIES,
+        C.NUMBER_CONSULTORIES AS ConsultoryNumber,
+        C.FLOOR_NUMBER AS FloorNumber,
+        A.STATE,
+        A.APPOINTMENT_PRICE
+        FROM TB_APPOINTMENTS A
+    INNER JOIN TB_USERS U ON A.ID_DOCTOR = U.ID_USER
+    INNER JOIN TB_SPECIALTIES S ON A.ID_SPECIALTY = S.ID_SPECIALTY
+    INNER JOIN TB_CONSULTORIES C ON A.ID_CONSULTORIES = C.ID_CONSULTORIES
+    INNER JOIN TB_USERS P ON A.ID_PATIENT = P.ID_USER
+    WHERE A.ID_APPOINTMENT = @IdAppointment;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SELECT 
+            NULL AS ID_APPOINTMENT,
+            'Cita no encontrada' AS Message;
+    END
+END
+GO
+
+IF OBJECT_ID('SP_EDIT_APPOINTMENT', 'P') IS NOT NULL
+    DROP PROCEDURE SP_EDIT_APPOINTMENT;
+
+GO
+CREATE PROCEDURE SP_EDIT_APPOINTMENT
+    @IdAppointment INT,
+    @IdDoctor INT,
+    @IdSpecialty INT,
+    @DateAppointment DATETIME,
+    @IdConsultories INT,
+    @State CHAR(1)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    BEGIN TRY
+        
+        -- Realizar el UPDATE en la tabla TB_APPOINTMENTS
+        UPDATE TB_APPOINTMENTS
+        SET 
+            ID_DOCTOR = @IdDoctor,
+            ID_SPECIALTY = @IdSpecialty,
+            DATE_APPOINTMENT = @DateAppointment,
+            ID_CONSULTORIES = @IdConsultories,
+            STATE = @State
+        WHERE 
+            ID_APPOINTMENT = @IdAppointment;
+        
+        -- Si la ediciï¿½n fue exitosa, retorna el ID de la cita editada
+        SELECT @IdAppointment AS IdAppointmentEdited;
+        
+    END TRY
+    BEGIN CATCH
+        -- Manejo de errores (solo el ErrorMessage y ErrorNumber)
+        SELECT 
+            NULL AS IdAppointmentEdited,
+            ERROR_MESSAGE() AS ErrorMessage,
+            ERROR_NUMBER() AS ErrorNumber;
+    END CATCH
+END
+GO
+
+IF OBJECT_ID('SP_CANCEL_APPOINTMENT', 'P') IS NOT NULL
+    DROP PROCEDURE SP_CANCEL_APPOINTMENT;
+
+GO
+
+CREATE OR ALTER PROCEDURE SP_CANCEL_APPOINTMENT
+    @IdAppointment INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    BEGIN TRY
+        
+        UPDATE TB_APPOINTMENTS
+        SET 
+            STATE = 'X'
+        WHERE 
+            ID_APPOINTMENT = @IdAppointment;
+        
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('No se encontrÃ³ la cita con el ID especificado para cancelar.', 16, 1);
+            RETURN;
+        END
+
+        SELECT @IdAppointment AS IdAppointmentCancelled;
+        
+    END TRY
+    BEGIN CATCH
+        SELECT 
+            NULL AS IdAppointmentCancelled,
+            ERROR_MESSAGE() AS ErrorMessage,
+            ERROR_NUMBER() AS ErrorNumber;
+    END CATCH
+END
+GO
+
+
+SET DATEFORMAT YMD;
+
+EXEC SP_LIST_SPECIALTIES_WITH_DESCRIPTION;
+
+EXEC SP_LIST_DOCTORS_BY_SPECIALTIES @IdSpecialty = 3;
+
+EXEC SP_LIST_DOCTOR_INFO @IdDoctor = 7;
+
+EXEC SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS 
+    @IdDoctor = 7, 
+    @IdSpecialty = 1;
+
+EXEC SP_GET_AVAILABLE_TIME_SLOTS 
+    @IdDoctor = 9, 
+    @IdSpecialty = 2, 
+    @ScheduleDate = '2025-10-28';
+
+
+EXEC SP_VALIDATE_APPOINTMENT_AVAILABILITY
+    @IdPatient = 5,
+    @IdDoctor = 12,
+    @IdSpecialty = 3,
+    @DateAppointment = '2025-10-28 10:30:00';
+
+EXEC SP_CREATE_APPOINTMENT
+    @IdPatient = 4,                     
+    @IdDoctor = 9,                     
+    @IdSpecialty = 2,    
+    @DateAppointment = '2025-10-28 11:20:00'
+
+
+EXEC SP_GET_APPOINTMENT_DETAILS 33
+
+EXEC SP_EDIT_APPOINTMENT
+    @IdAppointment = 33,
+    @IdDoctor = 7,              
+    @IdSpecialty = 1,           
+    @DateAppointment = '2025-10-27 11:20:00',
+    @IdConsultories = 1,       
+    @State = 'X';               
+
+EXEC SP_CANCEL_APPOINTMENT 28
 
 /* ============================================
    PROCEDURES MEDICAL RECORDS
@@ -911,7 +1454,7 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM TB_APPOINTMENTS WHERE ID_APPOINTMENT = @ID_APPOINTMENT AND STATE = 'A')
     BEGIN
-        RAISERROR('La cita debe estar en estado Atendida (A) para crear un registro médico', 16, 1);
+        RAISERROR('La cita debe estar en estado Atendida (A) para crear un registro mï¿½dico', 16, 1);
         RETURN;
     END
 
@@ -927,7 +1470,7 @@ BEGIN
 
         SELECT 
             ID_RECORD,
-            'Registro médico actualizado exitosamente' AS Mensaje
+            'Registro mï¿½dico actualizado exitosamente' AS Mensaje
         FROM TB_MEDICAL_RECORDS
         WHERE ID_APPOINTMENT = @ID_APPOINTMENT;
     END
@@ -938,7 +1481,7 @@ BEGIN
 
         SELECT 
             SCOPE_IDENTITY() AS ID_RECORD,
-            'Registro médico creado exitosamente' AS Mensaje;
+            'Registro mï¿½dico creado exitosamente' AS Mensaje;
     END
 END
 GO
@@ -996,12 +1539,12 @@ BEGIN
         D.LAST_NAME_PAT AS DoctorLastNamePat,
         D.LAST_NAME_MAT AS DoctorLastNameMat,
         S.NAME_SPECIALTY,
-        C.NUMERO_CONSULTORIO
+        C.NUMBER_CONSULTORIES
     FROM TB_MEDICAL_RECORDS MR
     INNER JOIN TB_APPOINTMENTS A ON MR.ID_APPOINTMENT = A.ID_APPOINTMENT
     INNER JOIN TB_USERS D ON A.ID_DOCTOR = D.ID_USER
     INNER JOIN TB_SPECIALTIES S ON A.ID_SPECIALTY = S.ID_SPECIALTY
-    INNER JOIN TB_CONSULTORIOS C ON A.ID_CONSULTORIO = C.ID_CONSULTORIO
+    INNER JOIN TB_CONSULTORIES C ON A.ID_CONSULTORIES = C.ID_CONSULTORIES
     WHERE A.ID_PATIENT = @ID_PATIENT
     ORDER BY MR.DATE_REPORT DESC;
 END
@@ -1024,19 +1567,19 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM TB_MEDICAL_RECORDS WHERE ID_RECORD = @ID_RECORD)
     BEGIN
-        RAISERROR('El registro médico con ID %d no existe', 16, 1, @ID_RECORD);
+        RAISERROR('El registro mï¿½dico con ID %d no existe', 16, 1, @ID_RECORD);
         RETURN;
     END
 
     IF NOT EXISTS (SELECT 1 FROM TB_SERVICES WHERE ID_SERVICE = @ID_SERVICE AND FLG_DELETE = 0)
     BEGIN
-        RAISERROR('El servicio con ID %d no existe o está eliminado', 16, 1, @ID_SERVICE);
+        RAISERROR('El servicio con ID %d no existe o estï¿½ eliminado', 16, 1, @ID_SERVICE);
         RETURN;
     END
 
     IF EXISTS (SELECT 1 FROM TB_ADDITIONAL_SERVICES WHERE ID_RECORD = @ID_RECORD AND ID_SERVICE = @ID_SERVICE)
     BEGIN
-        RAISERROR('El servicio ya está asociado a este registro médico', 16, 1);
+        RAISERROR('El servicio ya estï¿½ asociado a este registro mï¿½dico', 16, 1);
         RETURN;
     END
 
@@ -1097,7 +1640,7 @@ BEGIN
 
     IF @STATE NOT IN ('P', 'A', 'X')
     BEGIN
-        RAISERROR('Estado inválido. Use: P=Pendiente, A=Aprobado, X=Cancelado', 16, 1);
+        RAISERROR('Estado invï¿½lido. Use: P=Pendiente, A=Aprobado, X=Cancelado', 16, 1);
         RETURN;
     END
 
@@ -1129,3 +1672,4 @@ BEGIN
 END
 GO
 
+SET DATEFORMAT YMD;

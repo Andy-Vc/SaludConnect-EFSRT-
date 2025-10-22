@@ -57,5 +57,36 @@ namespace Logic
         {
             return await service.ListAppointmentDateByDoctor(doctorId, date);
         }
+
+
+        //COREEEE
+        public async Task<Appointment> GetAppointmentById(int idAppointment)
+        {
+            return await service.GetAppointmentById(idAppointment);
+        }
+        public async Task<Appointment> CreateAppointment(Appointment appointment)
+        {
+            return await service.CreateAppointment(appointment);
+        }
+
+        public async Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(int idDoctor, int idSpeciality, DateOnly fecha)
+        {
+            return await service.GetAvailableTimeSlots(idDoctor, idSpeciality, fecha);
+        }
+
+        public async Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(int idDoctor, int idEspecialidad)
+        {
+            return await service.SearchAvailableDatesAppointments(idDoctor, idEspecialidad);
+        }
+
+        public async Task<ValidateAppointmentAvailability> ValidateAppointmentAvailability(int idPatient, int idDoctor, int idSpecialty, DateTime? dateAppointment)
+        {
+            return await service.ValidateAppointmentAvailability(idPatient, idDoctor, idSpecialty, dateAppointment);
+        }
+
+        public async Task<Appointment> ChangeStateAppointmentToCancel(int idAppointment)
+        {
+            return await service.ChangeStateAppointmentToCancel(idAppointment);
+        }
     }
 }

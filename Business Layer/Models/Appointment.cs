@@ -17,6 +17,7 @@ namespace Models
         public Specialty Specialty { get; set; }
         public DateTime DateAppointment { get; set; }
         public string State { get; set; }
+        public Consultories Consultory { get; set; }
         public decimal AppointmentPrice { get; set; }
     }
 }

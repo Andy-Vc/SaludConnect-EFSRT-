@@ -13,5 +13,8 @@ namespace Models
         public User Doctor { get; set; }
         public Specialty Specialty { get; set; }
         public int YearsExperience { get; set; }
+        public string Experience { get; set; }
+
+        public string Languagues { get; set; }
     }
 }

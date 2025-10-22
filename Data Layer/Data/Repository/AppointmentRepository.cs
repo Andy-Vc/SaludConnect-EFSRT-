@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data.Interface;
+﻿using Data.Interface;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Models;
 using Models.DTO;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection.PortableExecutable;
+using System.Text;
+using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Data.Repository
@@ -405,6 +406,253 @@ namespace Data.Repository
             }
 
             return appointment;
+        }
+
+
+        // CORE
+        public async Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(
+            int idDoctor,
+            int idEspecialidad)
+        {
+            var availableDates = new List<AvailableDateAppointment>();
+
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdDoctor", idDoctor);
+                    command.Parameters.AddWithValue("@IdSpecialty", idEspecialidad);
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            availableDates.Add(new AvailableDateAppointment
+                            {
+                                IdSchedule = reader.GetInt32(reader.GetOrdinal("IdSchedule")),
+                                IdConsultory = reader.GetInt32(reader.GetOrdinal("IdConsultory")),
+                                ScheduleDate = reader.GetDateTime(reader.GetOrdinal("ScheduleDate")),
+                                StartTime = reader.GetDateTime(reader.GetOrdinal("StartTime")),
+                                EndTime = reader.GetDateTime(reader.GetOrdinal("EndTime")),
+                                SlotDuration = reader.GetInt32(reader.GetOrdinal("SlotDuration")),
+                                TotalSlots = reader.GetInt32(reader.GetOrdinal("TotalSlots")),
+                                OccupiedSlots = reader.GetInt32(reader.GetOrdinal("OccupiedSlots")),
+                                AvailableSlots = reader.GetInt32(reader.GetOrdinal("AvailableSlots")),
+                                DayOfWeek = reader.GetString(reader.GetOrdinal("DayOfWeek"))
+                            });
+                        }
+                    }
+                }
+            }
+
+            return availableDates;
+        }
+
+        public async Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(
+            int idDoctor,
+            int idSpeciality,
+            DateOnly fecha)
+        {
+            var timeSlots = new List<AvailableTimeSlots>();
+
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_GET_AVAILABLE_TIME_SLOTS", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdDoctor", idDoctor);
+                    command.Parameters.AddWithValue("@IdSpecialty", idSpeciality);
+                    command.Parameters.AddWithValue("@ScheduleDate", fecha.ToDateTime(TimeOnly.MinValue));
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            if (reader.FieldCount == 1 && reader.GetName(0) == "Message")
+                            {
+                                // Sin horario disponible
+                                break;
+                            }
+
+                            timeSlots.Add(new AvailableTimeSlots
+                            {
+                                SlotTime = reader.GetDateTime(reader.GetOrdinal("SlotTime")),
+                                TimeSlot = reader.GetString(reader.GetOrdinal("TimeSlot")),
+                                IsAvailable = reader.GetBoolean(reader.GetOrdinal("IsAvailable")),
+                                Status = reader.GetString(reader.GetOrdinal("Status"))
+                            });
+                        }
+                    }
+                }
+            }
+
+            return timeSlots;
+        }
+
+        public async Task<ValidateAppointmentAvailability> ValidateAppointmentAvailability(
+                int idPatient,
+                int idDoctor,
+                int idSpecialty,
+                DateTime? dateAppointment)
+        {
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_VALIDATE_APPOINTMENT_AVAILABILITY", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdPatient", idPatient);
+                    command.Parameters.AddWithValue("@IdDoctor", idDoctor);
+                    command.Parameters.AddWithValue("@IdSpecialty", idSpecialty);
+                    command.Parameters.AddWithValue("@DateAppointment", dateAppointment ?? (object)DBNull.Value);
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return new ValidateAppointmentAvailability
+                            {
+                                IsAvailable = reader.GetBoolean(reader.GetOrdinal("IsAvailable")),
+                                ErrorMessage = reader.GetString(reader.GetOrdinal("ErrorMessage")),
+                                IdPatient = reader.GetInt32(reader.GetOrdinal("IdPatient")),
+                                IdDoctor = reader.GetInt32(reader.GetOrdinal("IdDoctor")),
+                                IdSpecialty = reader.GetInt32(reader.GetOrdinal("IdSpecialty")),
+                                DateAppointment = reader.GetDateTime(reader.GetOrdinal("DateAppointment"))
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<Appointment> CreateAppointment(Appointment appointment)
+        {
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_CREATE_APPOINTMENT", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@IdPatient", appointment.Patient.IdUser);
+                    command.Parameters.AddWithValue("@IdDoctor", appointment.Doctor.IdUser);
+                    command.Parameters.AddWithValue("@IdSpecialty", appointment.Specialty.IdSpecialty);
+                    command.Parameters.AddWithValue("@DateAppointment", appointment.DateAppointment);
+
+                    await connection.OpenAsync();
+
+                    var result = await command.ExecuteScalarAsync();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        int newAppointmentId = Convert.ToInt32(result);
+
+                        Console.WriteLine($"ID obtenido del proc: {newAppointmentId}");
+
+                        return await GetAppointmentById(newAppointmentId);
+                    }
+
+                    return null;
+                }
+            }
+        }
+        public async Task<Appointment> GetAppointmentById(int idAppointment)
+        {
+            Console.WriteLine($"Buscando cita con ID: {idAppointment}");
+
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_GET_APPOINTMENT_DETAILS", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@IdAppointment", idAppointment);
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            if (reader["ID_APPOINTMENT"] == DBNull.Value)
+                            {
+                                return null;
+                            }
+
+                            return new Appointment
+                            {
+                                IdAppointment = reader.GetInt32(reader.GetOrdinal("ID_APPOINTMENT")),
+                                Patient = new User
+                                {
+                                    IdUser = reader.GetInt32(reader.GetOrdinal("ID_PATIENT")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("PatientFullName"))
+                                },
+                                Doctor = new User
+                                {
+                                    IdUser = reader.GetInt32(reader.GetOrdinal("ID_DOCTOR")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("DoctorFullName"))
+                                },
+                                Specialty = new Specialty
+                                {
+                                    IdSpecialty = reader.GetInt32(reader.GetOrdinal("ID_SPECIALTY")),
+                                    NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY"))
+                                },
+                                DateAppointment = reader.GetDateTime(reader.GetOrdinal("DATE_APPOINTMENT")),
+                                Consultory = new Consultories
+                                {
+                                    idConsultories = reader.GetInt32(reader.GetOrdinal("ID_CONSULTORIES")),
+                                    numberConsultories = reader.GetString(reader.GetOrdinal("ConsultoryNumber")),
+                                    FloorNumber = reader.GetInt32(reader.GetOrdinal("FloorNumber"))
+                                },
+                                State = reader.GetString(reader.GetOrdinal("STATE")),
+                                AppointmentPrice = reader.GetDecimal(reader.GetOrdinal("APPOINTMENT_PRICE"))
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<Appointment> ChangeStateAppointmentToCancel(int idAppointment)
+        {
+            if (idAppointment <= 0)
+            {
+                return null;
+            }
+
+            using (var connection = new SqlConnection(stringConexion))
+            {
+                using (var command = new SqlCommand("SP_CANCEL_APPOINTMENT", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@IdAppointment", idAppointment);
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            if (!reader.IsDBNull(0))
+                            {
+                                int cancelledAppointmentId = Convert.ToInt32(reader.GetValue(0));
+
+                                return await GetAppointmentById(cancelledAppointmentId);
+                            }
+                        }
+                    }
+                    return null;
+                }
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Reflection.Metadata;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Logic;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.DTO;
+using System.Reflection.Metadata;
 
 namespace API.Controllers
 {
@@ -17,6 +18,157 @@ namespace API.Controllers
         {
             this.serviceBL = serviceBL;
         }
+
+        // CORE
+
+        [HttpGet("{idAppointment}")]
+        public async Task<IActionResult> GetAppointmentById(int idAppointment)
+        {
+            if (idAppointment <= 0)
+                return BadRequest(new { success = false, message = "ID de cita no válido." });
+
+            var appointment = await serviceBL.GetAppointmentById(idAppointment);
+
+            if (appointment == null)
+                return NotFound(new { success = false, message = "Cita no encontrada." });
+
+            return Ok(new { success = true, data = appointment });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequest request)
+        {
+            if (request == null)
+                return BadRequest(new { success = false, message = "Datos de cita inválidos." });
+
+            if (request.IdPatient <= 0 || request.IdDoctor <= 0 || request.IdSpecialty <= 0)
+                return BadRequest(new { success = false, message = "Faltan campos obligatorios." });
+
+            try
+            {
+                var appointment = new Appointment
+                {
+                    Patient = new User { IdUser = request.IdPatient },
+                    Doctor = new User { IdUser = request.IdDoctor },
+                    Specialty = new Specialty { IdSpecialty = request.IdSpecialty },
+                    DateAppointment = request.DateAppointment
+                };
+
+                var result = await serviceBL.CreateAppointment(appointment);
+
+                if (result != null)
+                {
+                    return CreatedAtAction(
+                        nameof(GetAppointmentById),
+                        new { idAppointment = result.IdAppointment },
+                        new { success = true, data = result }
+                    );
+                }
+
+                return BadRequest(new { success = false, message = "No se pudo crear la cita." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+
+        [HttpPut("change-to-cancel/{idAppointment}")]
+        public async Task<IActionResult> ChangeStateToCancel(int idAppointment)
+        {
+            if (idAppointment <= 0)
+                return BadRequest(new { success = false, message = "ID de cita no válido." });
+
+            var appointment = await serviceBL.ChangeStateAppointmentToCancel(idAppointment);
+
+            if (appointment == null)
+                return NotFound(new { success = false, message = "Cita no encontrada." });
+
+            return Ok(new { success = true, data = appointment });
+        }
+
+        [HttpGet("available-dates")]
+        public async Task<IActionResult> SearchAvailableDatesAppointments(
+            [FromQuery] int idDoctor,
+            [FromQuery] int idSpecialty)
+        {
+            if (idDoctor <= 0 || idSpecialty <= 0)
+                return BadRequest(new { success = false, message = "Doctor y especialidad son requeridos." });
+
+            try
+            {
+                var availableDates = await serviceBL.SearchAvailableDatesAppointments(idDoctor, idSpecialty);
+
+                if (availableDates == null || !availableDates.Any())
+                    return NotFound(new { success = false, message = "No hay fechas disponibles." });
+
+                return Ok(new { success = true, data = availableDates });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet("available-slots")]
+        public async Task<IActionResult> GetAvailableTimeSlots(
+            [FromQuery] int idDoctor,
+            [FromQuery] int idSpecialty,
+            [FromQuery] string date)
+        {
+            if (idDoctor <= 0 || idSpecialty <= 0)
+                return BadRequest(new { success = false, message = "Doctor y especialidad son requeridos." });
+
+            if (string.IsNullOrEmpty(date) || !DateOnly.TryParse(date, out DateOnly parsedDate))
+                return BadRequest(new { success = false, message = "Fecha inválida. Formato esperado: yyyy-MM-dd" });
+
+            try
+            {
+                var timeSlots = await serviceBL.GetAvailableTimeSlots(idDoctor, idSpecialty, parsedDate);
+
+                if (timeSlots == null || !timeSlots.Any())
+                    return NotFound(new { success = false, message = "No hay horarios disponibles para esta fecha." });
+
+                return Ok(new { success = true, data = timeSlots });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("validate")]
+        public async Task<IActionResult> ValidateAppointmentAvailability([FromBody] ValidateAppointmentRequest request)
+        {
+            if (request == null)
+                return BadRequest(new { success = false, message = "Datos inválidos." });
+
+            if (request.IdPatient <= 0 || request.IdDoctor <= 0 || request.IdSpecialty <= 0)
+                return BadRequest(new { success = false, message = "Faltan campos obligatorios." });
+
+            try
+            {
+                var validation = await serviceBL.ValidateAppointmentAvailability(
+                    request.IdPatient,
+                    request.IdDoctor,
+                    request.IdSpecialty,
+                    request.DateAppointment
+                );
+
+                if (validation == null)
+                    return StatusCode(500, new { success = false, message = "Error al validar disponibilidad." });
+
+                return Ok(new { success = true, data = validation });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        //
 
         [HttpGet("count-today/{doctorId}")]
         public async Task<IActionResult> CountAppointmentsTodayByDoctor(int doctorId)

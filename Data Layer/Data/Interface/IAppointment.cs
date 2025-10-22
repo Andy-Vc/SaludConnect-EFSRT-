@@ -18,5 +18,16 @@ namespace Data.Interface
         Task<List<AppointmentDTO>> ListAppointmentDateByDoctor(int doctorId, DateTime? date);
         Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId);
         Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state);
+
+        //CORE
+        Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(int idDoctor, int idEspecialidad);
+        Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(int idDoctor, int idSpeciality, DateOnly fecha);
+
+        Task<ValidateAppointmentAvailability> ValidateAppointmentAvailability(int idPatient, int idDoctor, int idSpecialty, DateTime? dateAppointment);
+        Task<Appointment> CreateAppointment(Appointment appointment);
+        Task<Appointment> GetAppointmentById(int idAppointment);
+
+        Task<Appointment> ChangeStateAppointmentToCancel(int idAppointment);
+    
     }
 }
