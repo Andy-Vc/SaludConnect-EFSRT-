@@ -17,9 +17,9 @@ namespace Logic
             this.service = service;
         }
 
-        public async Task<DoctorCard> GetDoctorInfo()
+        public async Task<DoctorCard> GetDoctorInfo(int idDoctor)
         {
-            return await service.GetDoctorInfo();
+            return await service.GetDoctorInfo(idDoctor);
         }
 
         public async Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality)

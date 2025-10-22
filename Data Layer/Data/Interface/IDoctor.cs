@@ -10,7 +10,7 @@ namespace Data.Interface
     public interface IDoctor
     {
         Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality);
-        Task<DoctorCard> GetDoctorInfo();
+        Task<DoctorCard> GetDoctorInfo(int idDoctor);
 
     }
 }

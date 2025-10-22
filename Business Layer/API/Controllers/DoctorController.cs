@@ -15,12 +15,20 @@ namespace API.Controllers
             this.serviceBL = serviceBL;
         }
 
-        [HttpGet("list-doctors-experience")]
+        [HttpGet("list-doctors-experience/{idSpeciality}")]
         public async Task<IActionResult> listSpecialties(int idSpeciality)
         {
             var list = await serviceBL.ListDoctorsWithExperience(idSpeciality);
             return Ok(list);
         }
+
+        [HttpGet("doctor-info/{idDoctor}")]
+        public async Task<IActionResult> getDoctorById(int idDoctor)
+        {
+            var list = await serviceBL.GetDoctorInfo(idDoctor);
+            return Ok(list);
+        }
+
 
     }
 }

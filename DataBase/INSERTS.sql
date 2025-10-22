@@ -528,9 +528,15 @@ INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE)
 (1, 19, 80.00, 'P');
 GO
 
+
+SET DATEFORMAT YMD;
+
 PRINT 'Datos insertados exitosamente en BD_SALUDCONNECT.';
 PRINT 'Total de doctores: 16 (2 por cada una de las 8 especialidades)';
 PRINT 'Total de pacientes: 5';
 PRINT 'Horarios creados para los próximos 30 días';
 PRINT 'Citas de ejemplo creadas para cada doctor';
 GO
+
+SELECT * FROM TB_APPOINTMENTS ORDER BY 1 DESC
+SELECT SCOPE_IDENTITY() AS IdAppointment;

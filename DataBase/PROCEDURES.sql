@@ -500,6 +500,9 @@ GO
 /* ============================================
    PROCEDURES DOCTOR
    ============================================ */
+IF OBJECT_ID('sp_update_information_patient', 'P') IS NOT NULL
+    DROP PROCEDURE sp_update_information_patient;
+GO
 
 CREATE PROCEDURE sp_update_information_patient 
     -- VARIABLES USER
@@ -712,8 +715,6 @@ GO
 IF OBJECT_ID('sp_total_citas', 'P') IS NOT NULL
     DROP PROCEDURE sp_total_citas;
 GO
-
-select * from TB_USERS
 
 CREATE PROCEDURE sp_total_citas
     @idPaciente INT
@@ -1186,7 +1187,7 @@ IF OBJECT_ID('SP_CREATE_APPOINTMENT', 'P') IS NOT NULL
     DROP PROCEDURE SP_CREATE_APPOINTMENT;
 GO
 
-CREATE PROCEDURE SP_CREATE_APPOINTMENT
+CREATE OR ALTER PROCEDURE SP_CREATE_APPOINTMENT
     @IdPatient INT,
     @IdDoctor INT,
     @IdSpecialty INT,
@@ -1197,16 +1198,21 @@ BEGIN
     SET NOCOUNT ON;
     
     BEGIN TRY
-        BEGIN TRANSACTION;
-        
-        -- Validar disponibilidad (Se asume que este proc devuelve errores si no est� disponible)
-        EXEC SP_VALIDATE_APPOINTMENT_AVAILABILITY 
-            @IdPatient, 
-            @IdDoctor, 
-            @IdSpecialty, 
-            @DateAppointment;
-        
-        -- Obtener consultorio del horario del doctor
+      
+        IF EXISTS (
+            SELECT 1
+            FROM TB_APPOINTMENTS
+            WHERE ID_DOCTOR = @IdDoctor
+            AND DATE_APPOINTMENT = @DateAppointment
+            AND STATE IN ('P', 'A') -- P: Pendiente, A: Agendada. Excluye X: Cancelada
+        )
+        BEGIN
+            -- Se lanza un error si el doctor ya tiene una cita agendada a esa hora.
+            RAISERROR('La hora de la cita ya está ocupada por otra reserva. Por favor, seleccione otro horario.', 16, 1);
+            RETURN;
+        END
+
+        -- 1.2 Validar que la hora de la cita caiga dentro del horario de trabajo definido.
         DECLARE @IdConsultory INT;
         
         SELECT TOP 1 @IdConsultory = ID_CONSULTORIES
@@ -1217,10 +1223,13 @@ BEGIN
         
         IF @IdConsultory IS NULL
         BEGIN
-            RAISERROR('No se encontr� consultorio disponible.', 16, 1);
+            -- Se lanza un error si el doctor no está trabajando a esa hora.
+            RAISERROR('El doctor no tiene horario disponible para la fecha y hora seleccionada.', 16, 1);
             RETURN;
         END
         
+        BEGIN TRANSACTION;
+                
         -- Insertar la cita
         INSERT INTO TB_APPOINTMENTS (
             ID_PATIENT, 
@@ -1237,11 +1246,10 @@ BEGIN
             @IdSpecialty,
             @DateAppointment,
             @IdConsultory,
-            'P',  -- Estado Pendiente
+            'P',   -- Estado Pendiente
             @AppointmentPrice
         );
         
-        -- **CAMBIO CRUCIAL: Devolver solo el ID de la cita creada**
         SELECT SCOPE_IDENTITY() AS IdAppointment;
         
         COMMIT TRANSACTION;
@@ -1250,7 +1258,6 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
         
-        -- Devolver informaci�n del error en caso de fallo
         SELECT 
             NULL AS IdAppointment,
             ERROR_MESSAGE() AS ErrorMessage,
@@ -1280,6 +1287,7 @@ BEGIN
         A.DATE_APPOINTMENT,
         A.ID_CONSULTORIES,
         C.NUMBER_CONSULTORIES AS ConsultoryNumber,
+        C.FLOOR_NUMBER AS FloorNumber,
         A.STATE,
         A.APPOINTMENT_PRICE
         FROM TB_APPOINTMENTS A
@@ -1340,9 +1348,49 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('SP_CANCEL_APPOINTMENT', 'P') IS NOT NULL
+    DROP PROCEDURE SP_CANCEL_APPOINTMENT;
+
+GO
+
+CREATE OR ALTER PROCEDURE SP_CANCEL_APPOINTMENT
+    @IdAppointment INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    BEGIN TRY
+        
+        UPDATE TB_APPOINTMENTS
+        SET 
+            STATE = 'X'
+        WHERE 
+            ID_APPOINTMENT = @IdAppointment;
+        
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('No se encontró la cita con el ID especificado para cancelar.', 16, 1);
+            RETURN;
+        END
+
+        SELECT @IdAppointment AS IdAppointmentCancelled;
+        
+    END TRY
+    BEGIN CATCH
+        SELECT 
+            NULL AS IdAppointmentCancelled,
+            ERROR_MESSAGE() AS ErrorMessage,
+            ERROR_NUMBER() AS ErrorNumber;
+    END CATCH
+END
+GO
+
+
+SET DATEFORMAT YMD;
+
 EXEC SP_LIST_SPECIALTIES_WITH_DESCRIPTION;
 
-EXEC SP_LIST_DOCTORS_BY_SPECIALTIES @IdSpecialty = 1;
+EXEC SP_LIST_DOCTORS_BY_SPECIALTIES @IdSpecialty = 3;
 
 EXEC SP_LIST_DOCTOR_INFO @IdDoctor = 7;
 
@@ -1351,22 +1399,22 @@ EXEC SP_SEARCH_AVAILABLE_DATES_APPOINTMENTS
     @IdSpecialty = 1;
 
 EXEC SP_GET_AVAILABLE_TIME_SLOTS 
-    @IdDoctor = 7, 
-    @IdSpecialty = 1, 
-    @ScheduleDate = '2025-10-27';
+    @IdDoctor = 9, 
+    @IdSpecialty = 2, 
+    @ScheduleDate = '2025-10-28';
 
 
 EXEC SP_VALIDATE_APPOINTMENT_AVAILABILITY
-    @IdPatient = 2,
-    @IdDoctor = 7,
-    @IdSpecialty = 1,
-    @DateAppointment = '27-10-2025 10:30:00';
+    @IdPatient = 5,
+    @IdDoctor = 12,
+    @IdSpecialty = 3,
+    @DateAppointment = '2025-10-28 10:30:00';
 
-EXEC SP_CREATE_APPOINTMENT 
-    @IdPatient = 2, 
-    @IdDoctor = 7, 
-    @IdSpecialty = 1, 
-    @DateAppointment = '27-10-2025 10:00:00'
+EXEC SP_CREATE_APPOINTMENT
+    @IdPatient = 4,                     
+    @IdDoctor = 9,                     
+    @IdSpecialty = 2,    
+    @DateAppointment = '2025-10-28 11:20:00'
 
 
 EXEC SP_GET_APPOINTMENT_DETAILS 33
@@ -1375,10 +1423,11 @@ EXEC SP_EDIT_APPOINTMENT
     @IdAppointment = 33,
     @IdDoctor = 7,              
     @IdSpecialty = 1,           
-    @DateAppointment = '10/11/2025 11:20:00',
+    @DateAppointment = '2025-10-27 11:20:00',
     @IdConsultories = 1,       
     @State = 'X';               
 
+EXEC SP_CANCEL_APPOINTMENT 28
 
 /* ============================================
    PROCEDURES MEDICAL RECORDS
@@ -1622,3 +1671,5 @@ BEGIN
     WHERE ADS.ID_RECORD = @ID_RECORD AND ADS.STATE != 'X';
 END
 GO
+
+SET DATEFORMAT YMD;

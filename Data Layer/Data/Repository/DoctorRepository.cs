@@ -24,9 +24,51 @@ namespace Data.Repository
             stringConexion = configuration["ConnectionStrings:DB"];
         }
 
-        public Task<DoctorCard> GetDoctorInfo()
+        public async Task<DoctorCard> GetDoctorInfo(int idDoctor)
         {
-            throw new NotImplementedException();
+            DoctorCard doctor = null;
+
+            try
+            {
+                using (var conexion = new SqlConnection(stringConexion))
+                {
+                    await conexion.OpenAsync();
+
+                    using (var cmd = new SqlCommand("SP_LIST_DOCTOR_INFO", conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@IdDoctor", idDoctor);
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (reader != null && await reader.ReadAsync())
+                            {
+                                doctor = new DoctorCard
+                                {
+                                    idDoctor = reader.GetInt32(reader.GetOrdinal("IdDoctor")),
+                                    fullNameDoc = reader.GetString(reader.GetOrdinal("FullName")),
+                                    speciality = new Specialty()
+                                    {
+                                        IdSpecialty = reader.GetInt32(reader.GetOrdinal("IdSpecialty")),
+                                        NameSpecialty = reader.GetString(reader.GetOrdinal("SpecialtyName"))
+                                    },
+                                    phone = reader.GetString(reader.GetOrdinal("PHONE")),
+                                    email = reader.GetString(reader.GetOrdinal("EMAIL")),
+                                    imgProfile = reader.IsDBNull(reader.GetOrdinal("ProfilePicture"))
+                                                            ? string.Empty
+                                                            : reader.GetString(reader.GetOrdinal("ProfilePicture"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error obteniendo doctor: {ex.Message}");
+            }
+
+            return doctor;
         }
 
         public async Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality)
