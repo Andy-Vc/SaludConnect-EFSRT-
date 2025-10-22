@@ -16,5 +16,16 @@ namespace Web.Services.Interface
         Task<(byte[] FileBytes, string FileName)> DownloadSingleAppointmentPdf(int appointmentId);
         Task<(byte[] FileBytes, string FileName)> DownloadMedicalRecordPdf(int appointmentId);
         Task<ResultResponse<string>> ChangeStateAppointment(int idAppointment, string state);
+
+        //CORE
+
+        Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(int idDoctor, int idEspecialidad);
+        Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(int idDoctor, int idSpeciality, DateOnly fecha);
+
+        Task<ValidateAppointmentResponse> ValidateAppointmentAvailability(ValidateAppointmentRequest validateAppointment);
+        Task<Appointment> CreateAppointment(CreateAppointmentRequest appointment);
+        Task<Appointment> GetAppointmentByIdBooking(int idAppointment);
+
+        Task<Appointment> ChangeStateAppointmentToCancel(int idAppointment);
     }
 }

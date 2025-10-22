@@ -11,6 +11,7 @@ namespace Web.Controllers
     {
 
         private readonly IPatient _patient;
+        private readonly IDoctor _doctor;
 
 
         public PatientController(IPatient inyec)

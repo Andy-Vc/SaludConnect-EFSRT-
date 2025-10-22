@@ -36,6 +36,7 @@ builder.Services.AddApiHttpClient<ISpecialty, SpecialtyService>(builder.Configur
 builder.Services.AddApiHttpClient<IAdmin, AdminService>(builder.Configuration);
 builder.Services.AddApiHttpClient<IMedicalRecord, MedicalRecordService>(builder.Configuration);
 builder.Services.AddApiHttpClient<IPatient, PatientService>(builder.Configuration);
+builder.Services.AddApiHttpClient<IDoctor, DoctorService>(builder.Configuration);
 
 var app = builder.Build();
 

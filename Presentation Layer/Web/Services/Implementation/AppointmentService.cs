@@ -3,7 +3,6 @@ using Web.Models;
 using Web.Models.DTO;
 using Web.Models.ViewModels.DoctorVM;
 using Web.Services.Interface;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Web.Services.Implementation
 {
@@ -146,7 +145,6 @@ namespace Web.Services.Implementation
             return null;
         }
 
-
         public async Task<List<AppointmentSummaryByDate>> GetAppointmentsSummaryLast7Days(int doctorId)
         {
             var url = $"appointment/appointments-for-7-days/{doctorId}";
@@ -184,6 +182,148 @@ namespace Web.Services.Implementation
                 return appointments ?? new List<AppointmentDTO>();
             }
             return new List<AppointmentDTO>();
+        }
+
+        // CORE
+
+        public async Task<Appointment> ChangeStateAppointmentToCancel(int idAppointment)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsync($"change-to-cancel/{idAppointment}", null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var apiResponse = JsonSerializer.Deserialize<ApiResponse<Appointment>>(content,
+                                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        return apiResponse.Data;
+                    }
+
+                    Console.WriteLine($"Error lógico de la API externa: {apiResponse?.Message}");
+                    return null;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                else
+                {
+                    Console.WriteLine($"Error HTTP al llamar a la API externa: {response.StatusCode}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error crítico en ChangeStateAppointmentToCancel: {ex.Message}");
+                return null;
+            }
+        }
+        public async Task<Appointment> CreateAppointment(CreateAppointmentRequest request)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Appointment", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<Appointment>>();
+                    return apiResponse?.Data;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en CreateAppointment: {ex.Message}");
+                return null;
+            }
+        }
+        public async Task<Appointment> GetAppointmentByIdBooking(int idAppointment)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Appointment/{idAppointment}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<Appointment>>();
+                    return apiResponse?.Data;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetAppointmentByIdBooking: {ex.Message}");
+                return null;
+            }
+        }
+        public async Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(int idDoctor, int idSpeciality, DateOnly fecha)
+        {
+            try
+            {
+                string fechaStr = fecha.ToString("yyyy-MM-dd");
+                var response = await _httpClient.GetAsync($"Appointment/available-slots?idDoctor={idDoctor}&idSpecialty={idSpeciality}&date={fechaStr}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<AvailableTimeSlots>>>();
+                    return apiResponse?.Data ?? new List<AvailableTimeSlots>();
+                }
+
+                return new List<AvailableTimeSlots>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetAvailableTimeSlots: {ex.Message}");
+                return new List<AvailableTimeSlots>();
+            }
+        }
+        public async Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(int idDoctor, int idEspecialidad)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Appointment/available-dates?idDoctor={idDoctor}&idSpecialty={idEspecialidad}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<AvailableDateAppointment>>>();
+                    return apiResponse?.Data ?? new List<AvailableDateAppointment>();
+                }
+
+                return new List<AvailableDateAppointment>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en SearchAvailableDatesAppointments: {ex.Message}");
+                return new List<AvailableDateAppointment>();
+            }
+        }
+        public async Task<ValidateAppointmentResponse> ValidateAppointmentAvailability(
+                    ValidateAppointmentRequest request)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Appointment/validate", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<ValidateAppointmentResponse>>();
+                    return apiResponse?.Data;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ValidateAppointmentAvailability: {ex.Message}");
+                return null;
+            }
         }
     }
 }
