@@ -85,53 +85,88 @@ namespace Web.Controllers
             }
         }
 
+
+        //LLamado a especialidades ajax
+        [HttpGet]
+        public async Task<IActionResult> GetSpecialtiesPartial()
+        {
+            try
+            {
+                var specialties = await _specialty.ListSpecialtiesWithDescription();
+
+                if (specialties == null)
+                {
+                    return PartialView("_SpecialtiesListPartial", new List<SpecialtyViewModel>());
+                }
+
+                return PartialView("_SpecialtiesListPartial", specialties);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al cargar la lista de especialidades: " + ex.Message);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> BookingDoctor(int idSpecialty)
+        {
+            if (idSpecialty <= 0)
+            {
+                return RedirectToAction("Booking");
+            }
+
+            try
+            {
+                var doctors = await _doctor.ListDoctorsWithExperience(idSpecialty);
+
+                ViewBag.IdSpecialty = idSpecialty;
+                return View(doctors);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Error al cargar la lista de doctores.");
+                return View(new List<Web.Models.ViewModels.PatientVM.DoctorCard>());
+            }
+        }
+
+        //Lllamado a doctores x especialidad
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorsPartial(int idSpecialty)
         {
             try
             {
                 if (idSpecialty <= 0)
                 {
-                    TempData["Error"] = "Debe seleccionar una especialidad primero.";
-                    return RedirectToAction(nameof(Booking));
+                    return StatusCode(400, "Debe seleccionar una especialidad válida.");
                 }
 
                 var doctors = await _doctor.ListDoctorsWithExperience(idSpecialty);
 
-                if (doctors == null || doctors.Count == 0)
-                {
-                    ViewBag.Message = "No hay doctores disponibles para esta especialidad.";
-                    return View(new List<DoctorCard>());
-                }
-
-                ViewBag.IdSpecialty = idSpecialty;
-
-                TempData["SelectedSpecialtyId"] = idSpecialty;
-
-                return View(doctors);
+                return PartialView("_BookingDoctorPartial", doctors);
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al cargar los doctores: " + ex.Message;
-                return View(new List<DoctorCard>());
+                return StatusCode(500, "Error al cargar los doctores: " + ex.Message);
             }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> BookingDate(int idDoctor, int idSpecialty)
         {
             try
             {
-
                 var doctorInfo = await _doctor.GetDoctorInfo(idDoctor);
 
                 if (doctorInfo == null)
                 {
-                    TempData["Error"] = "No se pudo obtener la información del doctor.";
-                    return RedirectToAction(nameof(BookingDoctor), new { idSpecialty });
+                    TempData["ErrorMessage"] = "El doctor seleccionado no fue encontrado.";
+                    return RedirectToAction("BookingDoctor", new { idSpecialty = idSpecialty });
                 }
 
                 var availableDates = await _appointment.SearchAvailableDatesAppointments(idDoctor, idSpecialty);
+
+                Console.WriteLine($"Fechas disponibles obtenidas: {availableDates?.Count ?? 0}");
 
                 var viewModel = new BookingDateViewModel
                 {
@@ -141,38 +176,87 @@ namespace Web.Controllers
                     AvailableDates = availableDates ?? new List<AvailableDateAppointment>()
                 };
 
-                TempData["SelectedDoctorId"] = idDoctor;
-                TempData["SelectedSpecialtyId"] = idSpecialty;
-
                 return View(viewModel);
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al cargar las fechas disponibles: " + ex.Message;
-                return RedirectToAction(nameof(BookingDoctor), new { idSpecialty });
+                TempData["ErrorMessage"] = "Error al cargar la página de agendamiento: " + ex.Message;
+                return RedirectToAction("Index");
             }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetTimeSlots(int idDoctor, int idSpecialty, string date)
         {
             try
             {
-                // 1. Validar y parsear la fecha
                 if (!DateOnly.TryParse(date, out DateOnly selectedDate))
                 {
                     return Json(new { success = false, message = "Fecha inválida" });
                 }
 
-                // 2. Llamar al servicio para obtener slots de tiempo
+                Console.WriteLine($"Solicitando slots para: Doctor={idDoctor}, Especialidad={idSpecialty}, Fecha={date}");
+
                 var timeSlots = await _appointment.GetAvailableTimeSlots(idDoctor, idSpecialty, selectedDate);
 
-                // 3. Retornar JSON para AJAX
+                Console.WriteLine($"Slots obtenidos: {timeSlots?.Count ?? 0}");
+
                 return Json(new { success = true, data = timeSlots });
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error en GetTimeSlots: {ex.Message}");
                 return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBookingSummary(int idDoctor, int idSpecialty, string date, string time)
+        {
+            try
+            {
+                if (idDoctor <= 0 || idSpecialty <= 0 || string.IsNullOrEmpty(date) || string.IsNullOrEmpty(time))
+                {
+                    return Json(new { success = false, message = "Faltan datos para generar el resumen." });
+                }
+
+                if (!DateTime.TryParse($"{date} {time}", out DateTime appointmentDateTime))
+                {
+                    return Json(new { success = false, message = "Fecha u hora inválida." });
+                }
+
+                var user = HttpContext.Session.GetObjectFromJson<User>("User");
+                if (user == null)
+                {
+                    return Json(new { success = false, redirect = Url.Action("Login", "UserAuth") });
+                }
+
+                var idUserPatient = user.IdUser;
+                int idPatient = idUserPatient;
+
+                var doctorInfo = await _doctor.GetDoctorInfo(idDoctor);
+
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        IdPatient = idPatient,
+                        IdDoctor = idDoctor,
+                        IdSpecialty = idSpecialty,
+                        DateAppointment = appointmentDateTime,
+                        DoctorName = doctorInfo?.fullNameDoc,
+                        SpecialtyName = doctorInfo?.speciality?.NameSpecialty,
+                        DoctorPhoto = doctorInfo?.imgProfile,
+                        Date = date,
+                        Time = time
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al generar el resumen: " + ex.Message });
             }
         }
 
@@ -184,14 +268,14 @@ namespace Web.Controllers
             {
                 if (idDoctor <= 0 || idSpecialty <= 0 || string.IsNullOrEmpty(date) || string.IsNullOrEmpty(time))
                 {
-                    TempData["Error"] = "Faltan datos para confirmar la cita.";
-                    return RedirectToAction(nameof(Booking));
+                    TempData["ErrorMessage"] = "Faltan datos para confirmar la cita.";
+                    return RedirectToAction("BookingDate", new { idDoctor, idSpecialty });
                 }
 
                 if (!DateTime.TryParse($"{date} {time}", out DateTime appointmentDateTime))
                 {
-                    TempData["Error"] = "Fecha u hora inválida.";
-                    return RedirectToAction(nameof(BookingDate), new { idDoctor, idSpecialty });
+                    TempData["ErrorMessage"] = "Fecha u hora inválida.";
+                    return RedirectToAction("BookingDate", new { idDoctor, idSpecialty });
                 }
 
                 var user = HttpContext.Session.GetObjectFromJson<User>("User");
@@ -201,10 +285,14 @@ namespace Web.Controllers
                 }
 
                 var idUserPatient = user.IdUser;
-
                 int idPatient = idUserPatient;
 
                 var doctorInfo = await _doctor.GetDoctorInfo(idDoctor);
+                if (doctorInfo == null)
+                {
+                    TempData["ErrorMessage"] = "No se encontró información del doctor.";
+                    return RedirectToAction("BookingDate", new { idDoctor, idSpecialty });
+                }
 
                 var viewModel = new BookingConfirmViewModel
                 {
@@ -221,39 +309,90 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Error al procesar la confirmación: " + ex.Message;
-                return RedirectToAction(nameof(Booking));
+                TempData["ErrorMessage"] = "Error al cargar la confirmación: " + ex.Message;
+                return RedirectToAction("BookingDate", new { idDoctor, idSpecialty });
             }
         }
 
-        public async Task<IActionResult> Record() 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmBookingAjax([FromBody] BookingConfirmViewModel model)
+        {
+            try
+            {
+                Console.WriteLine($"Received from JS: Patient={model.IdPatient}, Doctor={model.IdDoctor}, Specialty={model.IdSpecialty}, Date={model.DateAppointment}");
+
+                var createRequest = new CreateAppointmentRequest
+                {
+                    IdPatient = model.IdPatient,
+                    IdDoctor = model.IdDoctor,
+                    IdSpecialty = model.IdSpecialty,
+                    DateAppointment = model.DateAppointment
+                };
+
+                Console.WriteLine($"Calling CreateAppointment...");
+                var createdAppointment = await _appointment.CreateAppointment(createRequest);
+
+                Console.WriteLine($"Create appointment result: {(createdAppointment != null ? $"SUCCESS - ID: {createdAppointment.IdAppointment}" : "FAILED - NULL")}");
+
+                if (createdAppointment == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "No se pudo crear la cita. Intente nuevamente."
+                    });
+                }
+
+                Console.WriteLine($"=== APPOINTMENT CREATED SUCCESSFULLY - ID: {createdAppointment.IdAppointment} ===");
+                return Json(new
+                {
+                    success = true,
+                    message = "¡Cita creada exitosamente!",
+                    appointmentId = createdAppointment.IdAppointment
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR IN CONFIRM BOOKING: {ex.Message} ===");
+                return Json(new
+                {
+                    success = false,
+                    message = "Error al crear la cita: " + ex.Message
+                });
+            }
+        }
+
+
+        public async Task<IActionResult> Record()
         {
             var user = HttpContext.Session.GetObjectFromJson<User>("User"); //Obtener al usuario logeado
-            if (user == null) 
+            if (user == null)
             {
                 return RedirectToAction("Login", "UserAuth");
             } //validacion
 
             var idUserPatient = user.IdUser;
 
-            var totalApointments    = await _patient.CountAppointments(idUserPatient);
+            var totalApointments = await _patient.CountAppointments(idUserPatient);
             var ApointmentsAssisted = await _patient.CountAppointmentsAssisted(idUserPatient);
             var ApointmentsCanceled = await _patient.CountAppointmentsCanceled(idUserPatient);
-            var ApointmentsEarring  = await _patient.CountAppointmentsEarring(idUserPatient);
+            var ApointmentsEarring = await _patient.CountAppointmentsEarring(idUserPatient);
 
             var recordAppointments = await _patient.RecordAppointments(idUserPatient);
 
-            ViewBag.TotalAppointments   = totalApointments;
+            ViewBag.TotalAppointments = totalApointments;
             ViewBag.ApointmentsAssisted = ApointmentsAssisted;
             ViewBag.ApointmentsCanceled = ApointmentsCanceled;
-            ViewBag.ApointmentsEarring  = ApointmentsEarring;
+            ViewBag.ApointmentsEarring = ApointmentsEarring;
             ViewBag.ListAppointments = recordAppointments;
 
             return View();
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> AppointmentsDetails(int id) 
+        public async Task<IActionResult> AppointmentsDetails(int id)
         {
             var user = HttpContext.Session.GetObjectFromJson<User>("User");
             if (user == null)
@@ -299,66 +438,6 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Patient");
             }
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmBooking(BookingConfirmViewModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View("BookingSuccess", model);
-                }
-
-                var validationRequest = new ValidateAppointmentRequest
-                {
-                    IdPatient = model.IdPatient,
-                    IdDoctor = model.IdDoctor,
-                    IdSpecialty = model.IdSpecialty,
-                    DateAppointment = model.DateAppointment
-                };
-
-                var validation = await _appointment.ValidateAppointmentAvailability(validationRequest);
-
-                if (validation == null || !validation.IsAvailable)
-                {
-                    TempData["Error"] = validation?.ErrorMessage ?? "No se pudo validar la disponibilidad.";
-                    return RedirectToAction(nameof(BookingDate), new
-                    {
-                        idDoctor = model.IdDoctor,
-                        idSpecialty = model.IdSpecialty
-                    });
-                }
-
-                var createRequest = new CreateAppointmentRequest
-                {
-                    IdPatient = model.IdPatient,
-                    IdDoctor = model.IdDoctor,
-                    IdSpecialty = model.IdSpecialty,
-                    DateAppointment = model.DateAppointment
-                };
-
-                var createdAppointment = await _appointment.CreateAppointment(createRequest);
-
-                if (createdAppointment == null)
-                {
-                    TempData["Error"] = "No se pudo crear la cita. Intente nuevamente.";
-                    return View("BookingSuccess", model);
-                }
-
-                TempData["Success"] = "¡Cita creada exitosamente!";
-                TempData["AppointmentId"] = createdAppointment.IdAppointment;
-
-                return RedirectToAction(nameof(AppointmentsDetails), new { id = createdAppointment.IdAppointment });
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error al crear la cita: " + ex.Message;
-                return View("BookingSuccess", model);
-            }
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

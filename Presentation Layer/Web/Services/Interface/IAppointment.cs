@@ -1,6 +1,7 @@
 ﻿using Web.Models;
 using Web.Models.DTO;
 using Web.Models.ViewModels.DoctorVM;
+using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Services.Interface
 {

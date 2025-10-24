@@ -1,4 +1,4 @@
-﻿@model List<Web.Models.DTO.DoctorCard>
+﻿@model List<Web.Models.ViewModels.PatientVM.DoctorCard>
 
 @using Web.Models.DTO
 @{
@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 
     var specialtyId = (int?)ViewBag.IdSpecialty ?? 0;
+
     var specialtyName = (Model != null && Model.Any() && Model.First().speciality != null)
         ? Model.First().speciality.NameSpecialty
         : "la especialidad seleccionada";
@@ -121,12 +122,17 @@
     }
 </style>
 
-<input type="hidden" id="selected-specialty-id" value="@specialtyId" data-id="@specialtyId" />
+<input type="hidden" id="selected-specialty-id" value="@specialtyId" />
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <nav class="flex mb-8" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-4">
-            <li><a asp-controller="Patient" asp-action="Index" class="text-text-secondary hover:text-primary transition-smooth">🏠</a></li>
+            <li>
+                <a asp-controller="Patient" asp-action="Index" class="text-text-secondary hover:text-primary transition-smooth">
+                    <svg class="flex-shrink-0 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    <span class="sr-only">Inicio</span>
+                </a>
+            </li>
             <li>
                 <div class="flex items-center">
                     <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
@@ -141,6 +147,46 @@
             </li>
         </ol>
     </nav>
+
+    <div class="mb-8">
+        <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <div class="progress-step completed">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-text-primary">Especialidad</span>
+                </div>
+
+                <div class="w-16 h-0.5" style="background-color: var(--primary-color);"></div>
+
+                <div class="flex items-center">
+                    <div class="progress-step active">
+                        <span class="text-sm font-medium">2</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary">Doctor</span>
+                </div>
+
+                <div class="w-16 h-0.5 bg-secondary-200"></div>
+
+                <div class="flex items-center">
+                    <div class="progress-step">
+                        <span class="text-sm font-medium text-secondary-400">3</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-secondary-400">Fecha</span>
+                </div>
+
+                <div class="w-16 h-0.5 bg-secondary-200"></div>
+
+                <div class="flex items-center">
+                    <div class="progress-step">
+                        <span class="text-sm font-medium text-secondary-400">4</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-secondary-400">Confirmar</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="text-center mb-8">
         <h1 class="text-3xl font-semibold text-text-primary mb-2">Seleccionar Doctor</h1>
@@ -213,59 +259,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="doctors-grid">
         @if (Model != null && Model.Any())
         {
-            foreach (var doctor in Model)
-            {
-                var availabilityList = new List<string>();
-                if (doctor.AvailableToday > 0) availabilityList.Add("today");
-                if (doctor.AvailableTomorrow > 0) availabilityList.Add("tomorrow");
-                if (doctor.AvailableThisWeek > 0) availabilityList.Add("week");
-                var availabilityData = string.Join(",", availabilityList);
-
-                <div class="card hover:shadow-floating transition-smooth cursor-pointer doctor-card"
-                     data-id="@doctor.idDoctor"
-                     data-doctor="@doctor.fullNameDoc.ToLower()"
-                     data-experience="@doctor.yearsExperience"
-                     data-languages="@doctor.languagues.ToLower()"
-                     data-availability="@availabilityData">
-
-                    <div class="flex items-start space-x-4 mb-4">
-                        <div class="w-16 h-16 rounded-full overflow-hidden doctor-icon-placeholder">
-                            @if (!string.IsNullOrEmpty(doctor.imgProfile))
-                            {
-                                <img src="@doctor.imgProfile" alt="@doctor.fullNameDoc" class="w-full h-full object-cover" />
-                            }
-                            else
-                            {
-                                <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                </svg>
-                            }
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold">@doctor.fullNameDoc</h3>
-                            <p class="text-sm text-text-secondary">@doctor.speciality.NameSpecialty</p>
-                        </div>
-                    </div>
-
-                    <div class="text-sm text-gray-600 mb-4">
-                        <p><strong>@doctor.yearsExperience</strong> años de experiencia</p>
-                        <p>Idiomas: @doctor.languagues</p>
-                        <p class="text-xs italic mt-2">@doctor.description</p>
-                        <p class="text-sm text-gray-500 mt-1">📞 @doctor.phone</p>
-                        <p class="text-sm text-gray-500">✉️ @doctor.email</p>
-                    </div>
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs px-2 py-1 rounded-full @(doctor.AvailableLabel != null ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-500")">
-                            @(doctor.AvailableLabel ?? "Sin disponibilidad inmediata")
-                        </span>
-                        <button class="btn-primary text-sm px-4 py-2"
-                                onclick="return selectDoctor(@doctor.idDoctor, '@doctor.fullNameDoc', arguments[0])">
-                            Seleccionar
-                        </button>
-                    </div>
-                </div>
-            }
+            @await Html.PartialAsync("_BookingDoctorPartial", Model)
         }
         else
         {
@@ -280,13 +274,159 @@
     </div>
 </main>
 
-<script>
-    window.bookingDoctorConfig = {
-        specialtyId: @specialtyId,
-        specialtyName: '@specialtyName',
-        doctorsCount: @(Model?.Count ?? 0),
-        baseUrl: '@Url.Content("~")'
-    };
-</script>
+@section Scripts {
+    <script>
+        const specialtyId = parseInt(document.getElementById('selected-specialty-id').value, 10);
+        console.log('Specialty ID cargado:', specialtyId);
 
-<script src="~/js/BookingDoctor.js" asp-append-version="true"></script>
+        let isNavigating = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDoctorSelection();
+            initializeFilters();
+        });
+
+
+        function initializeDoctorSelection() {
+            const selectButtons = document.querySelectorAll('.select-doctor-btn');
+            selectButtons.forEach(button => {
+                // Evita que el click en el botón se propague a la tarjeta
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const doctorId = this.dataset.doctorId;
+                    const doctorName = this.dataset.doctorName;
+
+                    selectDoctor(doctorId, doctorName, this.closest('.doctor-card'));
+                });
+            });
+
+            const doctorCards = document.querySelectorAll('.doctor-card');
+            doctorCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (isNavigating || e.target.closest('.select-doctor-btn')) {
+                        return; // Ignorar si ya está navegando o si el clic fue en el botón
+                    }
+
+                    const doctorId = this.dataset.id;
+                    const doctorName = this.querySelector('h3').textContent;
+
+                    selectDoctor(doctorId, doctorName, this);
+                });
+            });
+        }
+
+        function selectDoctor(doctorId, doctorName, cardElement) {
+            if (isNavigating) return;
+
+            // 1. Validación
+            if (!doctorId || doctorId === '0') {
+                console.error('Doctor ID inválido:', doctorId);
+                alert('Error: ID de doctor inválido');
+                return;
+            }
+
+            if (!specialtyId || specialtyId === 0) {
+                console.error('Specialty ID inválido:', specialtyId);
+                alert('Error: ID de especialidad inválido. Por favor, vuelva a seleccionar la especialidad.');
+                window.location.href = '/Patient/Booking';
+                return;
+            }
+
+            isNavigating = true;
+
+            document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
+            if (cardElement) {
+                cardElement.classList.add('selected');
+                cardElement.style.opacity = '0.5';
+            }
+
+
+            localStorage.setItem('selectedDoctorId', doctorId);
+            localStorage.setItem('selectedDoctorName', doctorName);
+            localStorage.setItem('selectedSpecialtyId', specialtyId);
+
+            const url = `/Patient/BookingDate?idDoctor=${doctorId}&idSpecialty=${specialtyId}`;
+
+            console.log('✅ Navegando a:', url);
+
+            // 4. Redirigir
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        function initializeFilters() {
+            const searchInput = document.getElementById('doctor-search');
+            const availabilityFilter = document.getElementById('availability-filter');
+            const experienceFilter = document.getElementById('experience-filter');
+            const languageFilter = document.getElementById('language-filter');
+            const resetFiltersBtn = document.getElementById('reset-filters');
+
+            if (searchInput) searchInput.addEventListener('input', filterDoctors);
+            if (availabilityFilter) availabilityFilter.addEventListener('change', filterDoctors);
+            if (experienceFilter) experienceFilter.addEventListener('change', filterDoctors);
+            if (languageFilter) languageFilter.addEventListener('change', filterDoctors);
+
+            if (resetFiltersBtn) {
+                resetFiltersBtn.addEventListener('click', function() {
+                    if (searchInput) searchInput.value = '';
+                    if (availabilityFilter) availabilityFilter.value = 'all';
+                    if (experienceFilter) experienceFilter.value = 'all';
+                    if (languageFilter) languageFilter.value = 'all';
+                    filterDoctors();
+                });
+            }
+
+            filterDoctors();
+        }
+
+        function filterDoctors() {
+            const searchInput = document.getElementById('doctor-search');
+            const availabilityFilter = document.getElementById('availability-filter');
+            const experienceFilter = document.getElementById('experience-filter');
+            const languageFilter = document.getElementById('language-filter');
+            const doctorCards = document.querySelectorAll('.doctor-card');
+            const noResults = document.getElementById('no-results');
+
+            const searchTerm = searchInput?.value.toLowerCase() || '';
+            const selectedAvailability = availabilityFilter?.value || 'all';
+            const selectedExperience = experienceFilter?.value || 'all';
+            const selectedLanguage = languageFilter?.value || 'all';
+
+            let visibleCount = 0;
+
+            doctorCards.forEach(card => {
+                const doctorName = card.dataset.doctor || '';
+                const cardExperience = parseInt(card.dataset.experience, 10) || 0;
+                const cardLanguages = card.dataset.languages || '';
+                const cardAvailability = card.dataset.availability || ''; // e.g., "today,week"
+
+                const matchesSearch = doctorName.includes(searchTerm);
+
+                let matchesExperience = true;
+                if (selectedExperience !== 'all') {
+                    const minExp = parseInt(selectedExperience.replace('+', ''), 10);
+                    matchesExperience = cardExperience >= minExp;
+                }
+
+                const matchesLanguage = selectedLanguage === 'all' || cardLanguages.includes(selectedLanguage);
+
+                const matchesAvailability = selectedAvailability === 'all' || cardAvailability.includes(selectedAvailability);
+
+
+                if (matchesSearch && matchesExperience && matchesLanguage && matchesAvailability) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (noResults) {
+                noResults.classList.toggle('hidden', visibleCount > 0);
+            }
+        }
+    </script>
+}

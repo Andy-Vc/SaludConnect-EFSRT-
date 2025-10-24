@@ -1,4 +1,4 @@
-﻿namespace Web.Models.DTO
+﻿namespace Web.Models.ViewModels.PatientVM
 {
     public class DoctorCard
     {

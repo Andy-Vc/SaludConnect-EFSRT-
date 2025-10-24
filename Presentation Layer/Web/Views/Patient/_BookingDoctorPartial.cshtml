@@ -1,0 +1,67 @@
+﻿@model List<Web.Models.ViewModels.PatientVM.DoctorCard>
+
+@using Web.Models.DTO
+
+@if (Model != null && Model.Any())
+{
+    foreach (var doctor in Model)
+    {
+        var availabilityList = new List<string>();
+        if (doctor.AvailableToday > 0) availabilityList.Add("today");
+        if (doctor.AvailableTomorrow > 0) availabilityList.Add("tomorrow");
+        if (doctor.AvailableThisWeek > 0) availabilityList.Add("week");
+        var availabilityData = string.Join(",", availabilityList);
+
+        <div class="card hover:shadow-floating transition-smooth cursor-pointer doctor-card"
+             data-id="@doctor.idDoctor"
+             data-doctor="@doctor.fullNameDoc.ToLower()"
+             data-experience="@doctor.yearsExperience"
+             data-languages="@doctor.languagues.ToLower()"
+             data-availability="@availabilityData">
+
+            <div class="flex items-start space-x-4 mb-4">
+                <div class="w-16 h-16 rounded-full overflow-hidden doctor-icon-placeholder">
+                    @if (!string.IsNullOrEmpty(doctor.imgProfile))
+                    {
+                        <img src="@doctor.imgProfile" alt="@doctor.fullNameDoc" class="w-full h-full object-cover" />
+                    }
+                    else
+                    {
+                        <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    }
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">@doctor.fullNameDoc</h3>
+                    <p class="text-sm text-text-secondary">@doctor.speciality.NameSpecialty</p>
+                </div>
+            </div>
+
+            <div class="text-sm text-gray-600 mb-4">
+                <p><strong>@doctor.yearsExperience</strong> años de experiencia</p>
+                <p>Idiomas: @doctor.languagues</p>
+                <p class="text-xs italic mt-2">@doctor.description</p>
+                @* Opcional: Mostrar información de contacto solo si es necesario en la tarjeta *@
+            </div>
+
+            <div class="flex justify-between items-center">
+                <span class="text-xs px-2 py-1 rounded-full @(doctor.AvailableLabel != null ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-500")">
+                    @(doctor.AvailableLabel ?? "Sin disponibilidad inmediata")
+                </span>
+                <button type="button"
+                        class="btn-primary text-sm px-4 py-2 select-doctor-btn"
+                        data-doctor-id="@doctor.idDoctor"
+                        data-doctor-name="@doctor.fullNameDoc">
+                    Seleccionar
+                </button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="col-span-full text-center py-12 text-gray-500">
+        <p>No se encontraron doctores para esta especialidad.</p>
+    </div>
+}

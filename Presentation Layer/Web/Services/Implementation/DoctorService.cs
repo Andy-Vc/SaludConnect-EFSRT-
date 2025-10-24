@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text.Json;
 using Web.Models.DTO;
+using Web.Models.ViewModels.PatientVM;
 using Web.Services.Interface;
 
 namespace Web.Services.Implementation
@@ -16,23 +17,22 @@ namespace Web.Services.Implementation
         }
         public async Task<DoctorCard> GetDoctorInfo(int idDoctor)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"Doctor/doctor-info/{idDoctor}");
+            var url = $"Doctor/doctor-info/{idDoctor}";
+            var response = await _httpClient.GetAsync(url);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<DoctorCard>>();
-                    return apiResponse?.Data;
-                }
-
-                return null;
-            }
-            catch (Exception ex)
+            if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Error en GetDoctorInfo: {ex.Message}");
-                return null;
+                return new DoctorCard();
             }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var doctor = JsonSerializer.Deserialize<DoctorCard>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return doctor ?? new DoctorCard();
         }
         public async Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality)
         {

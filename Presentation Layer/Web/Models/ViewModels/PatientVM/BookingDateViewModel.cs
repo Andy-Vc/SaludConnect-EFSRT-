@@ -1,4 +1,4 @@
-﻿using Web.Models.DTO;
+﻿using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Models.ViewModels.PatientWM
 {
@@ -7,6 +7,6 @@ namespace Web.Models.ViewModels.PatientWM
         public int IdDoctor { get; set; }
         public int IdSpecialty { get; set; }
         public DoctorCard DoctorInfo { get; set; }
-        public List<AvailableDateAppointment> AvailableDates { get; set; }
+        public List<AvailableDateAppointment> AvailableDates { get; set; } = new List<AvailableDateAppointment>();
     }
 }

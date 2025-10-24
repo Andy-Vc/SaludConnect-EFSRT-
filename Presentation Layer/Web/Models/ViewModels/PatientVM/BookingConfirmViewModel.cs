@@ -1,4 +1,4 @@
-﻿using Web.Models.DTO;
+﻿using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Models.ViewModels.PatientWM
 {
