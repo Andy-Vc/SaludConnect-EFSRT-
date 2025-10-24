@@ -1,56 +1,79 @@
-﻿
-@{   ViewData ["Title"] = "BookingDate";
+﻿@model Web.Models.ViewModels.PatientWM.BookingDateViewModel
+
+@{
+    ViewData["Title"] = "Seleccionar Fecha y Hora";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
 
-<!-- Main Content -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb Navigation -->
-    <nav class="flex mb-8" aria-label="Breadcrumb">
-        <ol class="flex items-center space-x-4">
-            <li>
-                <div>
-                    <a href="@Url.Action("Index", "Dashboard")" class="text-text-secondary hover:text-primary transition-smooth">
-                        <svg class="flex-shrink-0 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                        </svg>
-                        <span class="sr-only">Inicio</span>
-                    </a>
-                </div>
-            </li>
-            <li>
-                <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <a class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth" href="@Url.Action("BookingSpecialty", "Appointment")">Especialidad</a>
-                </div>
-            </li>
-            <li>
-                <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <a class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth" href="@Url.Action("BookingDoctor", "Appointment")">Doctor</a>
-                </div>
-            </li>
-            <li>
-                <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="ml-4 text-sm font-medium text-primary">Fecha y Hora</span>
-                </div>
-            </li>
-        </ol>
-    </nav>
+<style>
+    .calendar-day {
+        min-height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+    }
 
+        .calendar-day.available {
+            background-color: #dbeafe;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+        }
+
+            .calendar-day.available:hover {
+                background-color: #3b82f6;
+                color: white;
+                transform: scale(1.05);
+            }
+
+        .calendar-day.selected {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.unavailable {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+    .time-slot {
+        padding: 0.75rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+    }
+
+        .time-slot.available:hover {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        .time-slot.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .time-slot.occupied {
+            background-color: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+            cursor: not-allowed;
+        }
+</style>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Progress Indicator -->
     <div class="mb-8">
         <div class="flex items-center justify-center">
             <div class="flex items-center space-x-4">
-                <!-- Step 1: Specialty Selection (Completed) -->
                 <div class="flex items-center">
                     <div class="progress-step completed">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -59,11 +82,7 @@
                     </div>
                     <span class="ml-2 text-sm font-medium text-success">Especialidad</span>
                 </div>
-
-                <!-- Connector -->
                 <div class="w-16 h-0.5 bg-success"></div>
-
-                <!-- Step 2: Doctor Selection (Completed) -->
                 <div class="flex items-center">
                     <div class="progress-step completed">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -72,22 +91,14 @@
                     </div>
                     <span class="ml-2 text-sm font-medium text-success">Doctor</span>
                 </div>
-
-                <!-- Connector -->
                 <div class="w-16 h-0.5 bg-primary"></div>
-
-                <!-- Step 3: Calendar (Active) -->
                 <div class="flex items-center">
                     <div class="progress-step active">
                         <span class="text-sm font-medium">3</span>
                     </div>
                     <span class="ml-2 text-sm font-medium text-primary">Fecha</span>
                 </div>
-
-                <!-- Connector -->
                 <div class="w-16 h-0.5 bg-secondary-200"></div>
-
-                <!-- Step 4: Confirmation -->
                 <div class="flex items-center">
                     <div class="progress-step">
                         <span class="text-sm font-medium text-secondary-400">4</span>
@@ -98,24 +109,11 @@
         </div>
     </div>
 
-    <!-- Page Header -->
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-semibold text-text-primary mb-2">Seleccionar Fecha y Hora</h1>
-        <p class="text-text-secondary max-w-2xl mx-auto">Elige la fecha y hora que mejor se adapte a tu horario. Los horarios disponibles se muestran en tiempo real.</p>
-    </div>
-
-    <!-- Booking Summary Context -->
+    <!-- Booking Summary -->
     <div class="mb-8">
         <div class="max-w-4xl mx-auto">
             <div class="card">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold text-text-primary">Resumen de la Cita</h2>
-                    <button onclick="goBack()" class="text-primary hover:text-primary-700 transition-smooth">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                        </svg>
-                    </button>
-                </div>
+                <h2 class="text-lg font-semibold text-text-primary mb-4">Resumen de la Cita</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
@@ -125,7 +123,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-text-secondary">Especialidad</p>
-                            <p class="font-semibold text-text-primary" id="selected-specialty">Cardiología</p>
+                            <p class="font-semibold text-text-primary">@Model.DoctorInfo.speciality.NameSpecialty</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
@@ -136,7 +134,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-text-secondary">Doctor</p>
-                            <p class="font-semibold text-text-primary" id="selected-doctor">Dr. Carlos Mendoza</p>
+                            <p class="font-semibold text-text-primary">@Model.DoctorInfo.fullNameDoc</p>
                         </div>
                     </div>
                 </div>
@@ -158,7 +156,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
-                            <h4 class="text-lg font-medium text-text-primary" id="current-month">Octubre 2025</h4>
+                            <h4 class="text-lg font-medium text-text-primary" id="current-month"></h4>
                             <button onclick="nextMonth()" class="p-2 text-text-secondary hover:text-primary transition-smooth">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -167,9 +165,8 @@
                         </div>
                     </div>
 
-                    <!-- Calendar Grid -->
+                    <!-- Day Headers -->
                     <div class="grid grid-cols-7 gap-1 mb-4">
-                        <!-- Day Headers -->
                         <div class="text-center text-sm font-medium text-text-secondary py-2">Lun</div>
                         <div class="text-center text-sm font-medium text-text-secondary py-2">Mar</div>
                         <div class="text-center text-sm font-medium text-text-secondary py-2">Mié</div>
@@ -179,7 +176,7 @@
                         <div class="text-center text-sm font-medium text-text-secondary py-2">Dom</div>
                     </div>
 
-                    <!-- Calendar Days -->
+                    <!-- Calendar Grid -->
                     <div class="grid grid-cols-7 gap-1" id="calendar-grid"></div>
 
                     <!-- Legend -->
@@ -189,11 +186,11 @@
                             <span class="text-sm text-text-secondary">Seleccionado</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="w-4 h-4 bg-accent-50 border border-accent rounded"></div>
+                            <div class="w-4 h-4 bg-blue-100 border-2 border-blue-500 rounded"></div>
                             <span class="text-sm text-text-secondary">Disponible</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="w-4 h-4 bg-secondary-100 rounded"></div>
+                            <div class="w-4 h-4 bg-gray-200 rounded"></div>
                             <span class="text-sm text-text-secondary">No disponible</span>
                         </div>
                     </div>
@@ -211,13 +208,13 @@
                         <p class="font-semibold text-primary" id="selected-date-display">Selecciona una fecha</p>
                     </div>
 
-                    <!-- Time Slots -->
+                    <!-- Time Slots Container -->
                     <div id="time-slots-container">
                         <div class="text-center py-8">
                             <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <p class="text-text-secondary">Selecciona una fecha para ver los horarios disponibles</p>
+                            <p class="text-text-secondary">Selecciona una fecha para ver horarios</p>
                         </div>
                     </div>
                 </div>
@@ -228,15 +225,15 @@
     <!-- Action Buttons -->
     <div class="max-w-6xl mx-auto mt-8">
         <div class="flex items-center justify-between">
-            <button onclick="goBack()" class="btn-secondary">
-                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onclick="goBack()" class="btn-secondary px-6 py-3 rounded-lg">
+                <svg class="w-5 h-5 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 Volver
             </button>
-            <button id="continue-btn" onclick="proceedToConfirmation()" class="btn-primary opacity-50 cursor-not-allowed" disabled>
+            <button id="continue-btn" onclick="proceedToConfirmation()" class="btn-primary px-6 py-3 rounded-lg opacity-50 cursor-not-allowed" disabled>
                 Continuar
-                <svg class="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 ml-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </button>
@@ -244,74 +241,49 @@
     </div>
 </main>
 
-<!-- Floating Chat Widget -->
-<div class="fixed bottom-6 right-6 z-50">
-    <button class="chat-widget w-14 h-14 flex items-center justify-center" onclick="toggleChat()">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-        </svg>
-    </button>
-</div>
-
-<!-- JavaScript -->
 <script>
-    // Calendar state
+    // ============================================
+    // VARIABLES GLOBALES
+    // ============================================
+    const idDoctor = @Model.IdDoctor;
+    const idSpecialty = @Model.IdSpecialty;
     let currentDate = new Date();
     let selectedDate = null;
     let selectedTime = null;
+    let availableDatesData = @Html.Raw(Json.Serialize(Model.AvailableDates));
 
-    // Mock availability data
-    const availabilityData = {
-        '2025-10-06': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
-        '2025-10-07': ['09:00', '10:30', '11:30', '14:30', '15:30'],
-        '2025-10-08': ['08:30', '09:30', '10:30', '14:00', '15:00', '16:30'],
-        '2025-10-09': ['09:00', '10:00', '11:00', '14:00', '15:00'],
-        '2025-10-10': ['08:30', '09:30', '11:00', '14:30', '15:30', '16:00'],
-        '2025-10-13': ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
-        '2025-10-14': ['09:30', '10:30', '11:30', '14:30', '15:30'],
-        '2025-10-15': ['08:30', '09:00', '10:00', '14:00', '15:00', '16:30'],
-        '2025-10-16': ['09:00', '10:30', '11:30', '14:30', '15:30'],
-        '2025-10-17': ['08:30', '09:30', '10:30', '14:00', '15:00', '16:00']
-    };
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-    // Spanish month names
-    const monthNames = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-
-    // Initialize calendar
-    function initializeCalendar() {
+    // ============================================
+    // INICIALIZAR CALENDARIO
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
         updateCalendarHeader();
         generateCalendar();
-        loadBookingContext();
-    }
+    });
 
-    // Update calendar header
     function updateCalendarHeader() {
         const monthYear = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
         document.getElementById('current-month').textContent = monthYear;
     }
 
-    // Generate calendar grid
     function generateCalendar() {
         const calendarGrid = document.getElementById('calendar-grid');
         calendarGrid.innerHTML = '';
 
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-
-        // First day of the month
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
 
-        // Start from Monday (1) instead of Sunday (0)
+        // Empezar desde el lunes
         const startDate = new Date(firstDay);
         const dayOfWeek = firstDay.getDay();
         const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
         startDate.setDate(firstDay.getDate() - daysToSubtract);
 
-        // Generate 42 days (6 weeks)
+        // Generar 42 días (6 semanas)
         for (let i = 0; i < 42; i++) {
             const cellDate = new Date(startDate);
             cellDate.setDate(startDate.getDate() + i);
@@ -321,37 +293,37 @@
         }
     }
 
-    // Create individual day element
     function createDayElement(date, currentMonth) {
         const dayElement = document.createElement('div');
         const dateStr = formatDateForAPI(date);
         const isCurrentMonth = date.getMonth() === currentMonth;
-        const isToday = isDateToday(date);
         const isPast = date < new Date().setHours(0, 0, 0, 0);
-        const hasAvailability = availabilityData[dateStr] && availabilityData[dateStr].length > 0;
+
+        // ✅ VERIFICAR SI LA FECHA TIENE DISPONIBILIDAD (desde el modelo C#)
+        const hasAvailability = availableDatesData.some(d =>
+            formatDateForAPI(new Date(d.scheduleDate)) === dateStr && d.availableSlots > 0
+        );
+
         const isSelected = selectedDate && formatDateForAPI(selectedDate) === dateStr;
 
-        dayElement.className = 'calendar-day h-12 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-smooth';
+        dayElement.className = 'calendar-day';
         dayElement.textContent = date.getDate();
 
-        // Apply styling based on conditions
+        // Aplicar estilos
         if (!isCurrentMonth) {
-            dayElement.className += ' text-secondary-300 cursor-not-allowed';
+            dayElement.classList.add('unavailable');
+            dayElement.style.color = '#d1d5db';
         } else if (isPast) {
-            dayElement.className += ' text-secondary-400 cursor-not-allowed bg-secondary-50';
+            dayElement.classList.add('unavailable');
         } else if (isSelected) {
-            dayElement.className += ' bg-primary text-white font-semibold';
+            dayElement.classList.add('selected');
         } else if (hasAvailability) {
-            dayElement.className += ' bg-accent-50 border border-accent text-accent-600 hover:bg-accent-100 active-scale';
+            dayElement.classList.add('available');
         } else {
-            dayElement.className += ' bg-secondary-100 text-secondary-400 cursor-not-allowed';
+            dayElement.classList.add('unavailable');
         }
 
-        if (isToday && !isSelected) {
-            dayElement.className += ' ring-2 ring-primary ring-opacity-50';
-        }
-
-        // Add click handler for available dates
+        // Click handler
         if (isCurrentMonth && !isPast && hasAvailability) {
             dayElement.addEventListener('click', () => selectDate(date));
         }
@@ -359,165 +331,157 @@
         return dayElement;
     }
 
-    // Select date
-    function selectDate(date) {
+    // ============================================
+    // SELECCIONAR FECHA
+    // ============================================
+    async function selectDate(date) {
         selectedDate = date;
         selectedTime = null;
         generateCalendar();
         updateSelectedDateDisplay();
-        generateTimeSlots();
+
+        // ✅ LLAMADA AJAX PARA OBTENER HORARIOS
+        await loadTimeSlots(date);
+
         updateContinueButton();
     }
 
-    // Update selected date display
     function updateSelectedDateDisplay() {
         const display = document.getElementById('selected-date-display');
         if (selectedDate) {
-            const formattedDate = formatDateSpanish(selectedDate);
-            display.textContent = formattedDate;
+            display.textContent = formatDateSpanish(selectedDate);
         } else {
             display.textContent = 'Selecciona una fecha';
         }
     }
 
-    // Generate time slots
-    function generateTimeSlots() {
+    // ============================================
+    // AJAX: CARGAR HORARIOS
+    // ============================================
+    async function loadTimeSlots(date) {
+        const container = document.getElementById('time-slots-container');
+        container.innerHTML = '<div class="text-center py-8"><p class="text-text-secondary">Cargando horarios...</p></div>';
+
+        try {
+            const dateStr = formatDateForAPI(date);
+
+            // ✅ LLAMADA AJAX AL CONTROLLER
+            const response = await fetch(`/Patient/GetTimeSlots?idDoctor=${idDoctor}&idSpecialty=${idSpecialty}&date=${dateStr}`);
+            const result = await response.json();
+
+            if (result.success && result.data && result.data.length > 0) {
+                displayTimeSlots(result.data);
+            } else {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-text-secondary">No hay horarios disponibles</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error al cargar horarios:', error);
+            container.innerHTML = '<div class="text-center py-8 text-red-600"><p>Error al cargar horarios</p></div>';
+        }
+    }
+
+    function displayTimeSlots(timeSlots) {
         const container = document.getElementById('time-slots-container');
 
-        if (!selectedDate) {
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-text-secondary">Selecciona una fecha para ver los horarios disponibles</p>
-                </div>
-            `;
-            return;
-        }
-
-        const dateStr = formatDateForAPI(selectedDate);
-        const timeSlots = availabilityData[dateStr] || [];
-
-        if (timeSlots.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <svg class="mx-auto h-12 w-12 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-text-secondary">No hay horarios disponibles para esta fecha</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Group time slots by period
-        const morningSlots = timeSlots.filter(time => {
-            const hour = parseInt(time.split(':')[0]);
+        // Agrupar por período
+        const morning = timeSlots.filter(t => {
+            const hour = parseInt(t.timeSlot.split(':')[0]);
             return hour < 12;
         });
 
-        const afternoonSlots = timeSlots.filter(time => {
-            const hour = parseInt(time.split(':')[0]);
+        const afternoon = timeSlots.filter(t => {
+            const hour = parseInt(t.timeSlot.split(':')[0]);
             return hour >= 12 && hour < 18;
         });
 
-        const eveningSlots = timeSlots.filter(time => {
-            const hour = parseInt(time.split(':')[0]);
+        const evening = timeSlots.filter(t => {
+            const hour = parseInt(t.timeSlot.split(':')[0]);
             return hour >= 18;
         });
 
-        let slotsHTML = '';
+        let html = '';
 
-        if (morningSlots.length > 0) {
-            slotsHTML += `
+        if (morning.length > 0) {
+            html += `
                 <div class="mb-6">
-                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Mañana
-                    </h4>
+                    <h4 class="text-sm font-medium text-text-secondary mb-3">☀️ Mañana</h4>
                     <div class="grid grid-cols-2 gap-2">
-                        ${morningSlots.map(time => createTimeSlotHTML(time)).join('')}
+                        ${morning.map(slot => createTimeSlotHTML(slot)).join('')}
                     </div>
                 </div>
             `;
         }
 
-        if (afternoonSlots.length > 0) {
-            slotsHTML += `
+        if (afternoon.length > 0) {
+            html += `
                 <div class="mb-6">
-                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Tarde
-                    </h4>
+                    <h4 class="text-sm font-medium text-text-secondary mb-3">🌤️ Tarde</h4>
                     <div class="grid grid-cols-2 gap-2">
-                        ${afternoonSlots.map(time => createTimeSlotHTML(time)).join('')}
+                        ${afternoon.map(slot => createTimeSlotHTML(slot)).join('')}
                     </div>
                 </div>
             `;
         }
 
-        if (eveningSlots.length > 0) {
-            slotsHTML += `
+        if (evening.length > 0) {
+            html += `
                 <div class="mb-6">
-                    <h4 class="text-sm font-medium text-text-secondary mb-3 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Noche
-                    </h4>
+                    <h4 class="text-sm font-medium text-text-secondary mb-3">🌙 Noche</h4>
                     <div class="grid grid-cols-2 gap-2">
-                        ${eveningSlots.map(time => createTimeSlotHTML(time)).join('')}
+                        ${evening.map(slot => createTimeSlotHTML(slot)).join('')}
                     </div>
                 </div>
             `;
         }
 
-        container.innerHTML = slotsHTML;
+        container.innerHTML = html;
 
-        // Add click handlers to time slots
+        // Agregar event listeners
         container.querySelectorAll('.time-slot').forEach(slot => {
-            slot.addEventListener('click', () => selectTime(slot.dataset.time));
+            if (slot.dataset.available === 'true') {
+                slot.addEventListener('click', () => selectTime(slot.dataset.time));
+            }
         });
     }
 
-    // Create time slot HTML
-    function createTimeSlotHTML(time) {
-        const isSelected = selectedTime === time;
-        const baseClass = 'time-slot';
-        const selectedClass = isSelected ? ' selected' : '';
+    function createTimeSlotHTML(slot) {
+        const isSelected = selectedTime === slot.timeSlot;
+        const cssClass = !slot.isAvailable ? 'occupied' : isSelected ? 'selected' : 'available';
 
         return `
-            <button class="${baseClass}${selectedClass}" data-time="${time}">
-                ${time}
+            <button class="time-slot ${cssClass}"
+                    data-time="${slot.timeSlot}"
+                    data-available="${slot.isAvailable}"
+                    ${!slot.isAvailable ? 'disabled' : ''}>
+                ${slot.timeSlot}
             </button>
         `;
     }
 
-    // Select time
     function selectTime(time) {
         selectedTime = time;
-        generateTimeSlots();
+
+        // Actualizar visualmente
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.classList.remove('selected');
+            if (slot.dataset.time === time) {
+                slot.classList.add('selected');
+            }
+        });
+
         updateContinueButton();
     }
 
-    // Update continue button state
-    function updateContinueButton() {
-        const continueBtn = document.getElementById('continue-btn');
-        if (selectedDate && selectedTime) {
-            continueBtn.disabled = false;
-            continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        } else {
-            continueBtn.disabled = true;
-            continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-    }
-
-    // Navigation functions
+    // ============================================
+    // NAVEGACIÓN
+    // ============================================
     function previousMonth() {
         currentDate.setMonth(currentDate.getMonth() - 1);
         updateCalendarHeader();
@@ -531,52 +495,41 @@
     }
 
     function goBack() {
-        window.location.href = 'book_appointment_doctor.html';
+        window.location.href = `/Patient/BookingDoctor?idSpecialty=${idSpecialty}`;
     }
 
     function proceedToConfirmation() {
         if (selectedDate && selectedTime) {
-            // Store selection in localStorage
-            localStorage.setItem('selectedDate', formatDateForAPI(selectedDate));
-            localStorage.setItem('selectedTime', selectedTime);
-            localStorage.setItem('selectedDateFormatted', formatDateSpanish(selectedDate));
-
-            // Navigate to confirmation
-            window.location.href = 'book_appointment_confirm.html';
+            const dateStr = formatDateForAPI(selectedDate);
+            window.location.href = `/Patient/BookingSuccess?idDoctor=${idDoctor}&idSpecialty=${idSpecialty}&date=${dateStr}&time=${selectedTime}`;
         }
     }
 
-    // Utility functions
+    function updateContinueButton() {
+        const continueBtn = document.getElementById('continue-btn');
+        if (selectedDate && selectedTime) {
+            continueBtn.disabled = false;
+            continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            continueBtn.disabled = true;
+            continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    // ============================================
+    // UTILIDADES
+    // ============================================
     function formatDateForAPI(date) {
-        return date.toISOString().split('T')[0];
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
     function formatDateSpanish(date) {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     }
-
-    function isDateToday(date) {
-        const today = new Date();
-        return date.toDateString() === today.toDateString();
-    }
-
-    function loadBookingContext() {
-        // Load previous selections from localStorage
-        const specialty = localStorage.getItem('selectedSpecialtyName') || 'Cardiología';
-        const doctor = localStorage.getItem('selectedDoctorName') || 'Dr. Carlos Mendoza';
-
-        document.getElementById('selected-specialty').textContent = specialty;
-        document.getElementById('selected-doctor').textContent = doctor;
-    }
-
-    // Chat widget toggle
-    function toggleChat() {
-        alert('Chat de ayuda - Funcionalidad próximamente disponible');
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', initializeCalendar);
 </script>

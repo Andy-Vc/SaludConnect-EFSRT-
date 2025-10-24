@@ -1,110 +1,158 @@
-﻿
-@{
-    ViewData["Title"] = "BookingDoctor";
-    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
-}
+﻿@model List<Web.Models.DTO.DoctorCard>
 
+@using Web.Models.DTO
 @{
     ViewData["Title"] = "Seleccionar Doctor";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+
+    var specialtyId = (int?)ViewBag.IdSpecialty ?? 0;
+    var specialtyName = (Model != null && Model.Any() && Model.First().speciality != null)
+        ? Model.First().speciality.NameSpecialty
+        : "la especialidad seleccionada";
 }
 
-<!-- Main Content -->
+<style>
+    /* Estilos de Pasos e Inputs (Mantener) */
+    :root {
+        --primary-color: #3b82f6;
+        --success-color: #10b981;
+        --secondary-200: #e5e7eb;
+        --secondary-400: #9ca3af;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --surface: #ffffff;
+    }
+
+    /* Clases de utilidad para el Step Indicator */
+    .progress-step {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--secondary-200);
+        color: var(--secondary-400);
+        transition: all 0.3s;
+    }
+
+        .progress-step.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .progress-step.completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+    /* Clases de utilidad para Inputs y Cards */
+    .input-focus {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        transition: all 0.3s;
+    }
+
+        .input-focus:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+    .transition-smooth {
+        transition: all 0.3s ease;
+    }
+
+    .hover\:shadow-floating:hover {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .card {
+        background: var(--surface);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+        .card.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #2563eb; /* Un tono más oscuro */
+        }
+
+    .bg-accent-50 {
+        background-color: #eff6ff;
+    }
+
+    .text-accent {
+        color: #3b82f6;
+    }
+
+    .text-success {
+        color: var(--success-color);
+    }
+
+    /* ESTILO PARA FOTO DE DOCTOR POR DEFECTO */
+    .doctor-icon-placeholder {
+        background-color: #e5e7eb; /* Gris claro */
+        color: #9ca3af; /* Gris oscuro para el ícono */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #availability-filter option {
+        padding: 4px 8px; /* Ejemplo */
+        border-radius: 9999px; /* Ejemplo */
+    }
+</style>
+
+<input type="hidden" id="selected-specialty-id" value="@specialtyId" data-id="@specialtyId" />
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb Navigation -->
     <nav class="flex mb-8" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-4">
+            <li><a asp-controller="Patient" asp-action="Index" class="text-text-secondary hover:text-primary transition-smooth">🏠</a></li>
             <li>
-                <div>
-                    <a asp-controller="Dashboard" asp-action="Index" class="text-text-secondary hover:text-primary transition-smooth">
-                        <svg class="flex-shrink-0 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                        </svg>
-                        <span class="sr-only">Inicio</span>
-                    </a>
+                <div class="flex items-center">
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                    <a asp-controller="Patient" asp-action="Booking" class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth">Especialidad</a>
                 </div>
             </li>
             <li>
                 <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <a asp-controller="Appointment" asp-action="Specialty" class="ml-4 text-sm font-medium text-text-secondary hover:text-primary transition-smooth">Especialidad</a>
-                </div>
-            </li>
-            <li>
-                <div class="flex items-center">
-                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                    </svg>
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
                     <span class="ml-4 text-sm font-medium text-primary">Seleccionar Doctor</span>
                 </div>
             </li>
         </ol>
     </nav>
 
-    <!-- Progress Indicator -->
-    <div class="mb-8">
-        <div class="flex items-center justify-center">
-            <div class="flex items-center space-x-4">
-                <!-- Step 1: Specialty Selection (Completed) -->
-                <div class="flex items-center">
-                    <div class="progress-step completed">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <span class="ml-2 text-sm font-medium text-success">Especialidad</span>
-                </div>
-
-                <!-- Connector -->
-                <div class="w-16 h-0.5 bg-primary"></div>
-
-                <!-- Step 2: Doctor Selection (Active) -->
-                <div class="flex items-center">
-                    <div class="progress-step active">
-                        <span class="text-sm font-medium">2</span>
-                    </div>
-                    <span class="ml-2 text-sm font-medium text-primary">Doctor</span>
-                </div>
-
-                <!-- Connector -->
-                <div class="w-16 h-0.5 bg-secondary-200"></div>
-
-                <!-- Step 3: Calendar -->
-                <div class="flex items-center">
-                    <div class="progress-step">
-                        <span class="text-sm font-medium text-secondary-400">3</span>
-                    </div>
-                    <span class="ml-2 text-sm font-medium text-secondary-400">Fecha</span>
-                </div>
-
-                <!-- Connector -->
-                <div class="w-16 h-0.5 bg-secondary-200"></div>
-
-                <!-- Step 4: Confirmation -->
-                <div class="flex items-center">
-                    <div class="progress-step">
-                        <span class="text-sm font-medium text-secondary-400">4</span>
-                    </div>
-                    <span class="ml-2 text-sm font-medium text-secondary-400">Confirmar</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Page Header -->
     <div class="text-center mb-8">
         <h1 class="text-3xl font-semibold text-text-primary mb-2">Seleccionar Doctor</h1>
-        <p class="text-text-secondary max-w-2xl mx-auto" id="specialty-description">Elige el doctor de cardiología de tu preferencia para tu consulta. Todos nuestros especialistas están altamente calificados.</p>
+        <p class="text-text-secondary max-w-2xl mx-auto" id="specialty-description">
+            Elige el doctor de <strong>@specialtyName</strong> de tu preferencia para tu consulta. Todos nuestros especialistas están altamente calificados.
+        </p>
     </div>
 
-    <!-- Filters Section -->
     <div class="mb-8">
         <div class="bg-surface rounded-xl p-6 shadow-soft border border-secondary-200">
-            <!-- Search Bar -->
             <div class="mb-6">
-                <div class="relative max-w-md">
+                <div class="relative w-full">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -114,12 +162,10 @@
                 </div>
             </div>
 
-            <!-- Filter Controls -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Availability Filter -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
                 <div>
                     <label class="block text-sm font-medium text-text-primary mb-2">Disponibilidad</label>
-                    <select id="availability-filter" class="input-focus w-full">
+                    <select id="availability-filter" class="input-focus w-full tag-filter">
                         <option value="all">Todos</option>
                         <option value="today">Hoy</option>
                         <option value="tomorrow">Mañana</option>
@@ -127,42 +173,32 @@
                     </select>
                 </div>
 
-                <!-- Rating Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-text-primary mb-2">Calificación</label>
-                    <select id="rating-filter" class="input-focus w-full">
-                        <option value="all">Todas</option>
-                        <option value="5">5 estrellas</option>
-                        <option value="4">4+ estrellas</option>
-                        <option value="3">3+ estrellas</option>
-                    </select>
-                </div>
-
-                <!-- Experience Filter -->
                 <div>
                     <label class="block text-sm font-medium text-text-primary mb-2">Experiencia</label>
                     <select id="experience-filter" class="input-focus w-full">
                         <option value="all">Todos</option>
-                        <option value="20+">20+ años</option>
                         <option value="15+">15+ años</option>
                         <option value="10+">10+ años</option>
                         <option value="5+">5+ años</option>
+                        <option value="1+">1+ años</option>
                     </select>
                 </div>
 
-                <!-- Language Filter -->
                 <div>
                     <label class="block text-sm font-medium text-text-primary mb-2">Idiomas</label>
                     <select id="language-filter" class="input-focus w-full">
                         <option value="all">Todos</option>
-                        <option value="spanish">Español</option>
-                        <option value="english">Inglés</option>
-                        <option value="catalan">Catalán</option>
+                        <option value="español">Español</option>
+                        <option value="inglés">Inglés</option>
+                        <option value="portugués">Portugués</option>
+                        <option value="italiano">Italiano</option>
+                        <option value="alemán">Alemán</option>
                     </select>
                 </div>
+
+                <div></div>
             </div>
 
-            <!-- Reset Filters -->
             <div class="mt-4 flex justify-end">
                 <button id="reset-filters" class="text-sm text-text-secondary hover:text-primary transition-smooth flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,250 +210,83 @@
         </div>
     </div>
 
-    <!-- Doctors Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="doctors-grid">
-        <!-- Doctor Card 1 -->
-        <div class="card hover:shadow-floating transition-smooth cursor-pointer doctor-card" data-doctor="dr-martinez" data-rating="5" data-experience="15" data-languages="spanish,english" data-availability="today">
-            <div class="flex items-start space-x-4 mb-4">
-                <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="Dr. Ana Martínez"
-                         class="w-full h-full object-cover"
-                         onerror="this.src='https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;">
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-text-primary">Dra. Ana Martínez</h3>
-                    <p class="text-sm text-text-secondary">Cardiología</p>
-                    <div class="flex items-center mt-1">
-                        <div class="flex text-yellow-400">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="doctors-grid">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var doctor in Model)
+            {
+                var availabilityList = new List<string>();
+                if (doctor.AvailableToday > 0) availabilityList.Add("today");
+                if (doctor.AvailableTomorrow > 0) availabilityList.Add("tomorrow");
+                if (doctor.AvailableThisWeek > 0) availabilityList.Add("week");
+                var availabilityData = string.Join(",", availabilityList);
+
+                <div class="card hover:shadow-floating transition-smooth cursor-pointer doctor-card"
+                     data-id="@doctor.idDoctor"
+                     data-doctor="@doctor.fullNameDoc.ToLower()"
+                     data-experience="@doctor.yearsExperience"
+                     data-languages="@doctor.languagues.ToLower()"
+                     data-availability="@availabilityData">
+
+                    <div class="flex items-start space-x-4 mb-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden doctor-icon-placeholder">
+                            @if (!string.IsNullOrEmpty(doctor.imgProfile))
+                            {
+                                <img src="@doctor.imgProfile" alt="@doctor.fullNameDoc" class="w-full h-full object-cover" />
+                            }
+                            else
+                            {
+                                <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                            }
                         </div>
-                        <span class="ml-2 text-sm text-text-secondary">5.0 (124 reseñas)</span>
+                        <div>
+                            <h3 class="text-lg font-semibold">@doctor.fullNameDoc</h3>
+                            <p class="text-sm text-text-secondary">@doctor.speciality.NameSpecialty</p>
+                        </div>
+                    </div>
+
+                    <div class="text-sm text-gray-600 mb-4">
+                        <p><strong>@doctor.yearsExperience</strong> años de experiencia</p>
+                        <p>Idiomas: @doctor.languagues</p>
+                        <p class="text-xs italic mt-2">@doctor.description</p>
+                        <p class="text-sm text-gray-500 mt-1">📞 @doctor.phone</p>
+                        <p class="text-sm text-gray-500">✉️ @doctor.email</p>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-2 py-1 rounded-full @(doctor.AvailableLabel != null ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-500")">
+                            @(doctor.AvailableLabel ?? "Sin disponibilidad inmediata")
+                        </span>
+                        <button class="btn-primary text-sm px-4 py-2"
+                                onclick="return selectDoctor(@doctor.idDoctor, '@doctor.fullNameDoc', arguments[0])">
+                            Seleccionar
+                        </button>
                     </div>
                 </div>
-            </div>
-
-            <div class="space-y-3 mb-4">
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    15 años de experiencia
-                </div>
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-                    </svg>
-                    Español, Inglés
-                </div>
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    Hospital Clínic Barcelona
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <p class="text-sm text-text-secondary">Especialista en cardiología preventiva y enfermedades cardiovasculares. Certificada por la Sociedad Española de Cardiología.</p>
-            </div>
-
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs text-accent font-medium bg-accent-50 px-2 py-1 rounded-full">Disponible hoy</span>
-                    <span class="text-xs text-text-secondary">Próxima cita: 14:30</span>
-                </div>
-                <button class="btn-primary text-sm px-4 py-2" onclick="selectDoctor('dr-martinez', 'Dra. Ana Martínez')">
-                    Seleccionar
-                </button>
-            </div>
-        </div>
-
-        <!-- Doctor Card 2 -->
-        <div class="card hover:shadow-floating transition-smooth cursor-pointer doctor-card" data-doctor="dr-rodriguez" data-rating="4" data-experience="12" data-languages="spanish,catalan" data-availability="tomorrow">
-            <div class="flex items-start space-x-4 mb-4">
-                <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="Dr. Carlos Rodríguez"
-                         class="w-full h-full object-cover"
-                         onerror="this.src='https://images.pixabay.com/photos/2582/doctor-563429_1280.jpg'; this.onerror=null;">
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-text-primary">Dr. Carlos Rodríguez</h3>
-                    <p class="text-sm text-text-secondary">Cardiología</p>
-                    <div class="flex items-center mt-1">
-                        <div class="flex text-yellow-400">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                            <svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                        </div>
-                        <span class="ml-2 text-sm text-text-secondary">4.8 (89 reseñas)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-3 mb-4">
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    12 años de experiencia
-                </div>
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-                    </svg>
-                    Español, Catalán
-                </div>
-                <div class="flex items-center text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    Hospital Sant Pau
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <p class="text-sm text-text-secondary">
-                    Experto en cardiología intervencionista y cateterismo cardíaco
-
-<!-- JavaScript -->
-<script>
-    // Initialize page with selected specialty
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectedSpecialty = localStorage.getItem('selectedSpecialtyName') || 'Cardiología';
-        document.getElementById('specialty-description').textContent =
-            `Elige el doctor de ${selectedSpecialty.toLowerCase()} de tu preferencia para tu consulta. Todos nuestros especialistas están altamente calificados.`;
-    });
-
-    // Filter functionality
-    const searchInput = document.getElementById('doctor-search');
-    const availabilityFilter = document.getElementById('availability-filter');
-    const ratingFilter = document.getElementById('rating-filter');
-    const experienceFilter = document.getElementById('experience-filter');
-    const languageFilter = document.getElementById('language-filter');
-    const resetFiltersBtn = document.getElementById('reset-filters');
-    const doctorCards = document.querySelectorAll('.doctor-card');
-    const noResults = document.getElementById('no-results');
-
-    // Search functionality
-    searchInput.addEventListener('input', filterDoctors);
-    availabilityFilter.addEventListener('change', filterDoctors);
-    ratingFilter.addEventListener('change', filterDoctors);
-    experienceFilter.addEventListener('change', filterDoctors);
-    languageFilter.addEventListener('change', filterDoctors);
-
-    // Reset filters
-    resetFiltersBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        availabilityFilter.value = 'all';
-        ratingFilter.value = 'all';
-        experienceFilter.value = 'all';
-        languageFilter.value = 'all';
-        filterDoctors();
-    });
-
-    function filterDoctors() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const availability = availabilityFilter.value;
-        const rating = ratingFilter.value;
-        const experience = experienceFilter.value;
-        const language = languageFilter.value;
-
-        let visibleCount = 0;
-
-        doctorCards.forEach(card => {
-            const doctorName = card.querySelector('h3').textContent.toLowerCase();
-            const doctorRating = parseInt(card.dataset.rating);
-            const doctorExperience = parseInt(card.dataset.experience);
-            const doctorLanguages = card.dataset.languages.split(',');
-            const doctorAvailability = card.dataset.availability;
-
-            // Search filter
-            const matchesSearch = doctorName.includes(searchTerm);
-
-            // Availability filter
-            const matchesAvailability = availability === 'all' || doctorAvailability === availability;
-
-            // Rating filter
-            let matchesRating = true;
-            if (rating !== 'all') {
-                const minRating = parseInt(rating);
-                matchesRating = doctorRating >= minRating;
             }
-
-            // Experience filter
-            let matchesExperience = true;
-            if (experience !== 'all') {
-                const minExperience = parseInt(experience.replace('+', ''));
-                matchesExperience = doctorExperience >= minExperience;
-            }
-
-            // Language filter
-            const matchesLanguage = language === 'all' || doctorLanguages.includes(language);
-
-            // Show/hide card
-            if (matchesSearch && matchesAvailability && matchesRating && matchesExperience && matchesLanguage) {
-                card.style.display = 'block';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        // Show/hide no results message
-        if (visibleCount === 0) {
-            noResults.classList.remove('hidden');
-        } else {
-            noResults.classList.add('hidden');
         }
-    }
+        else
+        {
+            <div class="col-span-full text-center py-12 text-gray-500">
+                <p>No se encontraron doctores para esta especialidad.</p>
+            </div>
+        }
+    </div>
 
-    // Doctor selection function
-    function selectDoctor(doctorId, doctorName) {
-        // Store selected doctor information
-        localStorage.setItem('selectedDoctor', doctorId);
-        localStorage.setItem('selectedDoctorName', doctorName);
+    <div id="no-results" class="hidden text-center py-12">
+        <p class="mt-1 text-sm text-text-secondary">No se encontraron doctores que coincidan con los filtros aplicados.</p>
+    </div>
+</main>
 
-        // Navigate to calendar selection
-        window.location.href = 'book_appointment_calendar.html';
-    }
-
-    // Chat widget toggle
-    function toggleChat() {
-        alert('Chat de ayuda - Funcionalidad próximamente disponible');
-    }
-
-    // Mobile menu toggle (if needed)
-    function toggleMobileMenu() {
-        // Implementation for mobile menu
-    }
+<script>
+    window.bookingDoctorConfig = {
+        specialtyId: @specialtyId,
+        specialtyName: '@specialtyName',
+        doctorsCount: @(Model?.Count ?? 0),
+        baseUrl: '@Url.Content("~")'
+    };
 </script>
+
+<script src="~/js/BookingDoctor.js" asp-append-version="true"></script>

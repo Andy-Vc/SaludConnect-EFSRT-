@@ -36,23 +36,23 @@ namespace Web.Services.Implementation
         }
         public async Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality)
         {
-            try
+            var url = $"Doctor/list-doctors-experience/{idSpeciality}";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"Doctor/list-doctors-experience/{idSpeciality}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<DoctorCard>>>();
-                    return apiResponse?.Data ?? new List<DoctorCard>();
-                }
-
                 return new List<DoctorCard>();
             }
-            catch (Exception ex)
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var doctors = JsonSerializer.Deserialize<List<DoctorCard>>(content, new JsonSerializerOptions
             {
-                Console.WriteLine($"Error en ListDoctorsWithExperience: {ex.Message}");
-                return new List<DoctorCard>();
-            }
+                PropertyNameCaseInsensitive = true
+            });
+
+            return doctors ?? new List<DoctorCard>();
         }
     }
 }

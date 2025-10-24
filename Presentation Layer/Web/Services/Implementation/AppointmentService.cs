@@ -194,28 +194,15 @@ namespace Web.Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    var apiResponse = JsonSerializer.Deserialize<ApiResponse<Appointment>>(content,
-                                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    if (apiResponse != null && apiResponse.Success)
-                    {
-                        return apiResponse.Data;
-                    }
-
-                    Console.WriteLine($"Error lógico de la API externa: {apiResponse?.Message}");
-                    return null;
+                    var result = await response.Content.ReadFromJsonAsync<Appointment>();
+                    return result;
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     return null;
-                }
-                else
-                {
-                    Console.WriteLine($"Error HTTP al llamar a la API externa: {response.StatusCode}");
-                    return null;
-                }
+
+                Console.WriteLine($"Error HTTP al llamar a la API externa: {response.StatusCode}");
+                return null;
             }
             catch (Exception ex)
             {
@@ -231,8 +218,8 @@ namespace Web.Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<Appointment>>();
-                    return apiResponse?.Data;
+                    var result = await response.Content.ReadFromJsonAsync<Appointment>();
+                    return result;
                 }
 
                 return null;
@@ -251,8 +238,8 @@ namespace Web.Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<Appointment>>();
-                    return apiResponse?.Data;
+                    var result = await response.Content.ReadFromJsonAsync<Appointment>();
+                    return result;
                 }
 
                 return null;
@@ -268,12 +255,13 @@ namespace Web.Services.Implementation
             try
             {
                 string fechaStr = fecha.ToString("yyyy-MM-dd");
-                var response = await _httpClient.GetAsync($"Appointment/available-slots?idDoctor={idDoctor}&idSpecialty={idSpeciality}&date={fechaStr}");
+                var response = await _httpClient.GetAsync(
+                    $"Appointment/available-slots?idDoctor={idDoctor}&idSpecialty={idSpeciality}&date={fechaStr}");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<AvailableTimeSlots>>>();
-                    return apiResponse?.Data ?? new List<AvailableTimeSlots>();
+                    var result = await response.Content.ReadFromJsonAsync<List<AvailableTimeSlots>>();
+                    return result ?? new List<AvailableTimeSlots>();
                 }
 
                 return new List<AvailableTimeSlots>();
@@ -284,16 +272,18 @@ namespace Web.Services.Implementation
                 return new List<AvailableTimeSlots>();
             }
         }
+
         public async Task<List<AvailableDateAppointment>> SearchAvailableDatesAppointments(int idDoctor, int idEspecialidad)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"Appointment/available-dates?idDoctor={idDoctor}&idSpecialty={idEspecialidad}");
+                var response = await _httpClient.GetAsync(
+                    $"Appointment/available-dates?idDoctor={idDoctor}&idSpecialty={idEspecialidad}");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<AvailableDateAppointment>>>();
-                    return apiResponse?.Data ?? new List<AvailableDateAppointment>();
+                    var result = await response.Content.ReadFromJsonAsync<List<AvailableDateAppointment>>();
+                    return result ?? new List<AvailableDateAppointment>();
                 }
 
                 return new List<AvailableDateAppointment>();
@@ -304,8 +294,7 @@ namespace Web.Services.Implementation
                 return new List<AvailableDateAppointment>();
             }
         }
-        public async Task<ValidateAppointmentResponse> ValidateAppointmentAvailability(
-                    ValidateAppointmentRequest request)
+        public async Task<ValidateAppointmentResponse> ValidateAppointmentAvailability(ValidateAppointmentRequest request)
         {
             try
             {
@@ -313,8 +302,8 @@ namespace Web.Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<ValidateAppointmentResponse>>();
-                    return apiResponse?.Data;
+                    var result = await response.Content.ReadFromJsonAsync<ValidateAppointmentResponse>();
+                    return result;
                 }
 
                 return null;
