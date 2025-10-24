@@ -13,7 +13,7 @@ namespace Web.Services.Implementation
 
         public PatientService(HttpClient inyect)
         {
-            this._httpClient = inyect;            
+            _httpClient = inyect;            
         }
 
        public async Task<List<RelationShip>> CompletListOfRelationShips()

@@ -48,7 +48,8 @@ namespace Data.Repository
                                         {
                                             IdSpecialty = reader.GetInt32(reader.GetOrdinal("ID_SPECIALTY")),
                                             NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),
-                                            Description = reader.GetString(reader.GetOrdinal("DESCRIPTION_SPECIALITY"))
+                                            Description = reader.GetString(reader.GetOrdinal("DESCRIPTION_SPECIALITY")),
+                                            DoctorCount = reader.GetInt32(reader.GetOrdinal("DoctorCount"))
                                         });
                                     }
                                 }
