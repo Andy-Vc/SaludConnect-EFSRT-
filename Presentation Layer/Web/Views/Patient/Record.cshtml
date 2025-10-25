@@ -19,16 +19,6 @@
                 <h2 class="text-2xl font-semibold text-text-primary mb-2">Historial de Citas</h2>
                 <p class="text-text-secondary">Revisa todas tus citas médicas anteriores</p>
             </div>
-            <div class="flex items-center space-x-3">
-                <button class="btn-secondary" onclick="exportHistory()">
-                    <i class="fas fa-download mr-2"></i>
-                    Exportar PDF
-                </button>
-                <button class="btn-primary md:hidden" onclick="toggleFilters()">
-                    <i class="fas fa-filter mr-2"></i>
-                    Filtros
-                </button>
-            </div>
         </div>
     </div>
 
@@ -172,7 +162,6 @@
                             var abreviaturaMedico = record.gender == "M" ? "Dr." : "Dra.";
                             var uniqueId = $"appointment{record.idAppointment}";
 
-                            // Convertir fecha a formato yyyy-MM-dd para comparación
                             var parts = record.fechaCita.Split('/');
                             var dateForFilter = $"{parts[2]}-{parts[1].PadLeft(2, '0')}-{parts[0].PadLeft(2, '0')}";
 
@@ -226,19 +215,42 @@
                                                     <p class="text-sm text-text-secondary">@record.observations</p>
                                                 </div>
                                             </div>
-                                            <div class="mt-4 flex items-center justify-between">
+                                            <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                                 <div class="text-sm text-text-secondary">
-                                                    <strong>Costo:</strong> S/. @record.appointmentPrice?.ToString("N2")
+                                                    <strong>Costo:</strong> MXN @record.appointmentPrice?.ToString("N2")
                                                 </div>
-                                                <div class="flex space-x-2">
-                                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                                        <i class="fas fa-file-medical mr-1"></i>
-                                                        Ver Informe
-                                                    </button>
-                                                    <button class="text-primary text-sm hover:text-primary-700 transition-colors">
-                                                        <i class="fas fa-prescription mr-1"></i>
-                                                        Receta
-                                                    </button>
+                                                <!-- NUEVO: Botones de descarga PDF -->
+                                                <div class="flex flex-wrap" style="gap: 1rem;">
+                                                    <!-- Descargar PDF de Cita -->
+                                                    <form method="post" asp-action="DownloadPDFAppointment" asp-controller="Doctor" class="m-0" onclick="event.stopPropagation()">
+                                                        <input type="hidden" name="id" value="@record.idAppointment" />
+                                                        <button type="submit"
+                                                                class="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-danger"
+                                                                title="Descargar Cita PDF">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                                            </svg>
+                                                            Cita
+                                                        </button>
+                                                    </form>
+
+                                                    <!-- Descargar PDF de Historia Médica (solo si existe) -->
+                                                    @if (!string.IsNullOrEmpty(record.diagnosis) || !string.IsNullOrEmpty(record.treatment))
+                                                    {
+                                                        <form method="post" asp-action="DownloadPDFMedicalRecord" asp-controller="Doctor" class="m-0" onclick="event.stopPropagation()">
+                                                            <input type="hidden" name="id" value="@record.idAppointment" />
+                                                            <button type="submit"
+                                                                    class="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-primary"
+                                                                    title="Descargar Registro Médico PDF">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                                                </svg>
+                                                                Historia
+                                                            </button>
+                                                        </form>
+                                                    }
                                                 </div>
                                             </div>
                                             break;
@@ -256,6 +268,21 @@
                                                     <strong>Duración estimada:</strong> @record.duracionMinutes minutos
                                                 </p>
                                             </div>
+                                            <!-- NUEVO: Botón de descarga PDF solo para cita -->
+                                            <div class="mt-4 flex items-center justify-end">
+                                                <form method="post" asp-action="DownloadPDFAppointment" asp-controller="Doctor" class="m-0" onclick="event.stopPropagation()">
+                                                    <input type="hidden" name="id" value="@record.idAppointment" />
+                                                    <button type="submit"
+                                                            class="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-danger"
+                                                            title="Descargar Cita PDF">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                                        </svg>
+                                                        Descargar Cita
+                                                    </button>
+                                                </form>
+                                            </div>
                                             break;
 
                                         case "X":
@@ -268,8 +295,21 @@
                                                     Esta cita fue cancelada. Puedes reagendar cuando lo necesites.
                                                 </p>
                                             </div>
-                                            <div class="mt-4 flex items-center justify-end">
-                                                <a asp-controller="Patient" asp-action="Booking" class="btn-primary text-sm">
+                                            <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+                                                <!-- Descargar PDF de Cita -->
+                                                <form method="post" asp-action="DownloadPDFAppointment" asp-controller="Doctor" class="m-0" onclick="event.stopPropagation()">
+                                                    <input type="hidden" name="id" value="@record.idAppointment" />
+                                                    <button type="submit"
+                                                            class="inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-danger"
+                                                            title="Descargar Cita PDF">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                                        </svg>
+                                                        Descargar Cita
+                                                    </button>
+                                                </form>
+                                                <a asp-controller="Patient" asp-action="Booking" class="btn-primary text-sm inline-flex items-center justify-center">
                                                     <i class="fas fa-plus mr-1"></i>
                                                     Reagendar Cita
                                                 </a>
@@ -289,8 +329,21 @@
                                                     Se recomienda reagendar para continuar con el seguimiento médico.
                                                 </p>
                                             </div>
-                                            <div class="mt-4 flex items-center justify-end">
-                                                <a asp-controller="Patient" asp-action="Booking" class="btn-primary text-sm">
+                                            <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+                                                <!-- Descargar PDF de Cita -->
+                                                <form method="post" asp-action="DownloadPDFAppointment" asp-controller="Patient" class="m-0" onclick="event.stopPropagation()">
+                                                    <input type="hidden" name="id" value="@record.idAppointment" />
+                                                    <button type="submit"
+                                                            class="inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold text-white bg-danger"
+                                                            title="Descargar Cita PDF">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                                                        </svg>
+                                                        Descargar Cita
+                                                    </button>
+                                                </form>
+                                                <a asp-controller="Patient" asp-action="Booking" class="btn-primary text-sm inline-flex items-center justify-center">
                                                     <i class="fas fa-plus mr-1"></i>
                                                     Reagendar Cita
                                                 </a>
@@ -405,20 +458,21 @@
 </button>
 
 
-
 <script>
     function toggleFilters() {
         const overlay = document.getElementById('mobileFiltersOverlay');
         const panel = document.getElementById('mobileFiltersPanel');
 
-        overlay.classList.toggle('hidden');
+        if (overlay && panel) {
+            overlay.classList.toggle('hidden');
 
-        if (!overlay.classList.contains('hidden')) {
-            setTimeout(() => {
-                panel.classList.remove('translate-x-full');
-            }, 10);
-        } else {
-            panel.classList.add('translate-x-full');
+            if (!overlay.classList.contains('hidden')) {
+                setTimeout(() => {
+                    panel.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                panel.classList.add('translate-x-full');
+            }
         }
     }
 
@@ -434,19 +488,18 @@
 
     function clearFilters() {
         // Desktop filters
-        document.getElementById('dateFrom').value = '2024-01-01';
-        document.getElementById('dateTo').value = '2025-12-31';
-        document.getElementById('specialtyFilter').value = '';
-        document.getElementById('doctorSearch').value = '';
+        const dateFrom = document.getElementById('dateFrom');
+        const dateTo = document.getElementById('dateTo');
+        const specialtyFilter = document.getElementById('specialtyFilter');
+        const doctorSearch = document.getElementById('doctorSearch');
 
-        // Mobile filters
-        document.getElementById('mobileDateFrom').value = '2024-01-01';
-        document.getElementById('mobileDateTo').value = '2025-12-31';
-        document.getElementById('mobileSpecialtyFilter').value = '';
-        document.getElementById('mobileDoctorSearch').value = '';
+        if (dateFrom) dateFrom.value = '2024-01-01';
+        if (dateTo) dateTo.value = '2025-12-31';
+        if (specialtyFilter) specialtyFilter.value = '';
+        if (doctorSearch) doctorSearch.value = '';
 
         // Reset all checkboxes
-        document.querySelectorAll('.status-filter, .mobile-status-filter').forEach(checkbox => {
+        document.querySelectorAll('.status-filter').forEach(checkbox => {
             checkbox.checked = true;
         });
 
@@ -454,15 +507,15 @@
     }
 
     function applyFilters() {
-        // Get filter values (desktop or mobile)
-        const dateFrom = document.getElementById('dateFrom').value || document.getElementById('mobileDateFrom').value;
-        const dateTo = document.getElementById('dateTo').value || document.getElementById('mobileDateTo').value;
-        const specialty = document.getElementById('specialtyFilter').value || document.getElementById('mobileSpecialtyFilter').value;
-        const doctorSearch = (document.getElementById('doctorSearch').value || document.getElementById('mobileDoctorSearch').value).toLowerCase();
+        // Get filter values
+        const dateFrom = document.getElementById('dateFrom')?.value || '2024-01-01';
+        const dateTo = document.getElementById('dateTo')?.value || '2025-12-31';
+        const specialty = document.getElementById('specialtyFilter')?.value || '';
+        const doctorSearch = (document.getElementById('doctorSearch')?.value || '').toLowerCase();
 
         // Get checked statuses
         const checkedStatuses = new Set();
-        document.querySelectorAll('.status-filter:checked, .mobile-status-filter:checked').forEach(checkbox => {
+        document.querySelectorAll('.status-filter:checked').forEach(checkbox => {
             checkedStatuses.add(checkbox.value);
         });
 
@@ -475,7 +528,7 @@
             const cardStatus = card.dataset.status;
             const cardSpecialty = card.dataset.specialty;
             const cardDate = card.dataset.date;
-            const doctorName = card.dataset.doctor.toLowerCase();
+            const doctorName = (card.dataset.doctor || '').toLowerCase();
 
             let shouldShow = true;
 
@@ -506,10 +559,14 @@
                 card.style.display = 'block';
                 visibleCount++;
 
-                // Track visible month
-                const monthSeparator = card.previousElementSibling;
-                if (monthSeparator && monthSeparator.classList.contains('month-separator')) {
-                    visibleMonths.add(monthSeparator);
+                // Track visible month - buscar el separador anterior más cercano
+                let prevElement = card.previousElementSibling;
+                while (prevElement) {
+                    if (prevElement.classList.contains('month-separator')) {
+                        visibleMonths.add(prevElement);
+                        break;
+                    }
+                    prevElement = prevElement.previousElementSibling;
                 }
             } else {
                 card.style.display = 'none';
@@ -526,21 +583,16 @@
         });
 
         // Update results count
-        document.getElementById('resultsCount').textContent = visibleCount;
-    }
+        const resultsCount = document.getElementById('resultsCount');
+        if (resultsCount) {
+            resultsCount.textContent = visibleCount;
+        }
 
-    function exportHistory() {
-        const button = event.target.closest('button');
-        const originalHTML = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generando PDF...';
-        button.disabled = true;
-
-        // Simular generación de PDF
-        setTimeout(() => {
-            button.innerHTML = originalHTML;
-            button.disabled = false;
-            showToast('Historial exportado correctamente', 'success');
-        }, 2000);
+        // Close mobile filters after applying
+        const overlay = document.getElementById('mobileFiltersOverlay');
+        if (overlay && !overlay.classList.contains('hidden')) {
+            toggleFilters();
+        }
     }
 
     function showToast(message, type = 'success') {
@@ -551,7 +603,7 @@
         };
 
         const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg`;
+        toast.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300`;
         toast.innerHTML = `
             <div class="flex items-center">
                 <i class="fas fa-check-circle mr-2"></i>
@@ -561,34 +613,58 @@
 
         document.body.appendChild(toast);
 
+        // Animate in
         setTimeout(() => {
-            toast.remove();
+            toast.style.transform = 'translateX(0)';
+        }, 10);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.transform = 'translateX(400px)';
+            setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
 
     // Close mobile filters when clicking overlay
-    document.getElementById('mobileFiltersOverlay').addEventListener('click', function(event) {
-        if (event.target === this) {
-            toggleFilters();
-        }
-    });
+    const mobileOverlay = document.getElementById('mobileFiltersOverlay');
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', function(event) {
+            if (event.target === this) {
+                toggleFilters();
+            }
+        });
+    }
 
     // Real-time filter updates
-    document.getElementById('doctorSearch').addEventListener('input', applyFilters);
-    document.getElementById('mobileDoctorSearch').addEventListener('input', applyFilters);
-    document.getElementById('specialtyFilter').addEventListener('change', applyFilters);
-    document.getElementById('mobileSpecialtyFilter').addEventListener('change', applyFilters);
-    document.getElementById('dateFrom').addEventListener('change', applyFilters);
-    document.getElementById('dateTo').addEventListener('change', applyFilters);
-    document.getElementById('mobileDateFrom').addEventListener('change', applyFilters);
-    document.getElementById('mobileDateTo').addEventListener('change', applyFilters);
-
-    document.querySelectorAll('.status-filter, .mobile-status-filter').forEach(checkbox => {
-        checkbox.addEventListener('change', applyFilters);
-    });
-
-    // Initialize on page load  
     document.addEventListener('DOMContentLoaded', function() {
+        // Setup event listeners
+        const doctorSearch = document.getElementById('doctorSearch');
+        const specialtyFilter = document.getElementById('specialtyFilter');
+        const dateFrom = document.getElementById('dateFrom');
+        const dateTo = document.getElementById('dateTo');
+
+        if (doctorSearch) {
+            doctorSearch.addEventListener('input', applyFilters);
+        }
+
+        if (specialtyFilter) {
+            specialtyFilter.addEventListener('change', applyFilters);
+        }
+
+        if (dateFrom) {
+            dateFrom.addEventListener('change', applyFilters);
+        }
+
+        if (dateTo) {
+            dateTo.addEventListener('change', applyFilters);
+        }
+
+        // Status checkboxes
+        document.querySelectorAll('.status-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', applyFilters);
+        });
+
+        // Initialize filters
         applyFilters();
     });
 </script>

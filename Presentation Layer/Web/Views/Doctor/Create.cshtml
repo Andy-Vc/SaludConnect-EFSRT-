@@ -156,13 +156,6 @@
                 }
             }
         });
-
-        // Convertir nombres y apellidos a mayúsculas automáticamente
-        const nameFields = ['FirstName', 'LastNamePat', 'LastNameMat'];
-        nameFields.forEach(field => {
-            const input = document.querySelector(`input[name="${field}"]`);
-            input.addEventListener('input', e => e.target.value = e.target.value.toUpperCase());
-        });
     </script>
 }
 

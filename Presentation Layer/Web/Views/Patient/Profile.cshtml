@@ -73,7 +73,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="lg:col-span-3">
 			<div class="bg-surface rounded-lg shadow-md">
 				<div class="border-b border-secondary-200">
@@ -82,16 +81,6 @@
 								onclick="switchTab('personal')" data-tab="personal">
 							<i class="fas fa-user mr-2"></i>
 							Información Personal
-						</button>
-						<button type="button" class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
-								onclick="switchTab('contact')" data-tab="contact">
-							<i class="fas fa-envelope mr-2"></i>
-							Contacto
-						</button>
-						<button type="button" class="tab-button py-4 px-1 border-b-2 font-medium text-sm transition-colors border-transparent text-text-secondary hover:text-text-primary hover:border-secondary-300"
-								onclick="switchTab('account')" data-tab="account">
-							<i class="fas fa-cog mr-2"></i>
-							Configuración
 						</button>
 					</nav>
 				</div>
@@ -302,6 +291,19 @@
 				</div>
 			</div>
 		</div>
+		
+	</div>
+	<div class="bg-surface rounded-lg shadow-md p-6 mt-6">
+		<h4 class="font-medium text-text-primary mb-4">Sesión</h4>
+		<form asp-action="Logout" asp-controller="UserAuth" method="post" class="w-full">
+			<button type="submit" class="w-full btn-secondary hover:bg-error hover:text-white hover:border-error transition-all duration-300 flex items-center justify-center">
+				<i class="fas fa-sign-out-alt mr-2"></i>
+				Cerrar Sesión
+			</button>
+		</form>
+		<p class="text-xs text-text-secondary mt-3 text-center">
+			Última sesión: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+		</p>
 	</div>
 </main>
 

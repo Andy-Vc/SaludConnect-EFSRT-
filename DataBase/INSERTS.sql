@@ -412,52 +412,52 @@ GO
 -- ============================================
 INSERT INTO TB_APPOINTMENTS (ID_PATIENT, ID_DOCTOR, ID_SPECIALTY, DATE_APPOINTMENT, STATE, APPOINTMENT_PRICE, ID_CONSULTORIES) VALUES
 -- Cardiología
-(2, 7, 1, '21/10/2025 08:00:00', 'P', 150.00, 1),
-(3, 7, 1, '21/10/2025 08:20:00', 'P', 150.00, 1),
-(4, 8, 1, '21/10/2025 14:00:00', 'P', 150.00, 2),
-(5, 8, 1, '21/10/2025 14:20:00', 'P', 150.00, 2),
+(2, 7, 1, '21/10/2025 08:00:00', 'P', 800.00, 1),
+(3, 7, 1, '21/10/2025 08:20:00', 'P', 800.00, 1),
+(4, 8, 1, '21/10/2025 14:00:00', 'P', 800.00, 2),
+(5, 8, 1, '21/10/2025 14:20:00', 'P', 800.00, 2),
 
 -- Dermatología
-(2, 9, 2, '21/10/2025 09:00:00', 'P', 120.00, 4),
-(3, 9, 2, '21/10/2025 09:20:00', 'P', 120.00, 4),
-(4, 10, 2, '21/10/2025 10:00:00', 'P', 120.00, 5),
-(5, 10, 2, '21/10/2025 10:20:00', 'P', 120.00, 5),
+(2, 9, 2, '21/10/2025 09:00:00', 'P', 600.00, 4),
+(3, 9, 2, '21/10/2025 09:20:00', 'P', 600.00, 4),
+(4, 10, 2, '21/10/2025 10:00:00', 'P', 600.00, 5),
+(5, 10, 2, '21/10/2025 10:20:00', 'P', 600.00, 5),
 
 -- Neurología
-(2, 11, 3, '21/10/2025 08:00:00', 'P', 130.00, 7),
-(3, 11, 3, '21/10/2025 08:20:00', 'P', 130.00, 7),
-(4, 12, 3, '21/10/2025 14:00:00', 'P', 130.00, 8),
-(5, 12, 3, '21/10/2025 14:20:00', 'P', 130.00, 8),
+(2, 11, 3, '21/10/2025 08:00:00', 'P', 700.00, 7),
+(3, 11, 3, '21/10/2025 08:20:00', 'P', 700.00, 7),
+(4, 12, 3, '21/10/2025 14:00:00', 'P', 700.00, 8),
+(5, 12, 3, '21/10/2025 14:20:00', 'P', 700.00, 8),
 
 -- Pediatría
-(2, 13, 4, '21/10/2025 08:00:00', 'P', 110.00, 9),
-(3, 13, 4, '21/10/2025 08:20:00', 'P', 110.00, 9),
-(4, 14, 4, '21/10/2025 13:00:00', 'P', 110.00, 10),
-(5, 14, 4, '21/10/2025 13:20:00', 'P', 110.00, 10),
+(2, 13, 4, '21/10/2025 08:00:00', 'P', 500.00, 9),
+(3, 13, 4, '21/10/2025 08:20:00', 'P', 500.00, 9),
+(4, 14, 4, '21/10/2025 13:00:00', 'P', 500.00, 10),
+(5, 14, 4, '21/10/2025 13:20:00', 'P', 500.00, 10),
 
 -- Ortopedía
-(2, 15, 5, '21/10/2025 08:00:00', 'P', 140.00, 11),
-(3, 15, 5, '21/10/2025 08:20:00', 'P', 140.00, 11),
-(4, 16, 5, '21/10/2025 09:00:00', 'P', 140.00, 12),
-(5, 16, 5, '21/10/2025 09:20:00', 'P', 140.00, 12),
+(2, 15, 5, '21/10/2025 08:00:00', 'P', 750.00, 11),
+(3, 15, 5, '21/10/2025 08:20:00', 'P', 750.00, 11),
+(4, 16, 5, '21/10/2025 09:00:00', 'P', 750.00, 12),
+(5, 16, 5, '21/10/2025 09:20:00', 'P', 750.00, 12),
 
 -- Oftalmología
-(2, 17, 6, '21/10/2025 08:00:00', 'P', 125.00, 13),
-(3, 17, 6, '21/10/2025 08:20:00', 'P', 125.00, 13),
-(4, 18, 6, '21/10/2025 14:00:00', 'P', 125.00, 14),
-(5, 18, 6, '21/10/2025 14:20:00', 'P', 125.00, 14),
+(2, 17, 6, '21/10/2025 08:00:00', 'P', 650.00, 13),
+(3, 17, 6, '21/10/2025 08:20:00', 'P', 650.00, 13),
+(4, 18, 6, '21/10/2025 14:00:00', 'P', 650.00, 14),
+(5, 18, 6, '21/10/2025 14:20:00', 'P', 650.00, 14),
 
 -- Psiquiatría
-(2, 19, 7, '21/10/2025 10:00:00', 'P', 160.00, 15),
-(3, 19, 7, '21/10/2025 10:20:00', 'P', 160.00, 15),
-(4, 20, 7, '21/10/2025 15:00:00', 'P', 160.00, 16),
-(5, 20, 7, '21/10/2025 15:20:00', 'P', 160.00, 16),
+(2, 19, 7, '21/10/2025 10:00:00', 'P', 900.00, 15),
+(3, 19, 7, '21/10/2025 10:20:00', 'P', 900.00, 15),
+(4, 20, 7, '21/10/2025 15:00:00', 'P', 900.00, 16),
+(5, 20, 7, '21/10/2025 15:20:00', 'P', 900.00, 16),
 
 -- Medicina Interna
-(2, 21, 8, '21/10/2025 08:00:00', 'P', 140.00, 17),
-(3, 21, 8, '21/10/2025 08:20:00', 'P', 140.00, 17),
-(4, 22, 8, '21/10/2025 13:00:00', 'P', 140.00, 18),
-(5, 22, 8, '21/10/2025 13:20:00', 'A', 140.00, 18);
+(2, 21, 8, '21/10/2025 08:00:00', 'P', 700.00, 17),
+(3, 21, 8, '21/10/2025 08:20:00', 'P', 700.00, 17),
+(4, 22, 8, '21/10/2025 13:00:00', 'P', 700.00, 18),
+(5, 22, 8, '21/10/2025 13:20:00', 'A', 700.00, 18);
 GO
 
 -- ============================================
@@ -465,47 +465,47 @@ GO
 -- ============================================
 INSERT INTO TB_SERVICES (NAME_SERVICE, DESCRIPTION, PRICE, DURATION_MINUTES, ID_SPECIALTY) VALUES
 -- Cardiología
-('Consulta Cardiología', 'Evaluación integral del sistema cardiovascular.', 150.00, 30, 1), 
-('Electrocardiograma', 'Prueba diagnóstica de actividad eléctrica del corazón.', 80.00, 15, 1),
-('Ecocardiograma', 'Ultrasonido del corazón para evaluar estructura y función.', 200.00, 45, 1),
-('Holter 24 horas', 'Monitoreo continuo del ritmo cardíaco.', 250.00, 30, 1),
+('Consulta Cardiología', 'Evaluación integral del sistema cardiovascular.', 800.00, 30, 1), 
+('Electrocardiograma', 'Prueba diagnóstica de actividad eléctrica del corazón.', 400.00, 15, 1),
+('Ecocardiograma', 'Ultrasonido del corazón para evaluar estructura y función.', 1200.00, 45, 1),
+('Holter 24 horas', 'Monitoreo continuo del ritmo cardíaco.', 1500.00, 30, 1),
 
 -- Dermatología
-('Consulta Dermatología', 'Diagnóstico y tratamiento de enfermedades de la piel.', 120.00, 25, 2), 
-('Biopsia de Piel', 'Toma de muestra de tejido cutáneo.', 250.00, 45, 2),
-('Crioterapia', 'Tratamiento con frío para lesiones cutáneas.', 180.00, 30, 2),
-('Dermatoscopia', 'Examen detallado de lesiones de piel.', 100.00, 20, 2),
+('Consulta Dermatología', 'Diagnóstico y tratamiento de enfermedades de la piel.', 600.00, 25, 2), 
+('Biopsia de Piel', 'Toma de muestra de tejido cutáneo.', 1300.00, 45, 2),
+('Crioterapia', 'Tratamiento con frío para lesiones cutáneas.', 900.00, 30, 2),
+('Dermatoscopia', 'Examen detallado de lesiones de piel.', 500.00, 20, 2),
 
 -- Neurología
-('Consulta Neurología', 'Evaluación de trastornos del sistema nervioso.', 130.00, 30, 3),
-('Electroencefalograma', 'Registro de actividad eléctrica cerebral.', 220.00, 60, 3),
-('Electromiografía', 'Evaluación de músculos y nervios periféricos.', 280.00, 45, 3),
+('Consulta Neurología', 'Evaluación de trastornos del sistema nervioso.', 700.00, 30, 3),
+('Electroencefalograma', 'Registro de actividad eléctrica cerebral.', 1200.00, 60, 3),
+('Electromiografía', 'Evaluación de músculos y nervios periféricos.', 1500.00, 45, 3),
 
 -- Pediatría
-('Consulta Pediatría', 'Atención médica integral para niños.', 110.00, 25, 4),
-('Control de Niño Sano', 'Evaluación del crecimiento y desarrollo.', 90.00, 30, 4),
-('Vacunación', 'Aplicación de vacunas según calendario.', 60.00, 15, 4),
+('Consulta Pediatría', 'Atención médica integral para niños.', 500.00, 25, 4),
+('Control de Niño Sano', 'Evaluación del crecimiento y desarrollo.', 450.00, 30, 4),
+('Vacunación', 'Aplicación de vacunas según calendario.', 300.00, 15, 4),
 
 -- Ortopedía
-('Consulta Ortopedia', 'Evaluación de lesiones músculo-esqueléticas.', 140.00, 30, 5),
-('Infiltración', 'Aplicación de medicamento en articulación.', 200.00, 20, 5),
-('Radiografía', 'Imagen diagnóstica de huesos y articulaciones.', 120.00, 15, 5),
+('Consulta Ortopedia', 'Evaluación de lesiones músculo-esqueléticas.', 750.00, 30, 5),
+('Infiltración', 'Aplicación de medicamento en articulación.', 1000.00, 20, 5),
+('Radiografía', 'Imagen diagnóstica de huesos y articulaciones.', 600.00, 15, 5),
 
 -- Oftalmología
-('Consulta Oftalmología', 'Examen completo de la visión.', 125.00, 30, 6),
-('Tonometría', 'Medición de presión intraocular.', 80.00, 15, 6),
-('Campimetría', 'Evaluación del campo visual.', 150.00, 30, 6),
+('Consulta Oftalmología', 'Examen completo de la visión.', 650.00, 30, 6),
+('Tonometría', 'Medición de presión intraocular.', 400.00, 15, 6),
+('Campimetría', 'Evaluación del campo visual.', 800.00, 30, 6),
 
 -- Psiquiatría
-('Consulta Psiquiatría', 'Evaluación y tratamiento de salud mental.', 160.00, 45, 7),
-('Psicoterapia Individual', 'Sesión terapéutica personalizada.', 180.00, 60, 7),
-('Evaluación Psiquiátrica Integral', 'Valoración completa del estado mental.', 220.00, 90, 7),
+('Consulta Psiquiatría', 'Evaluación y tratamiento de salud mental.', 900.00, 45, 7),
+('Psicoterapia Individual', 'Sesión terapéutica personalizada.', 1000.00, 60, 7),
+('Evaluación Psiquiátrica Integral', 'Valoración completa del estado mental.', 1300.00, 90, 7),
 
 -- Medicina Interna
-('Consulta Medicina Interna', 'Atención integral de enfermedades en adultos.', 140.00, 30, 8), 
-('Prueba de Glucosa en Ayunas', 'Análisis de niveles de azúcar en sangre.', 60.00, 20, 8),
-('Perfil Lipídico', 'Análisis de colesterol y triglicéridos.', 80.00, 20, 8),
-('Hemograma Completo', 'Análisis detallado de células sanguíneas.', 70.00, 20, 8);
+('Consulta Medicina Interna', 'Atención integral de enfermedades en adultos.', 700.00, 30, 8), 
+('Prueba de Glucosa en Ayunas', 'Análisis de niveles de azúcar en sangre.', 300.00, 20, 8),
+('Perfil Lipídico', 'Análisis de colesterol y triglicéridos.', 400.00, 20, 8),
+('Hemograma Completo', 'Análisis detallado de células sanguíneas.', 350.00, 20, 8);
 GO
 
 -- ============================================
@@ -524,8 +524,8 @@ GO
 -- INSERTS: TB_ADDITIONAL_SERVICES
 -- ============================================
 INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE) VALUES
-(1, 18, 70.00, 'P'),
-(1, 19, 80.00, 'P');
+(1, 18, 400.00, 'P'),
+(1, 19, 800.00, 'P');
 GO
 
 INSERT INTO TB_MEDICAL_RECORDS (ID_APPOINTMENT, OBSERVATIONS, DIAGNOSIS, TREATMENT, FOLLOW_UP_DATE) VALUES

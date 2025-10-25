@@ -18,6 +18,6 @@ namespace Models.DTO
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public int IdRole { get; set; }
-        public string ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
     }
 }

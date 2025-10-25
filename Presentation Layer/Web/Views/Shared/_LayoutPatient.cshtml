@@ -11,8 +11,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - SaludConnect</title>
-
-    <link rel="stylesheet" href="../css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
@@ -20,8 +18,13 @@
     <link href="https://medicitas-patient-portal-vjucr07.public.builtwithrocket.new/css/main.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap">
-
 </head>
+<style>
+    .bg-danger{
+        background:red;
+        gap:0.5rem;
+    }
+</style>
 <body class="bg-background min-h-screen">
     <nav class="bg-surface shadow-md border-b border-secondary-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,37 +46,37 @@
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
                            asp-controller="Patient"
                            asp-action="Index">
-                            Portal Client
+                            Index
                         </a>
                        
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
                            asp-controller="Patient"
                            asp-action="Booking">
-                            Booking
+                            Portal
                         </a>
 
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
                            asp-controller="Patient"
                            asp-action="Record">
-                            Record
+                            Historial
                         </a>
 
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
                            asp-controller="Patient"
                            asp-action="Help">
-                            Help
+                            Ayuda
                         </a>
                         
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
                            asp-controller="Patient"
                            asp-action="Profile">
-                            My Profile
+                            Mi Perfil
                         </a>
 
                         <a class="text-text-secondary hover:text-text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors relative"
                            asp-controller="Patient"
                            asp-action="Notifications">
-                            Notifications
+                            Notificaciones
                             <span class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
                         </a>
                        
@@ -241,7 +244,7 @@
 
     <!-- FAB Button -->
     <button class="fab"
-            onclick="window.location.href='@Url.Action("Index", "Help")'"
+            onclick="window.location.href='@Url.Action("Help", "Patient")'"
             title="Centro de Ayuda">
         <i class="fas fa-question text-lg"></i>
     </button>
@@ -288,5 +291,7 @@
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    @Html.Partial("_SweetAlert")
+
 </body>
 </html>

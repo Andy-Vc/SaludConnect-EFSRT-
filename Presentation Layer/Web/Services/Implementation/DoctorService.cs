@@ -1,4 +1,4 @@
-
+﻿
 using System.Net;
 using System.Text;
 using Web.Models.DTO;
@@ -60,22 +60,28 @@ namespace Web.Services.Implementation
 
         public async Task<int> CreateDoctor(CreateDoctorDTO doctor)
         {
-
             try
             {
                 var response = await _httpClient.PostAsJsonAsync("Doctor/doctors", doctor);
+
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadFromJsonAsync<CreateDoctorResponse>();
                     return result?.idDoctor ?? 0;
                 }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"❌ Error HTTP {response.StatusCode}: {errorContent}");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al crear consultorio: {ex.Message}");
+                Console.WriteLine($"⚠️ Error al crear doctor: {ex.Message}");
             }
             return 0;
         }
+
 
 
         public async Task<bool> UpdateDoctor(int id, UpdateDoctorDTO doctor)

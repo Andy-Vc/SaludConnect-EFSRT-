@@ -374,7 +374,7 @@
                     </div>
                     <div class="col-md-6">
                         <small class="text-muted fw-semibold">Precio:</small>
-                        <p class="mb-0 fw-bold text-success" style="font-size: 1.1rem;">S/. ${appointment.appointmentPrice.toFixed(2)}</p>
+                        <p class="mb-0 fw-bold text-success" style="font-size: 1.1rem;">MXN ${appointment.appointmentPrice.toFixed(2)}</p>
                     </div>
                     <div class="col-md-6">
                         <small class="text-muted fw-semibold">Estado:</small>
@@ -468,7 +468,8 @@
             price: service.price,
             specialty: {
                 idSpecialty: specialty.idSpecialty,
-                nameSpecialty: specialty.nameSpecialty
+                nameSpecialty: specialty.nameSpecialty,
+                description: specialty.description
             }
         });
 
@@ -492,7 +493,7 @@
             <tr>
                 <td>${index + 1}</td>
                 <td>${service.nameService}</td>
-                <td>${service.price}</td>
+                <td>MXN ${service.price}</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeServiceGlobal(${index})">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -547,6 +548,7 @@
                     specialty: {
                         idSpecialty: service.specialty.idSpecialty,
                         nameSpecialty: service.specialty.nameSpecialty,
+                        description: service.specialty.description,
                         flgDelete: false
                     },
                     flgDelete: false

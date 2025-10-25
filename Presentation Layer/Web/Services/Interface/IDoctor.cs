@@ -1,4 +1,5 @@
-﻿using Web.Models.ViewModels.PatientVM;
+﻿using Web.Models.DTO;
+using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Services.Interface
 {
@@ -10,6 +11,7 @@ namespace Web.Services.Interface
         Task<bool> UpdateDoctor(int id, UpdateDoctorDTO doctor);
         Task<bool> DeleteDoctor(int idDoctor);
         Task<bool> AddDoctorSpecialty(int idDoctor, DoctorSpecialtyDTO doctorSpecialty);
-       
+        Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality);
+        Task<DoctorCard> GetDoctorInfo(int idDoctor);
     }
 }

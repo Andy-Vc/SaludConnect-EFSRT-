@@ -165,41 +165,6 @@
                 </div>
             </div>
 
-            <!-- Contact Support -->
-            <div class="bg-surface rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-medium text-text-primary mb-4">¿Necesitas más ayuda?</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-phone text-primary mr-3"></i>
-                        <div>
-                            <p class="text-sm font-medium text-text-primary">Teléfono</p>
-                            <p class="text-sm text-text-secondary">+34 900 123 456</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center">
-                        <i class="fas fa-envelope text-primary mr-3"></i>
-                        <div>
-                            <p class="text-sm font-medium text-text-primary">Email</p>
-                            <p class="text-sm text-text-secondary">ayuda@@medicitas.es</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center">
-                        <i class="fas fa-clock text-primary mr-3"></i>
-                        <div>
-                            <p class="text-sm font-medium text-text-primary">Horario de Atención</p>
-                            <p class="text-sm text-text-secondary">Lun-Vie: 8:00-18:00</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn-primary w-full mt-4" onclick="window.location.href='@Url.Action("Contact", "Support")'">
-                    <i class="fas fa-headset mr-2"></i>
-                    Contactar Soporte
-                </button>
-            </div>
-
             <!-- FAQ Categories -->
             <div class="bg-surface rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-medium text-text-primary mb-4">Categorías de Ayuda</h3>
@@ -230,244 +195,309 @@
 </div>
 
                         @section Scripts {
-<script>
-    // Chat functionality
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const typingIndicator = document.getElementById('typingIndicator');
+    <script>
+            // Chat functionality
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const typingIndicator = document.getElementById('typingIndicator');
 
-    // Predefined responses database
-    const responses = {
-        'programar': {
-            keywords: ['programar', 'agendar', 'reservar', 'nueva cita', 'cita'],
-            response: `Para programar una nueva cita, sigue estos pasos:
-1. Ve al Panel Principal
-2. Haz clic en "Programar Nueva Cita"
-3. Selecciona la especialidad médica
-4. Elige tu médico preferido
-5. Selecciona fecha y hora disponible
-6. Confirma tu cita
+            // Predefined responses database
+            const responses = {
+                'programar': {
+                    keywords: ['programar', 'agendar', 'reservar', 'nueva cita', 'cita'],
+                    response: `Para programar una nueva cita, sigue estos pasos:
+        1. Ve al Panel Principal
+        2. Haz clic en "Programar Nueva Cita"
+        3. Selecciona la especialidad médica
+        4. Elige tu médico preferido
+        5. Selecciona fecha y hora disponible
+        6. Confirma tu cita
 
-¿Necesitas ayuda con algún paso específico?`
-        },
-        'cancelar': {
-            keywords: ['cancelar', 'eliminar', 'borrar cita'],
-            response: `Para cancelar una cita:
-1. Ve a "Mis Citas"
-2. Encuentra la cita que deseas cancelar
-3. Haz clic en "Cancelar Cita"
-4. Confirma la cancelación
+        ¿Necesitas ayuda con algún paso específico?`
+                },
+                'cancelar': {
+                    keywords: ['cancelar', 'eliminar', 'borrar cita'],
+                    response: `Para cancelar una cita:
+        1. Ve a "Mis Citas"
+        2. Encuentra la cita que deseas cancelar
+        3. Haz clic en "Cancelar Cita"
+        4. Confirma la cancelación
 
-Nota: Las cancelaciones deben hacerse con al menos 24 horas de anticipación.`
-        },
-        'reprogramar': {
-            keywords: ['reprogramar', 'cambiar fecha', 'mover cita', 'cambiar hora'],
-            response: `Para reprogramar una cita:
-1. Ve a "Mis Citas"
-2. Selecciona la cita que deseas reprogramar
-3. Haz clic en "Reprogramar"
-4. Elige una nueva fecha y hora
-5. Confirma los cambios
+        Nota: Las cancelaciones deben hacerse con al menos 24 horas de anticipación.`
+                },
+                'reprogramar': {
+                    keywords: ['reprogramar', 'cambiar fecha', 'mover cita', 'cambiar hora'],
+                    response: `Para reprogramar una cita:
+        1. Ve a "Mis Citas"
+        2. Selecciona la cita que deseas reprogramar
+        3. Haz clic en "Reprogramar"
+        4. Elige una nueva fecha y hora
+        5. Confirma los cambios
 
-¿Te gustaría reprogramar alguna cita ahora?`
-        },
-        'perfil': {
-            keywords: ['perfil', 'información personal', 'datos personales', 'actualizar información'],
-            response: `Para actualizar tu información personal:
-1. Ve a "Mi Perfil" en el menú superior
-2. Haz clic en "Editar Perfil"
-3. Modifica los datos que necesites
-4. Guarda los cambios
+        ¿Te gustaría reprogramar alguna cita ahora?`
+                },
+                'perfil': {
+                    keywords: ['perfil', 'información personal', 'datos personales', 'actualizar información'],
+                    response: `Para actualizar tu información personal:
+        1. Ve a "Mi Perfil" en el menú superior
+        2. Haz clic en "Editar Perfil"
+        3. Modifica los datos que necesites
+        4. Guarda los cambios
 
-Puedes actualizar: nombre, teléfono, dirección, correo electrónico y más.`
-        },
-        'contraseña': {
-            keywords: ['contraseña', 'password', 'olvidé', 'cambiar contraseña'],
-            response: `Si olvidaste tu contraseña:
-1. Ve a la página de inicio de sesión
-2. Haz clic en "¿Olvidaste tu contraseña?"
-3. Ingresa tu correo electrónico
-4. Revisa tu correo para el enlace de restablecimiento
-5. Crea una nueva contraseña
+        Puedes actualizar: nombre, teléfono, dirección, correo electrónico y más.`
+                },
+                'contraseña': {
+                    keywords: ['contraseña', 'password', 'olvidé', 'cambiar contraseña'],
+                    response: `Si olvidaste tu contraseña:
+        1. Ve a la página de inicio de sesión
+        2. Haz clic en "¿Olvidaste tu contraseña?"
+        3. Ingresa tu correo electrónico
+        4. Revisa tu correo para el enlace de restablecimiento
+        5. Crea una nueva contraseña
 
-El enlace es válido por 24 horas.`
-        },
-        'historial': {
-            keywords: ['historial', 'citas anteriores', 'ver citas', 'mis citas'],
-            response: `Para ver tu historial de citas:
-1. Ve a "Mis Citas" en el menú
-2. Selecciona la pestaña "Historial"
-3. Podrás ver todas tus citas anteriores con detalles
+        El enlace es válido por 24 horas.`
+                },
+                'historial': {
+                    keywords: ['historial', 'citas anteriores', 'ver citas', 'mis citas'],
+                    response: `Para ver tu historial de citas:
+        1. Ve a "Mis Citas" en el menú
+        2. Selecciona la pestaña "Historial"
+        3. Podrás ver todas tus citas anteriores con detalles
 
-También puedes filtrar por fecha, doctor o especialidad.`
-        }
-    };
+        También puedes filtrar por fecha, doctor o especialidad.`
+                }
+            };
 
-    // Handle chat input
-    function handleChatInput(event) {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    }
-
-    // Send message
-    function sendMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-
-        // Add user message
-        addUserMessage(message);
-        chatInput.value = '';
-
-        // Show typing indicator
-        typingIndicator.classList.remove('hidden');
-        scrollToBottom();
-
-        // Simulate processing delay
-        setTimeout(() => {
-            typingIndicator.classList.add('hidden');
-            const response = generateResponse(message);
-            addBotMessage(response);
-        }, 1000 + Math.random() * 1000);
-    }
-
-    // Add user message to chat
-    function addUserMessage(message) {
-        const timestamp = new Date().toLocaleString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const messageHTML = `
-            <div class="flex items-start space-x-3 justify-end">
-                <div class="bg-primary rounded-lg p-3 max-w-xs text-white">
-                    <p class="text-sm">${escapeHtml(message)}</p>
-                    <span class="text-xs opacity-75 mt-1 block">${timestamp}</span>
-                </div>
-                <img class="w-8 h-8 rounded-full object-cover flex-shrink-0" 
-                     src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                     alt="Usuario">
-            </div>
-        `;
-
-        chatMessages.insertAdjacentHTML('beforeend', messageHTML);
-        scrollToBottom();
-    }
-
-    // Add bot message to chat
-    function addBotMessage(message) {
-        const timestamp = new Date().toLocaleString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const messageHTML = `
-            <div class="flex items-start space-x-3">
-                <div class="bg-primary rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-robot text-white text-sm"></i>
-                </div>
-                <div class="bg-secondary-100 rounded-lg p-3 max-w-md">
-                    <p class="text-sm text-text-primary whitespace-pre-line">${escapeHtml(message)}</p>
-                    <div class="flex items-center mt-3 space-x-2">
-                        <button class="text-xs text-primary hover:text-primary-700 transition-colors" onclick="provideFeedback('helpful')">
-                            <i class="fas fa-thumbs-up mr-1"></i>Útil
-                        </button>
-                        <button class="text-xs text-text-secondary hover:text-text-primary transition-colors" onclick="provideFeedback('not-helpful')">
-                            <i class="fas fa-thumbs-down mr-1"></i>No útil
-                        </button>
-                    </div>
-                    <span class="text-xs text-text-secondary mt-2 block">${timestamp}</span>
-                </div>
-            </div>
-        `;
-
-        chatMessages.insertAdjacentHTML('beforeend', messageHTML);
-        scrollToBottom();
-    }
-
-    // Generate response based on keywords
-    function generateResponse(message) {
-        const messageLower = message.toLowerCase();
-
-        // Check each response category
-        for (const [key, data] of Object.entries(responses)) {
-            for (const keyword of data.keywords) {
-                if (messageLower.includes(keyword)) {
-                    return data.response;
+            // Handle chat input
+            function handleChatInput(event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
                 }
             }
-        }
 
-        // Default response if no match found
-        return `Gracias por tu pregunta. Para ayudarte mejor, puedes:
+            // Send message
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
 
-• Usar las preguntas frecuentes en el panel lateral
-• Contactar a nuestro equipo de soporte
-• Llamar al +34 900 123 456
+                // Add user message
+                addUserMessage(message);
+                chatInput.value = '';
 
-¿Hay algo más específico con lo que pueda ayudarte?`;
-    }
+                // Show typing indicator
+                typingIndicator.classList.remove('hidden');
+                scrollToBottom();
 
-    // Ask predefined question
-    function askPredefinedQuestion(question) {
-        chatInput.value = question;
-        sendMessage();
-    }
+                // Simulate processing delay
+                setTimeout(() => {
+                    typingIndicator.classList.add('hidden');
+                    const response = generateResponse(message);
+                    addBotMessage(response);
+                }, 1000 + Math.random() * 1000);
+            }
 
-    // Provide feedback
-    function provideFeedback(type) {
-        const message = type === 'helpful' 
-            ? '¡Gracias por tu feedback! Nos alegra haber sido de ayuda.' 
-            : 'Gracias por tu feedback. ¿Te gustaría contactar con soporte directo?';
-        
-        alert(message);
-    }
+            // Add user message to chat
+            function addUserMessage(message) {
+                const timestamp = new Date().toLocaleString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
 
-    // Filter by category
-    function filterByCategory(category) {
-        const categoryMessages = {
-            'appointments': '¿Tienes preguntas sobre gestión de citas? Puedo ayudarte con programar, cancelar o reprogramar citas.',
-            'account': '¿Necesitas ayuda con tu cuenta? Puedo ayudarte con perfil, contraseña y configuración.',
-            'technical': '¿Problemas técnicos? Estoy aquí para ayudarte a resolverlos.',
-            'billing': '¿Preguntas sobre facturación? Puedo ayudarte con pagos y facturas.'
-        };
+                const messageHTML = `
+                    <div class="flex items-start space-x-3 justify-end">
+                        <div class="bg-primary rounded-lg p-3 max-w-xs text-white">
+                            <p class="text-sm">${escapeHtml(message)}</p>
+                            <span class="text-xs opacity-75 mt-1 block">${timestamp}</span>
+                        </div>
+                        <img class="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                             src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3"
+                             alt="Usuario">
+                    </div>
+                `;
 
-        const message = categoryMessages[category] || 'Selecciona una categoría para más información.';
-        addBotMessage(message);
-    }
+                chatMessages.insertAdjacentHTML('beforeend', messageHTML);
+                scrollToBottom();
+            }
 
-    // Toggle floating chat
-    function toggleFloatingChat() {
-        // Implementation for floating chat toggle
-        alert('Chat flotante - Funcionalidad próximamente');
-    }
+            // Add bot message to chat
+            function addBotMessage(message) {
+                const timestamp = new Date().toLocaleString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
 
-    // Scroll to bottom of chat
-    function scrollToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+                const messageHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-primary rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot text-white text-sm"></i>
+                        </div>
+                        <div class="bg-secondary-100 rounded-lg p-3 max-w-md">
+                            <p class="text-sm text-text-primary whitespace-pre-line">${escapeHtml(message)}</p>
+                            <div class="flex items-center mt-3 space-x-2">
+                                <button class="text-xs text-primary hover:text-primary-700 transition-colors" onclick="provideFeedback('helpful')">
+                                    <i class="fas fa-thumbs-up mr-1"></i>Útil
+                                </button>
+                                <button class="text-xs text-text-secondary hover:text-text-primary transition-colors" onclick="provideFeedback('not-helpful')">
+                                    <i class="fas fa-thumbs-down mr-1"></i>No útil
+                                </button>
+                            </div>
+                            <span class="text-xs text-text-secondary mt-2 block">${timestamp}</span>
+                        </div>
+                    </div>
+                `;
 
-    // Escape HTML to prevent XSS
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, m => map[m]);
-    }
+                chatMessages.insertAdjacentHTML('beforeend', messageHTML);
+                scrollToBottom();
+            }
 
-    // Initialize chat
-    document.addEventListener('DOMContentLoaded', function() {
-        scrollToBottom();
-    });
-</script>
+            // Generate response based on keywords - VERSIÓN MEJORADA
+            function generateResponse(message) {
+                const messageLower = message.toLowerCase().trim();
+
+                // Si el mensaje es muy corto (1-3 caracteres), no buscar coincidencias
+                if (messageLower.length <= 3) {
+                    return `No entiendo tu pregunta. ¿Podrías ser más específico?
+
+        Algunas preguntas que puedo responder:
+        - ¿Cómo programar una cita?
+        - ¿Cómo cancelar mi cita?
+        - ¿Cómo cambiar mi información personal?
+        - ¿Qué hacer si olvido mi contraseña?
+
+        ¿En qué puedo ayudarte?`;
+                }
+
+                // Buscar coincidencia exacta primero (palabras completas)
+                for (const [key, data] of Object.entries(responses)) {
+                    for (const keyword of data.keywords) {
+                        const regex = new RegExp(`\\b${keyword.toLowerCase()}\\b`, 'i');
+                        if (regex.test(messageLower)) {
+                            return data.response;
+                        }
+                    }
+                }
+
+                // Si no hay coincidencia exacta, buscar la mejor coincidencia parcial
+                let bestMatch = null;
+                let maxMatches = 0;
+
+                for (const [key, data] of Object.entries(responses)) {
+                    let matchCount = 0;
+
+                    // Contar cuántas keywords coinciden
+                    for (const keyword of data.keywords) {
+                        if (messageLower.includes(keyword.toLowerCase())) {
+                            matchCount++;
+                        }
+                    }
+
+                    // Si esta categoría tiene más coincidencias, es mejor candidata
+                    if (matchCount > maxMatches) {
+                        maxMatches = matchCount;
+                        bestMatch = data.response;
+                    }
+                }
+
+                // Si encontramos una buena coincidencia, retornarla
+                if (bestMatch && maxMatches > 0) {
+                    return bestMatch;
+                }
+
+                // Default response if no match found
+                return `Gracias por tu pregunta. Para ayudarte mejor, puedes:
+
+        - Usar las preguntas frecuentes en el panel lateral
+        - Contactar a nuestro equipo de soporte: soporte@medicitas.com
+        - Llamar al +52 55 1234 5678
+
+        ¿Hay algo más específico con lo que pueda ayudarte?`;
+            }
+
+            // Ask predefined question
+            function askPredefinedQuestion(question) {
+                chatInput.value = question;
+                sendMessage();
+            }
+
+            // Provide feedback
+            function provideFeedback(type) {
+                const message = type === 'helpful'
+                    ? '¡Gracias por tu feedback! Nos alegra haber sido de ayuda.'
+                    : 'Gracias por tu feedback. ¿Te gustaría contactar con soporte directo?';
+
+                // Mostrar mensaje con SweetAlert2 si está disponible, sino usar alert
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: type === 'helpful' ? 'success' : 'info',
+                        title: type === 'helpful' ? '¡Gracias!' : 'Feedback recibido',
+                        text: message,
+                        confirmButtonText: 'OK',
+                        timer: 3000
+                    });
+                } else {
+                    alert(message);
+                }
+            }
+
+            // Filter by category
+            function filterByCategory(category) {
+                const categoryMessages = {
+                    'appointments': '¿Tienes preguntas sobre gestión de citas? Puedo ayudarte con programar, cancelar o reprogramar citas.',
+                    'account': '¿Necesitas ayuda con tu cuenta? Puedo ayudarte con perfil, contraseña y configuración.',
+                    'technical': '¿Problemas técnicos? Estoy aquí para ayudarte a resolverlos.',
+                    'billing': '¿Preguntas sobre facturación? Puedo ayudarte con pagos y facturas.'
+                };
+
+                const message = categoryMessages[category] || 'Selecciona una categoría para más información.';
+                addBotMessage(message);
+            }
+
+            // Toggle floating chat
+            function toggleFloatingChat() {
+                // Implementation for floating chat toggle
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Chat Flotante',
+                        text: 'Funcionalidad próximamente disponible',
+                        confirmButtonText: 'Entendido'
+                    });
+                } else {
+                    alert('Chat flotante - Funcionalidad próximamente');
+                }
+            }
+
+            // Scroll to bottom of chat
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+
+            // Initialize chat
+            document.addEventListener('DOMContentLoaded', function() {
+                scrollToBottom();
+
+                // Focus en el input del chat
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            });
+    </script>
 }

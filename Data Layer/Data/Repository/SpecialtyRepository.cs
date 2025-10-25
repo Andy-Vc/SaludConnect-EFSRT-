@@ -90,7 +90,8 @@ namespace Data.Repository
                                     list.Add(new Specialty
                                     {
                                         IdSpecialty = reader.GetInt32(reader.GetOrdinal("ID_SPECIALTY")),
-                                        NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),                                      
+                                        NameSpecialty = reader.GetString(reader.GetOrdinal("NAME_SPECIALTY")),
+                                        Description = reader.GetString(reader.GetOrdinal("DESCRIPTION_SPECIALITY"))
                                     });
                                 }
                             }

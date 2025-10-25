@@ -463,7 +463,7 @@ namespace API.Controllers
             ("Fecha", appointment.DateAppointment.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))),
             ("Hora", appointment.DateAppointment.ToString("hh:mm tt")),
             ("Especialidad", appointment.Specialty.NameSpecialty),
-            ("Precio de Consulta", $"S/ {appointment.AppointmentPrice:0.00}")
+            ("Precio de Consulta", $"MXN {appointment.AppointmentPrice:0.00}")
         }, new BaseColor(37, 99, 235));
 
                 AddCard("👤 Información del Paciente", new List<(string, string)>
@@ -952,7 +952,7 @@ namespace API.Controllers
                         Padding = 8
                     });
 
-                    totalTable.AddCell(new PdfPCell(new Phrase($"S/ {totalCost:0.00}", totalValueFont))
+                    totalTable.AddCell(new PdfPCell(new Phrase($"MXN {totalCost:0.00}", totalValueFont))
                     {
                         Border = Rectangle.NO_BORDER,
                         HorizontalAlignment = Element.ALIGN_CENTER,

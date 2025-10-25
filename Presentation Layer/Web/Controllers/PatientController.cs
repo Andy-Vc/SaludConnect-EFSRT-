@@ -49,8 +49,7 @@ namespace Web.Controllers
             ViewBag.ApointmentsCanceled = ApointmentsCanceled;
             ViewBag.ApointmentsEarring  = ApointmentsEarring;
             ViewBag.NextAppointments = nextAppointments;
-
-
+            ViewBag.UserName = $"{user.FirstName} {user.LastNamePat} {user.LastNameMat}";
             return View();
         }
 
