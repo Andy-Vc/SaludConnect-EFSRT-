@@ -1,6 +1,4 @@
-﻿using Models;
-
-namespace Web.Models
+﻿namespace Web.Models
 
 {
     public class Appointment
@@ -9,7 +7,7 @@ namespace Web.Models
         public User Patient { get; set; }
         public User Doctor { get; set; }
         public Specialty Specialty { get; set; }
-        public Consultories consultories { get; set; }
+        public Consultories consultory { get; set; }
         public DateTime DateAppointment { get; set; }
         public string State { get; set; }
         public decimal AppointmentPrice { get; set; }

@@ -40,7 +40,7 @@
 						<i class="fas fa-clock text-accent text-lg"></i>
 					</div>
 					<h4 class="font-medium text-text-primary mb-1">Horarios Flexibles</h4>
-					<p class="text-sm text-text-secondary">Lunes a Sábado 7:00 - 20:00</p>
+					<p class="text-sm text-text-secondary">Lunes a Sábado 7:00 - 18:00</p>
 				</div>
 				<div class="text-center">
 					<div class="bg-success-50 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
@@ -81,8 +81,8 @@
 					<div class="flex items-center justify-between">
 						<h3 class="text-lg font-semibold text-text-primary">Próximas Citas</h3>
 						<a class="text-primary text-sm hover:text-primary-700 transition-colors"
-						   asp-controller="Appointments"
-						   asp-action="History">Ver todas</a>
+						   asp-controller="Pacient"
+						   asp-action="Record">Ver todas</a>
 					</div>
 				</div>
 
@@ -93,7 +93,7 @@
 						foreach (var cita in nextAppointments)
 						{
 							<div class="medical-card cursor-pointer"
-								 onclick="window.location.href='@Url.Action("AppointmentsDetails", "Patient", new { id = cita.idAppointment })'">
+									 onclick="window.location.href='@Url.Action("AppointmentsDetails", "Patient", new { idAppointment = cita.idAppointment })'">
 								<div class="flex items-start space-x-4">
 									<img src="https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop"
 										 alt="@cita.nombresCompletos"

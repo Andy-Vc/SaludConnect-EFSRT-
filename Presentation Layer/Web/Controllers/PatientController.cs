@@ -392,7 +392,7 @@ namespace Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> AppointmentsDetails(int id)
+        public async Task<IActionResult> AppointmentsDetails(int idAppointment)
         {
             var user = HttpContext.Session.GetObjectFromJson<User>("User");
             if (user == null)
@@ -404,13 +404,13 @@ namespace Web.Controllers
 
             try
             {
-                if (id <= 0)
+                if (idAppointment <= 0)
                 {
                     TempData["Error"] = "ID de cita inválido.";
                     return RedirectToAction("Index", "Patient");
                 }
 
-                var appointment = await _appointment.GetAppointmentByIdBooking(id);
+                var appointment = await _appointment.GetAppointmentByIdBooking(idAppointment);
 
                 if (appointment == null)
                 {
@@ -438,19 +438,21 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Patient");
             }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelAppointment(int id)
         {
             try
             {
+
                 if (id <= 0)
                 {
                     return Json(new { success = false, message = "ID de cita inválido" });
                 }
 
                 var appointment = await _appointment.GetAppointmentByIdBooking(id);
+                Console.WriteLine($"Cita encontrada: {appointment != null}");
+
                 if (appointment == null)
                 {
                     return Json(new { success = false, message = "Cita no encontrada" });
@@ -463,7 +465,7 @@ namespace Web.Controllers
                 }
 
                 var idUserPatient = user.IdUser;
-
+                Console.WriteLine($"Usuario actual: {idUserPatient}, Paciente de la cita: {appointment.Patient?.IdUser}");
 
                 int currentUserId = idUserPatient;
                 if (appointment.Patient.IdUser != currentUserId)

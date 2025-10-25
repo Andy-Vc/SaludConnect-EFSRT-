@@ -191,25 +191,31 @@ namespace Web.Services.Implementation
         {
             try
             {
-                var response = await _httpClient.PutAsync($"change-to-cancel/{idAppointment}", null);
+                var response = await _httpClient.PutAsync($"Appointment/change-to-cancel/{idAppointment}", null);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<Appointment>();
-                    return result;
+                    var content = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonSerializer.Deserialize<ApiResponse<Appointment>>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    return apiResponse?.Data;
                 }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error {response.StatusCode}: {errorContent}");
                     return null;
-
-                Console.WriteLine($"Error HTTP al llamar a la API externa: {response.StatusCode}");
-                return null;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error crítico en ChangeStateAppointmentToCancel: {ex.Message}");
+                Console.WriteLine($"Exception en ChangeStateAppointmentToCancel: {ex.Message}");
                 return null;
             }
+
         }
         public async Task<Appointment> GetAppointmentByIdBooking(int idAppointment)
         {
@@ -219,16 +225,24 @@ namespace Web.Services.Implementation
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<Appointment>();
-                    return result;
+                    var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<Appointment>>();
+
+                    if (apiResponse?.Success == true && apiResponse.Data != null)
+                    {
+                        return apiResponse.Data;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Error HTTP: {response.StatusCode}");
                 }
 
-                return null;
+                return new Appointment();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error en GetAppointmentByIdBooking: {ex.Message}");
-                return null;
+                return new Appointment();
             }
         }
         public async Task<List<AvailableTimeSlots>> GetAvailableTimeSlots(int idDoctor, int idSpeciality, DateOnly fecha)

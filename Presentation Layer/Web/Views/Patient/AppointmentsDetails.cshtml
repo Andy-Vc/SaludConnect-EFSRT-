@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Web.Models
+
+@{
     ViewData["Title"] = "Detalles de la Cita";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
@@ -48,11 +50,45 @@
             </div>
             <!-- Status Badge -->
             <div class="flex items-center">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-50 text-accent">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    Pendiente
+                @{
+                    string estadoTexto = "";
+                    string estadoClase = "";
+                    string estadoIcono = "";
+
+                    switch (Model.State?.ToUpper())
+                    {
+                        case "P":
+                            estadoTexto = "Pendiente";
+                            estadoClase = "text-yellow-600";
+                            estadoIcono = "⏳";
+                            break;
+                        case "A":
+                            estadoTexto = "Asistida";
+                            estadoClase = "text-green-600";
+                            estadoIcono = "✅";
+                            break;
+                        case "X":
+                            estadoTexto = "Cancelada";
+                            estadoClase = "text-red-600";
+                            estadoIcono = "❌";
+                            break;
+                        case "N":
+                            estadoTexto = "No asistió";
+                            estadoClase = "text-gray-600";
+                            estadoIcono = "⏸️";
+                            break;
+                        default:
+                            estadoTexto = "Desconocido";
+                            estadoClase = "text-gray-600";
+                            estadoIcono = "❓";
+                            break;
+                    }
+                }
+
+                <!-- Status Badge -->
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-50 text-accent @estadoClase">
+                    <span class="mr-2">@estadoIcono</span>
+                    @estadoTexto
                 </span>
             </div>
         </div>
@@ -67,11 +103,11 @@
                 <div class="flex items-start justify-between mb-6">
                     <div>
                         <h2 class="text-xl font-semibold text-text-primary mb-2">Información de la Cita</h2>
-                        <p class="text-text-secondary">Consulta de Cardiología</p>
+                        <p class="text-text-secondary">Consulta de @Model.Specialty.NameSpecialty </p>
                     </div>
                     <div class="text-right">
                         <p class="text-sm text-text-secondary">ID de Cita</p>
-                        <p class="font-mono text-sm text-text-primary">#APT-2025-001</p>
+                        <p class="font-mono text-sm text-text-primary">#APT-2025-00-@Model.IdAppointment</p>
                     </div>
                 </div>
 
@@ -85,7 +121,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-text-secondary">Fecha</p>
-                            <p class="text-lg font-semibold text-text-primary">15/10/2025</p>
+                            <p class="text-lg font-semibold text-text-primary">@Model.DateAppointment.ToString("dd/MM/yyyy")</p>
                         </div>
                     </div>
                     <div class="flex items-center">
@@ -96,7 +132,10 @@
                         </div>
                         <div>
                             <p class="text-sm text-text-secondary">Hora</p>
-                            <p class="text-lg font-semibold text-text-primary">10:30 AM</p>
+                            <p class="text-lg font-semibold text-text-primary">
+                                @Model.DateAppointment.ToString("hh:mm")
+                                @(Model.DateAppointment.Hour < 12 ? "A.M." : "P.M.")
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -111,8 +150,8 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-sm text-text-secondary">Ubicación</p>
-                        <p class="text-lg font-semibold text-text-primary">Hospital Central Madrid</p>
-                        <p class="text-sm text-text-secondary mt-1">Calle de la Salud, 123, 28001 Madrid</p>
+                        <p class="text-lg font-semibold text-text-primary">Consultorio N°@Model.consultory.numberConsultories en el piso número @Model.consultory.floorNumber</p>
+                        <p class="text-sm text-text-secondary mt-1">Ciudad de México, CDMX, México</p>
                         <button class="text-primary text-sm font-medium mt-2 hover:text-primary-700 transition-smooth">
                             Ver en mapa →
                         </button>
@@ -141,31 +180,27 @@
                 <h2 class="text-xl font-semibold text-text-primary mb-6">Información del Doctor</h2>
 
                 <div class="flex items-start space-x-4">
-                    <!-- Doctor Photo -->
+                    <!-- Doctor Icon to Implement in future -->
                     <div class="flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2940&auto=format&fit=crop"
-                             alt="Dr. Carlos Mendoza"
-                             class="w-20 h-20 rounded-xl object-cover">
+
                     </div>
 
                     <!-- Doctor Details -->
                     <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-text-primary">Dr. Carlos Mendoza</h3>
-                        <p class="text-text-secondary mb-2">Especialista en Cardiología</p>
+                        <h3 class="text-lg font-semibold text-text-primary">Dr. @Model.Doctor.FirstName</h3>
+                        <p class="text-text-secondary mb-2">Especialista en @Model.Specialty.NameSpecialty</p>
 
                         <!-- Credentials -->
                         <div class="space-y-2 mb-4">
                             <div class="flex items-center text-sm text-text-secondary">
-                                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-                                </svg>
-                                Colegiado Nº 28/45123
+                                <span class="text-lg mr-2 mb-4">🎓</span>
+                                    <div id="doctor-info-colegiado" class="space-y-2 mb-4">
+                                    </div>
                             </div>
                             <div class="flex items-center text-sm text-text-secondary">
-                                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                </svg>
-                                15 años de experiencia
+                                <span class="text-lg mr-2 mb-4">💼</span>
+                                <div id="doctor-info-logros" class="space-y-2 mb-4">
+                                </div>
                             </div>
                         </div>
 
@@ -185,16 +220,6 @@
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Medical Notes Card -->
-            <div class="card">
-                <h2 class="text-xl font-semibold text-text-primary mb-4">Notas Médicas</h2>
-                <div class="bg-secondary-50 rounded-lg p-4">
-                    <p class="text-sm text-text-secondary">
-                        Consulta de seguimiento para evaluación cardiovascular. Se recomienda traer los resultados de los análisis de sangre realizados la semana pasada y el electrocardiograma previo.
-                    </p>
                 </div>
             </div>
         </div>
@@ -240,13 +265,13 @@
                     <!-- Duration -->
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-text-secondary">Duración estimada</span>
-                        <span class="text-sm font-medium text-text-primary">45 minutos</span>
+                        <span class="text-sm font-medium text-text-primary">20-30 minutos</span>
                     </div>
 
                     <!-- Cost -->
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-text-secondary">Coste</span>
-                        <span class="text-sm font-medium text-text-primary">€85,00</span>
+                        <span class="text-sm font-medium text-text-primary">MXN 20,00</span>
                     </div>
 
                     <!-- Insurance -->
@@ -263,21 +288,28 @@
                 </div>
             </div>
 
-            <!-- Emergency Contact Card -->
-            <div class="card bg-error-50 border-error-200">
-                <h3 class="text-lg font-semibold text-error mb-2 flex items-center">
+            <!-- Emergency Contact Card Mejorado -->
+            <div class="card bg-error-50 border-error-200 p-6">
+                <h3 class="text-lg font-semibold text-error mb-3 flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                     </svg>
                     Contacto de Emergencia
                 </h3>
-                <p class="text-sm text-error mb-3">Si necesitas cancelar con menos de 24h de antelación</p>
-                <button class="text-error font-medium text-sm hover:text-red-700 transition-smooth">
-                    📞 +34 911 234 567
+                <p class="text-sm text-error mb-4 leading-relaxed">Si necesitas cancelar con menos de 24h de antelación</p>
+                <button class="text-error font-medium text-sm hover:text-red-700 transition-smooth py-2 px-4 bg-white rounded-lg border border-error-200 hover:bg-error-100">
+                    📞 +52 55 2789 2000
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- DEBUG TEMPORAL - Agrega esto en tu vista -->
+    <div class="fixed bottom-4 left-4 bg-yellow-100 p-4 rounded-lg z-50">
+        <p class="text-sm font-mono">ID de cita: @Model.IdAppointment</p>
+        <p class="text-sm font-mono">Estado: @Model.State</p>
+    </div>
+    @Html.AntiForgeryToken()
 </main>
 
 <!-- Confirmation Modals -->
@@ -303,9 +335,118 @@
     </div>
 </div>
 
+
+
 @section Scripts {
     <script>
-        // Modal functions
+        // Mover showToast al inicio
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+
+            // Configuración por tipo
+            let config = {
+                bgColor: 'bg-blue-500',
+                textColor: 'text-white',
+                icon: 'ℹ️',
+                borderColor: 'border-blue-600'
+            };
+
+            switch (type) {
+                case 'success':
+                    config = {
+                        bgColor: 'bg-green-500',
+                        textColor: 'text-white',
+                        icon: '✅',
+                        borderColor: 'border-green-600'
+                    };
+                    break;
+                case 'error':
+                    config = {
+                        bgColor: 'bg-red-500',
+                        textColor: 'text-white',
+                        icon: '❌',
+                        borderColor: 'border-red-600'
+                    };
+                    break;
+                case 'info':
+                    config = {
+                        bgColor: 'bg-blue-500',
+                        textColor: 'text-white',
+                        icon: 'ℹ️',
+                        borderColor: 'border-blue-600'
+                    };
+                    break;
+            }
+
+            toast.className = `fixed top-6 right-6 z-50 p-4 rounded-xl shadow-2xl border-l-4 ${config.bgColor} ${config.textColor} ${config.borderColor} transform transition-all duration-300 translate-x-full`;
+
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl">${config.icon}</span>
+                    <div class="flex-1">
+                        <p class="font-semibold">${type === 'success' ? '¡Éxito!' : type === 'error' ? 'Error' : 'Información'}</p>
+                        <p class="text-sm opacity-90">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-lg hover:opacity-70 transition-opacity">
+                        ×
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Animación de entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+                toast.classList.add('translate-x-0');
+            }, 10);
+
+            // Auto-remover después de 4 segundos
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.classList.add('translate-x-full');
+                    toast.classList.remove('translate-x-0');
+                    setTimeout(() => {
+                        if (toast.parentElement) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }
+            }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const colegiados = [
+                "Colegiado Nº " + (Math.floor(Math.random() * 90000) + 10000),
+                "Registro profesional " + (Math.floor(Math.random() * 20000) + 5000),
+                "Licencia médica " + (Math.floor(Math.random() * 4000) + 1000),
+                "Matrícula " + (Math.floor(Math.random() * 80000) + 20000),
+                "Certificado Nº " + (Math.floor(Math.random() * 50000) + 10000)
+            ];
+
+            const logros = [
+                "Más de " + (Math.floor(Math.random() * 4000) + 1000) + " procedimientos exitosos",
+                "Publicaciones en " + (Math.floor(Math.random() * 12) + 3) + " revistas médicas",
+                "Miembro de " + (Math.floor(Math.random() * 4) + 2) + " sociedades médicas",
+                "Ponente en " + (Math.floor(Math.random() * 15) + 5) + " congresos internacionales",
+                (Math.floor(Math.random() * 95) + 95) + "% de satisfacción en pacientes",
+                "Líder en " + (Math.floor(Math.random() * 8) + 1) + " investigaciones clínicas",
+                "Reconocido por " + (Math.floor(Math.random() * 10) + 5) + " años de excelencia"
+            ];
+
+            // Colegiado
+            const doctorInfoColegiado = document.getElementById('doctor-info-colegiado');
+            if (doctorInfoColegiado) {
+                doctorInfoColegiado.textContent = colegiados[Math.floor(Math.random() * colegiados.length)];
+            }
+
+            // Logros
+            const doctorInfoLogros = document.getElementById('doctor-info-logros');
+            if (doctorInfoLogros) {
+                doctorInfoLogros.textContent = logros[Math.floor(Math.random() * logros.length)];
+            }
+        });
+
         function rescheduleAppointment() {
             document.getElementById('reschedule-modal').classList.remove('hidden');
         }
@@ -320,31 +461,52 @@
 
         function confirmReschedule() {
             closeModal('reschedule-modal');
-            // Redirigir a la página de reserva
             window.location.href = '@Url.Action("Booking", "Patient")';
         }
 
-        function confirmCancel() {
+        async function confirmCancel() {
             closeModal('cancel-modal');
-            // Aquí iría la lógica para cancelar la cita via API
-            showToast('Cita cancelada correctamente', 'success');
-            setTimeout(() => {
-                window.location.href = '@Url.Action("Record", "Patient")';
-            }, 2000);
+
+            try {
+                showToast('Cancelando cita...', 'info');
+
+                console.log('ID de cita a cancelar:', @Model.IdAppointment);
+
+                const formData = new FormData();
+                formData.append('id', @Model.IdAppointment);
+
+                const response = await fetch('@Url.Action("CancelAppointment", "Patient")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+
+                console.log('Response status:', response.status);
+
+                const result = await response.json();
+                console.log('Resultado:', result);
+
+                if (result.success) {
+                    showToast(result.message, 'success');
+                    setTimeout(() => {
+                        if (result.redirectUrl) {
+                            window.location.href = result.redirectUrl;
+                        } else {
+                            window.location.href = '@Url.Action("Record", "Patient")';
+                        }
+                    }, 2000);
+                } else {
+                    showToast(result.message, 'error');
+                }
+
+            } catch (error) {
+                console.error('Error cancelando cita:', error);
+                showToast('Error al cancelar la cita: ' + error.message, 'error');
+            }
         }
 
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast fixed top-4 right-4 z-50 p-4 rounded-lg ${type === 'success' ? 'bg-success text-white' : 'bg-primary text-white'}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // Cerrar modal al hacer click fuera
         document.addEventListener('click', function(event) {
             const rescheduleModal = document.getElementById('reschedule-modal');
             const cancelModal = document.getElementById('cancel-modal');
