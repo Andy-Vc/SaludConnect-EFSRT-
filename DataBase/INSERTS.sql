@@ -528,6 +528,55 @@ INSERT INTO TB_ADDITIONAL_SERVICES (ID_RECORD, ID_SERVICE, PRICE_AT_TIME, STATE)
 (1, 19, 80.00, 'P');
 GO
 
+INSERT INTO TB_MEDICAL_RECORDS (ID_APPOINTMENT, OBSERVATIONS, DIAGNOSIS, TREATMENT, FOLLOW_UP_DATE) VALUES
+(1, 
+ 'Paciente refiere dolor torácico esporádico. TA: 135/85. Sin soplos.', 
+ 'Posible Angina Estable.', 
+ 'Indicar reposo y Aspirina 100mg/día. Se requieren exámenes adicionales.', 
+ '03/11/2025' 
+),
+(2,
+ 'Paciente presenta congestión nasal, fiebre leve y tos seca. No hay dificultad respiratoria.',
+ 'Infección respiratoria viral leve.',
+ 'Reposo, hidratación abundante, Paracetamol 500mg cada 8h por 3 días.',
+ '24/10/2025'),
+
+-- Cita #3 (ID_PATIENT = 2, Especialidad 2)
+(3,
+ 'Paciente refiere dolor de garganta persistente por más de 5 días. Amígdalas inflamadas con puntos blancos.',
+ 'Amigdalitis bacteriana.',
+ 'Amoxicilina 500mg cada 8h por 7 días, reposo y evitar alimentos fríos.',
+ '31/10/2025'),
+
+-- Cita #4 (ID_PATIENT = 5, Especialidad 8)
+(4,
+ 'Paciente acude por dolor lumbar después de cargar peso. No hay irradiación ni déficit neurológico.',
+ 'Lumbalgia mecánica.',
+ 'Analgésico (Ibuprofeno 400mg cada 8h), ejercicios de estiramiento y reposo relativo.',
+ '02/11/2025'),
+
+-- Cita #5 (ID_PATIENT = 2, Especialidad 1)
+(5,
+ 'Paciente continúa con síntomas leves de fatiga. Exámenes previos sin alteraciones significativas.',
+ 'Síndrome de fatiga leve post-viral.',
+ 'Recomendación de descanso activo, dieta equilibrada y control en una semana.',
+ '29/10/2025'),
+
+-- Cita #6 (ID_PATIENT = 2, Especialidad 2)
+(6,
+ 'Control pediátrico de rutina. Peso y talla dentro del rango normal. Vacunas al día.',
+ 'Paciente sano. Evaluación normal.',
+ 'Mantener controles periódicos cada 6 meses y buena alimentación.',
+ NULL),
+
+-- Cita #7 (ID_PATIENT = 2, Especialidad 8)
+(7,
+ 'Paciente refiere molestias cervicales leves tras largas horas frente al computador.',
+ 'Contractura cervical.',
+ 'Ejercicios de estiramiento diarios, postura ergonómica y Diclofenaco tópico cada 12h.',
+ '28/10/2025');
+
+
 
 SET DATEFORMAT YMD;
 
