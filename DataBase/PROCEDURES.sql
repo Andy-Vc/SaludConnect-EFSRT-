@@ -573,7 +573,11 @@ BEGIN
 END
 GO
 
-create or alter proc sp_patient_information
+IF OBJECT_ID('sp_patient_information', 'P') IS NOT NULL
+    DROP PROCEDURE sp_patient_information;
+GO
+
+create proc sp_patient_information
 @idUser int
 as
 begin
@@ -589,14 +593,11 @@ begin
 end
 go
 
-select * from TB_EMERGENCY_CONTACT
-exec  sp_patient_information 6
+IF OBJECT_ID('sp_historial_appointments', 'P') IS NOT NULL
+    DROP PROCEDURE sp_historial_appointments;
+GO
 
-select * from TB_RELATIONSHIP
-go
-
-
-CREATE OR ALTER PROC sp_historial_appointments
+CREATE PROC sp_historial_appointments
 @idPatient int 
 
 as 
@@ -1258,10 +1259,6 @@ IF OBJECT_ID('SP_LIST_DOCTORS_BY_SPECIALTIES', 'P') IS NOT NULL
     DROP PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES;
 GO
 
-IF OBJECT_ID('SP_LIST_DOCTORS_BY_SPECIALTIES', 'P') IS NOT NULL
-    DROP PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES;
-GO
-
 CREATE PROCEDURE SP_LIST_DOCTORS_BY_SPECIALTIES
     @IdSpecialty INT
 AS
@@ -1315,7 +1312,7 @@ BEGIN
                 SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
                 WHERE DSS.ID_DOCTOR = U.ID_USER
                   AND CAST(DSS.FECHA_INICIO AS DATE) = @Tomorrow
-            ) THEN 'Ma�ana'
+            ) THEN 'Mañana'
             WHEN EXISTS (
                 SELECT 1 FROM TB_DOCTOR_SCHEDULES DSS
                 WHERE DSS.ID_DOCTOR = U.ID_USER
@@ -1323,7 +1320,7 @@ BEGIN
                   AND DSS.FECHA_INICIO < @EndOfWeek
             ) THEN 'Esta Semana'
             ELSE 'Sin Disponibilidad'
-        END AS AvailabilityLabel
+        END AS AvailableLabel
     FROM TB_USERS U
     INNER JOIN TB_DOCTOR_SPECIALTIES DS ON U.ID_USER = DS.ID_DOCTOR
     INNER JOIN TB_SPECIALTIES S ON DS.ID_SPECIALTY = S.ID_SPECIALTY

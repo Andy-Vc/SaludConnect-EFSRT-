@@ -1,0 +1,214 @@
+﻿@model Web.Models.ViewModels.PatientWM.BookingConfirmViewModel
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Appointment Summary Card -->
+    <div class="lg:col-span-2">
+        <div class="card">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-text-primary">Resumen de la Cita</h2>
+                <span class="text-sm text-text-secondary bg-secondary-100 px-3 py-1 rounded-full">
+                    Ref: #MC-@DateTime.Now.Year-@(Model.IdDoctor.ToString().PadLeft(4, '0'))@(Model.IdSpecialty.ToString().PadLeft(2, '0'))
+                </span>
+            </div>
+
+            <!-- Doctor Information -->
+            <div class="border border-secondary-200 rounded-lg p-6 mb-6">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        @if (!string.IsNullOrEmpty(Model.DoctorInfo?.imgProfile))
+                        {
+                            <img src="@Model.DoctorInfo.imgProfile"
+                                 alt="@Model.DoctorInfo?.fullNameDoc"
+                                 class="w-16 h-16 rounded-lg object-cover"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iOCIgZmlsbD0iI0ZGRjVGOSIvPgo8cGF0aCBkPSJNMzIgMzRDMzcuNTIyOCAzNCA0MiAyOS41MjI4IDQyIDI0QzQyIDE4LjQ3NzIgMzcuNTIyOCAxNCAzMiAxNEMyNi40NzcyIDE0IDIyIDE4LjQ3NzIgMjIgMjRDMjIgMjkuNTIyOCAyNi40NzcyIDM0IDMyIDM0WiIgZmlsbD0iIzlDQThBNiIvPgo8cGF0aCBkPSJNNDggNjRIMTZDMTQuMzUgNjQgMTMgNjIuNjUgMTMgNjFWMzEuNUMxMyAyOS44NSAxNC4zNSAyOC41IDE2IDI4LjVINDhDNDkuNjUgMjguNSA1MSAyOS44NSA1MSAzMS41VjYxQzUxIDYyLjY1IDQ5LjY1IDY0IDQ4IDY0WiIgZmlsbD0iIzlDQThBNiIvPgo8L3N2Zz4K'; this.onerror=null;">
+                        }
+                        else
+                        {
+                            <div class="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        }
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-text-primary">@Model.DoctorInfo?.fullNameDoc</h3>
+                        <p class="text-text-secondary mb-2">@Model.DoctorInfo?.speciality?.NameSpecialty</p>
+                        <div class="flex items-center space-x-4 text-sm text-text-secondary">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                                @(Model.DoctorInfo?.phone ?? "No disponible")
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                @(Model.DoctorInfo?.email ?? "No disponible")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <span class="text-sm font-medium text-text-secondary">4.9</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Date & Time -->
+                    <div class="bg-primary-50 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <svg class="w-5 h-5 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <h4 class="font-medium text-text-primary">Fecha y Hora</h4>
+                        </div>
+                        <p class="text-text-primary font-semibold">@Model.DateAppointment.ToString("dd/MM/yyyy")</p>
+                        <p class="text-text-secondary">@Model.DateAppointment.ToString("HH:mm")</p>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="bg-accent-50 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <svg class="w-5 h-5 text-accent mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h4 class="font-medium text-text-primary">Duración</h4>
+                        </div>
+                        <p class="text-text-primary font-semibold">20 minutos</p>
+                        <p class="text-text-secondary">Consulta estándar</p>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="bg-secondary-50 rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <svg class="w-5 h-5 text-secondary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <h4 class="font-medium text-text-primary">Ubicación</h4>
+                    </div>
+                    <p class="text-text-primary font-semibold">Centro Médico SaludConnect</p>
+                    <p class="text-text-secondary">Ciudad de México, CDMX, México</p>
+                    <p class="text-text-secondary">El número de piso y consulta en detalles.</p>
+                </div>
+
+                <!-- Preparation Instructions -->
+                <div class="bg-warning-50 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-warning mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="font-medium text-text-primary mb-2">Instrucciones de Preparación</h4>
+                            <ul class="text-text-secondary text-sm space-y-1">
+                                <li>• Traer historial médico reciente y medicamentos actuales</li>
+                                <li>• Llegar 15 minutos antes de la cita</li>
+                                <li>• Traer documento de identidad y tarjeta sanitaria</li>
+                                <li>• Evitar cafeína 2 horas antes de la consulta</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Edit Links -->
+            <div class="mt-6 pt-6 border-t border-secondary-200">
+                <h4 class="text-sm font-medium text-text-primary mb-3">¿Necesitas hacer cambios?</h4>
+                <div class="flex flex-wrap gap-3">
+                    <a asp-controller="Patient" asp-action="Booking" class="text-sm text-primary hover:text-primary-700 transition-smooth flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                        </svg>
+                        Cambiar especialidad
+                    </a>
+                    <a asp-controller="Patient" asp-action="BookingDoctor" asp-route-idSpecialty="@Model.IdSpecialty" class="text-sm text-primary hover:text-primary-700 transition-smooth flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                        </svg>
+                        Cambiar doctor
+                    </a>
+                    <a asp-controller="Patient" asp-action="BookingDate" asp-route-idDoctor="@Model.IdDoctor" asp-route-idSpecialty="@Model.IdSpecialty" class="text-sm text-primary hover:text-primary-700 transition-smooth flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                        </svg>
+                        Cambiar fecha/hora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Sidebar -->
+    <div class="lg:col-span-1">
+        <div class="card sticky top-8">
+            <h3 class="text-lg font-semibold text-text-primary mb-6">Confirmar Reserva</h3>
+
+            <!-- Terms and Conditions -->
+            <div class="mb-6">
+                <div class="bg-secondary-50 rounded-lg p-4 mb-4">
+                    <h4 class="font-medium text-text-primary mb-2">Políticas Importantes</h4>
+                    <ul class="text-sm text-text-secondary space-y-1">
+                        <li>• Cancelación gratuita hasta 24h antes</li>
+                        <li>• Reagendamiento sin costo adicional</li>
+                        <li>• Política de privacidad RGPD</li>
+                        <li>• Notificaciones automáticas activadas</li>
+                    </ul>
+                </div>
+
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" id="terms-checkbox" class="mt-1 w-4 h-4 text-primary border-secondary-300 rounded focus:ring-primary focus:ring-2">
+                    <span class="text-sm text-text-secondary">
+                        Acepto los
+                        <a href="javascript:void(0)" class="text-primary hover:text-primary-700 transition-smooth">términos y condiciones</a>,
+                        <a href="javascript:void(0)" class="text-primary hover:text-primary-700 transition-smooth">política de privacidad</a>
+                        y las políticas de cancelación de MediCitas.
+                    </span>
+                </label>
+            </div>
+
+            <!-- Notification Preferences -->
+            <div class="mb-6">
+                <h4 class="font-medium text-text-primary mb-3">Recordatorios</h4>
+                <div class="space-y-3">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 text-primary border-secondary-300 rounded focus:ring-primary focus:ring-2">
+                        <span class="text-sm text-text-secondary">Notificación 1 hora antes</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 text-primary border-secondary-300 rounded focus:ring-primary focus:ring-2">
+                        <span class="text-sm text-text-secondary">Recordatorio 24 horas antes</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 text-primary border-secondary-300 rounded focus:ring-primary focus:ring-2">
+                        <span class="text-sm text-text-secondary">SMS de confirmación</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Confirmation Button -->
+            <button id="confirm-appointment-btn" class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed mb-4" disabled onclick="confirmAppointment()">
+                Confirmar Cita Médica
+            </button>
+
+            <!-- Security Notice -->
+            <div class="text-center">
+                <div class="flex items-center justify-center text-xs text-text-secondary">
+                    <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    Conexión segura SSL
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()

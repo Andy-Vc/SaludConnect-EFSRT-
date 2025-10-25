@@ -1,0 +1,416 @@
+﻿@model Web.Models.ViewModels.PatientWM.BookingConfirmViewModel
+
+@{
+    ViewData["Title"] = "Confirmar Cita";
+    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+}
+
+<style>
+    /* MODAL DE CONFIRMACIÓN - CLASES ÚNICAS */
+    .booking-success-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+    }
+
+        .booking-success-modal.hidden {
+            display: none;
+        }
+
+    .booking-success-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 2.5rem;
+        max-width: 32rem;
+        margin: 0 1.5rem;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border: 2px solid #e5e7eb;
+    }
+
+    .booking-success-icon {
+        width: 5rem;
+        height: 5rem;
+        background-color: #f0fdf4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        border: 4px solid #dcfce7;
+    }
+
+        .booking-success-icon svg {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #16a34a;
+        }
+
+    .booking-success-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.75rem;
+    }
+
+    .booking-success-message {
+        color: #6b7280;
+        font-size: 1.125rem;
+        line-height: 1.75;
+        margin-bottom: 2rem;
+    }
+
+    .booking-success-reference {
+        background-color: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .booking-success-reference-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+    }
+
+    .booking-success-reference-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+    .booking-success-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .booking-success-btn {
+        flex: 1;
+        background-color: #3b82f6;
+        color: white;
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        transform: scale(1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+        .booking-success-btn:hover {
+            transform: scale(1.05);
+        }
+
+    .booking-success-btn-primary {
+        background-color: #3b82f6;
+    }
+
+        .booking-success-btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+    .booking-success-btn-secondary {
+        background-color: #6b7280;
+    }
+
+        .booking-success-btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+    .booking-success-info {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .booking-success-info-text {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    /* Responsive */
+    @@media (max-width: 640px) {
+        .booking-success-content {
+            padding: 2rem 1.5rem;
+            margin: 0 1rem;
+        }
+
+        .booking-success-buttons {
+            flex-direction: column;
+        }
+
+        .booking-success-icon {
+            width: 4rem;
+            height: 4rem;
+        }
+
+            .booking-success-icon svg {
+                width: 2rem;
+                height: 2rem;
+            }
+
+        .booking-success-title {
+            font-size: 1.25rem;
+        }
+
+        .booking-success-message {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb Navigation -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-4">
+            <li>
+                <div>
+                    <a asp-controller="Patient" asp-action="Index" class="text-text-secondary hover:text-primary transition-smooth">
+                        <svg class="flex-shrink-0 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        <span class="sr-only">Inicio</span>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="flex-shrink-0 h-5 w-5 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-4 text-sm font-medium text-primary">Confirmar Cita</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Progress Indicator -->
+    <div class="mb-8">
+        <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-4">
+                <!-- Step 1: Specialty Selection (Completed) -->
+                <div class="flex items-center">
+                    <div class="progress-step completed">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-success">Especialidad</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-success"></div>
+
+                <!-- Step 2: Doctor Selection (Completed) -->
+                <div class="flex items-center">
+                    <div class="progress-step completed">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-success">Doctor</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-success"></div>
+
+                <!-- Step 3: Calendar (Completed) -->
+                <div class="flex items-center">
+                    <div class="progress-step completed">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-success">Fecha</span>
+                </div>
+
+                <!-- Connector -->
+                <div class="w-16 h-0.5 bg-primary"></div>
+
+                <!-- Step 4: Confirmation (Active) -->
+                <div class="flex items-center">
+                    <div class="progress-step active">
+                        <span class="text-sm font-medium">4</span>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary">Confirmar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-semibold text-text-primary mb-2">Confirmar Cita Médica</h1>
+        <p class="text-text-secondary max-w-2xl mx-auto">Revisa los detalles de tu cita y confirma la reserva. Recibirás una notificación de confirmación y recordatorios automáticos.</p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="max-w-4xl mx-auto">
+        <!-- Render the partial view with the model -->
+        @await Html.PartialAsync("_BookingSummaryPartial", Model)
+    </div>
+</main>
+
+<div id="success-modal" class="booking-success-modal hidden">
+    <div class="booking-success-content">
+        <!-- Icono de éxito -->
+        <div class="booking-success-icon">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+
+        <!-- Título y mensaje -->
+        <h3 class="booking-success-title">¡Cita Confirmada!</h3>
+        <p class="booking-success-message">
+            Tu cita ha sido reservada exitosamente. Recibirás una confirmación por email y recordatorios automáticos.
+        </p>
+
+        <!-- Número de referencia -->
+        <div class="booking-success-reference">
+            <p class="booking-success-reference-label">Número de Referencia</p>
+            <p class="booking-success-reference-number" id="appointment-reference">#MC-2025-001234</p>
+        </div>
+
+        <!-- Botones -->
+        <div class="booking-success-buttons">
+            <button onclick="goToDashboard()" class="booking-success-btn booking-success-btn-primary">
+                Ir al Dashboard
+            </button>
+            <button onclick="closeSuccessModal()" class="booking-success-btn booking-success-btn-secondary">
+                Cerrar
+            </button>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="booking-success-info">
+            <p class="booking-success-info-text">
+                📧 Se envió confirmación a tu correo<br>
+                ⏰ Recibirás recordatorio 24h antes
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span class="text-text-primary">Confirmando cita</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Terms checkbox handler
+        const termsCheckbox = document.getElementById('terms-checkbox');
+        const confirmButton = document.getElementById('confirm-appointment-btn');
+
+        if (termsCheckbox && confirmButton) {
+            termsCheckbox.addEventListener('change', function() {
+                confirmButton.disabled = !this.checked;
+            });
+        }
+        async function confirmAppointment() {
+            showLoading();
+
+            const confirmButton = document.getElementById('confirm-appointment-btn');
+            if (confirmButton) {
+                confirmButton.innerHTML = `Confirmado`;
+                confirmButton.disabled = true;
+            }
+
+            try {
+                const appointmentData = {
+                    idPatient: @Model.IdPatient,
+                    idDoctor: @Model.IdDoctor,
+                    idSpecialty: @Model.IdSpecialty,
+                    dateAppointment: '@Model.DateAppointment.ToString("yyyy-MM-ddTHH:mm:ss.fff")'
+                };
+
+                console.log('1. Sending to Web MVC:', appointmentData);
+
+                const createResponse = await fetch('@Url.Action("ConfirmBookingAjax", "Patient")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(appointmentData)
+                });
+
+                const createText = await createResponse.text();
+                const createResult = JSON.parse(createText);
+
+                if (createResult.success) {
+                    document.getElementById('appointment-reference').textContent = `#CM000-${createResult.appointmentId}`;
+                    document.getElementById('success-modal').classList.remove('hidden');
+
+                    // Reset button
+                    if (confirmButton) {
+                        confirmButton.disabled = true;
+                    }
+                } else {
+                    throw new Error(createResult.message);
+                }
+
+            } catch (error) {
+                console.error('6. ERROR:', error);
+                alert('Error al confirmar la cita: ' + error.message);
+
+                // Reset button on error
+                if (confirmButton) {
+                    confirmButton.disabled = !document.getElementById('terms-checkbox')?.checked;
+                }
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Modal functions
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function goToDashboard() {
+            window.location.href = '@Url.Action("Index", "Patient")';
+        }
+
+        function showLoading() {
+            document.getElementById('loading-spinner').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-spinner').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('success-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuccessModal();
+            }
+        });
+
+        // Load appointment data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Appointment data loaded:', {
+                idPatient: @Model.IdPatient,
+                idDoctor: @Model.IdDoctor,
+                idSpecialty: @Model.IdSpecialty,
+                dateAppointment: '@Model.DateAppointment.ToString("yyyy-MM-dd HH:mm")'
+            });
+        });
+    </script>
+}

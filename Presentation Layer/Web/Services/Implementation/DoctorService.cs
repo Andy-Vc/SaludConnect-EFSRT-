@@ -1,9 +1,10 @@
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+
 using System.Net;
 using System.Text;
 using Web.Models.DTO;
 using Web.Services.Interface;
+using System.Text.Json;
+using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Services.Implementation
 {
@@ -104,7 +105,46 @@ namespace Web.Services.Implementation
                 return false;
             }
         }
+        public async Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality)
+        {
+            var url = $"Doctor/list-doctors-experience/{idSpeciality}";
 
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<DoctorCard>();
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var doctors = System.Text.Json.JsonSerializer.Deserialize<List<DoctorCard>>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return doctors ?? new List<DoctorCard>();
+        }
+
+        public async Task<DoctorCard> GetDoctorInfo(int idDoctor)
+        {
+            var url = $"Doctor/doctor-info/{idDoctor}";
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new DoctorCard();
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var doctor = System.Text.Json.JsonSerializer.Deserialize<DoctorCard>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return doctor ?? new DoctorCard();
+        }
         public async Task<bool> AddDoctorSpecialty(int idDoctor, DoctorSpecialtyDTO doctorSpecialty)
         {
             try

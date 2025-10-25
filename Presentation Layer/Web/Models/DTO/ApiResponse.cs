@@ -1,9 +1,14 @@
-﻿namespace Web.Models.DTO
+﻿using System.Text.Json.Serialization;
+
+namespace Web.Models.DTO
 {
     public class ApiResponse<T>
     {
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
+
+        [JsonPropertyName("data")]
         public T Data { get; set; }
-        public string Message { get; set; }
+
     }
 }
