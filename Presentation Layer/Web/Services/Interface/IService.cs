@@ -1,4 +1,6 @@
-﻿using Web.Models;
+﻿
+using Web.Models;
+using Web.Models.DTO;
 
 namespace Web.Services.Interface
 {
@@ -8,5 +10,13 @@ namespace Web.Services.Interface
         Task<int> minDurationService();
         Task<int> totalServices();
         Task<List<Service>> ListServicesBySpecialty(int idSpecialty);
+
+
+
+        Task<List<ServiceDTO>> ListService();
+        Task<ServiceDTO> GetServiceById(int id);
+        Task<int> CreateService(CreateServiceDTO service);
+        Task<bool> UpdateService(int id, UpdateServiceDTO service);
+        Task<bool> DeleteService(int id);
     }
 }

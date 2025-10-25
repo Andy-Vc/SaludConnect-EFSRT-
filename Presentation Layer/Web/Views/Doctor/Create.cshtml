@@ -1,0 +1,228 @@
+﻿@model Web.Models.DTO.CreateDoctorDTO
+
+@{
+    ViewData["Title"] = "Nuevo Doctor";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-gradient-primary text-white py-3 rounded-top-4">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-person-badge me-2"></i>Información del Doctor
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="createDoctorForm">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Por favor, corrija los siguientes errores:
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Nombre -->
+                        <div class="mb-4">
+                            <label asp-for="FirstName" class="form-label fw-semibold">
+                                <i class="bi bi-person-circle text-primary me-1"></i>Nombre
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="FirstName" class="form-control form-control-lg" placeholder="Ingrese el nombre" />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Apellido Paterno -->
+                        <div class="mb-4">
+                            <label asp-for="LastNamePat" class="form-label fw-semibold">
+                                <i class="bi bi-person-badge text-info me-1"></i>Apellido Paterno
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="LastNamePat" class="form-control form-control-lg" placeholder="Ingrese apellido paterno" />
+                            <span asp-validation-for="LastNamePat" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Apellido Materno -->
+                        <div class="mb-4">
+                            <label asp-for="LastNameMat" class="form-label fw-semibold">
+                                <i class="bi bi-person-badge-fill text-info me-1"></i>Apellido Materno
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="LastNameMat" class="form-control form-control-lg" placeholder="Ingrese apellido materno" />
+                            <span asp-validation-for="LastNameMat" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Documento -->
+                        <div class="mb-4">
+                            <label asp-for="Document" class="form-label fw-semibold">
+                                <i class="bi bi-card-text text-warning me-1"></i>Documento
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Document" class="form-control form-control-lg" placeholder="DNI, CE o Pasaporte" />
+                            <span asp-validation-for="Document" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Fecha de Nacimiento -->
+                        <div class="mb-4">
+                            <label asp-for="Birthdate" class="form-label fw-semibold">
+                                <i class="bi bi-calendar-event text-success me-1"></i>Fecha de Nacimiento
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Birthdate" class="form-control form-control-lg" type="date" />
+                            <span asp-validation-for="Birthdate" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="mb-4">
+                            <label asp-for="Phone" class="form-label fw-semibold">
+                                <i class="bi bi-telephone text-secondary me-1"></i>Teléfono
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Phone" class="form-control form-control-lg" placeholder="Ingrese número de teléfono" />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Género -->
+                        <div class="mb-4">
+                            <label asp-for="Gender" class="form-label fw-semibold">
+                                <i class="bi bi-gender-ambiguous text-danger me-1"></i>Género
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Gender" class="form-select form-select-lg">
+                                <option value="">-- Seleccione género --</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-semibold">
+                                <i class="bi bi-envelope text-primary me-1"></i>Email
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Email" class="form-control form-control-lg" placeholder="correo@ejemplo.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="mb-4">
+                            <label asp-for="PasswordHash" class="form-label fw-semibold">
+                                <i class="bi bi-lock text-dark me-1"></i>Contraseña
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="PasswordHash" class="form-control form-control-lg" type="password" />
+                            <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                        </div>
+
+                        <input type="hidden" asp-for="IdRole" value="3" />
+
+
+                        
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-lg btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>Crear Doctor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        // Confirmación antes de enviar
+        document.getElementById('createDoctorForm').addEventListener('submit', function(e) {
+            const firstName = document.querySelector('input[name="FirstName"]').value;
+            const lastName = document.querySelector('input[name="LastNamePat"]').value;
+
+            if (firstName && lastName) {
+                if (!confirm(`¿Confirma crear al doctor "${firstName} ${lastName}"?`)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Convertir nombres y apellidos a mayúsculas automáticamente
+        const nameFields = ['FirstName', 'LastNamePat', 'LastNameMat'];
+        nameFields.forEach(field => {
+            const input = document.querySelector(`input[name="${field}"]`);
+            input.addEventListener('input', e => e.target.value = e.target.value.toUpperCase());
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+        }
+
+        .rounded-4 {
+            border-radius: 1rem !important;
+        }
+
+        .rounded-top-4 {
+            border-top-left-radius: 1rem !important;
+            border-top-right-radius: 1rem !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .form-label {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group-text {
+            border: 1px solid #ced4da;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .form-control-lg,
+        .form-select-lg {
+            font-size: 1rem;
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+        }
+
+        .form-control,
+        .form-select {
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                transform: translateY(-2px);
+            }
+    </style>
+}
+

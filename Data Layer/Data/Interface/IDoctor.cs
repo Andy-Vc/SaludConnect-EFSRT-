@@ -12,5 +12,14 @@ namespace Data.Interface
         Task<List<DoctorCard>> ListDoctorsWithExperience(int idSpeciality);
         Task<DoctorCard> GetDoctorInfo(int idDoctor);
 
+
+
+        Task<List<DoctorFullDTO>> ListDoctors();
+        Task<DoctorDetailDTO> GetDoctorById(int idDoctor);
+        Task<int> CreateDoctor(CreateDoctorDTO doctor);
+        Task<bool> UpdateDoctor(UpdateDoctorDTO doctor);
+        Task<bool> DeleteDoctor(int idDoctor);
+        Task<bool> AddDoctorSpecialty(DoctorSpecialtyDTO doctorSpecialty);
+
     }
 }

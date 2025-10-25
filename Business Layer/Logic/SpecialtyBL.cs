@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
 using Models;
+using Models.DTO;
 
 namespace Logic
 {
@@ -15,6 +16,11 @@ namespace Logic
         public SpecialtyBL(ISpecialty service)
         {
             this.service = service;
+        }
+
+        public Task<List<SpecialtyDTO>> GetAllSpecialties()
+        {
+            return service.GetAllSpecialties();
         }
 
         public async Task<List<Specialty>> ListSpecialitiesWithDescription()

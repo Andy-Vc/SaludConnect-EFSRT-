@@ -5,16 +5,19 @@
 }
 
 
+
 <div class="container-fluid py-4">
     <h2 class="mb-1">Panel de Control</h2>
     <p class="text-muted mb-4">
-        Bienvenido, @Model.MensajeBienvenida Aquí puedes ver un resumen de tus métricas principales.
+        Bienvenido, Aquí puedes ver un resumen de tus métricas principales.
     </p>
 
     <h4 class="mb-3">Métricas Generales</h4>
     <p class="text-muted">Resumen del estado actual de tus citas y pacientes.</p>
 
+    <!-- Tarjetas de Métricas Principales -->
     <div class="row g-4 mb-5">
+        <!-- Total de Citas -->
         <div class="col-md-6 col-xl-3">
             <div class="card shadow-sm border-0 h-100 bg-primary-subtle text-primary">
                 <div class="card-body d-flex align-items-center justify-content-between">
@@ -27,32 +30,375 @@
             </div>
         </div>
 
+        <!-- Total de Pacientes -->
         <div class="col-md-6 col-xl-3">
             <div class="card shadow-sm border-0 h-100 bg-success-subtle text-success">
                 <div class="card-body d-flex align-items-center justify-content-between">
                     <div>
                         <h6 class="text-uppercase fw-bold mb-0">Total de Pacientes</h6>
-                        <h3 class="fw-bolder mt-2">@Model.TotalPacientes</h3>
+                        <h3 class="fw-bolder mt-2">@Model.TotalPatients</h3>
                     </div>
                     <i class="bi bi-people h2 text-success"></i>
                 </div>
             </div>
         </div>
-    </div>
 
-    <h4 class="mb-3">Información del Usuario</h4>
-    <div class="card shadow-sm border-0 p-4 bg-light">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-            <div>
-                <h5 class="fw-bold mb-1">@Model.FullName</h5>
-                <p class="mb-0 text-muted">Rol: @Model.Rol</p>
+        <!-- Total de Doctores -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100 bg-info-subtle text-info">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase fw-bold mb-0">Total de Doctores</h6>
+                        <h3 class="fw-bolder mt-2">@Model.TotalDoctors</h3>
+                    </div>
+                    <i class="bi bi-person-badge h2 text-info"></i>
+                </div>
             </div>
-            <div class="mt-3 mt-md-0">
-                <a asp-controller="UserAuth" asp-action="Logout" class="btn btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                </a>
+        </div>
+
+        <!-- Citas de Hoy -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100 bg-warning-subtle text-warning">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase fw-bold mb-0">Citas de Hoy</h6>
+                        <h3 class="fw-bolder mt-2">@Model.TodayAppointments</h3>
+                    </div>
+                    <i class="bi bi-calendar-event h2 text-warning"></i>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Sección de Gráficos -->
+    <h4 class="mb-3">Análisis Visual</h4>
+    <div class="row g-4 mb-5">
+        <!-- Gráfico de Citas por Estado (Dona) -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h6 class="mb-0 fw-bold">
+                        <i class="bi bi-pie-chart-fill text-primary me-2"></i>Distribución de Citas por Estado
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="appointmentsByStateChart" height="280"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Top Especialidades (Barras Horizontales) -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h6 class="mb-0 fw-bold">
+                        <i class="bi bi-bar-chart-fill text-info me-2"></i>Especialidades Más Solicitadas
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="topSpecialtiesChart" height="280"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="row g-4 mb-5">
+        
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="mb-0 fw-bold">
+                            <i class="bi bi-file-earmark-arrow-down me-2"></i>Descargar Reportes
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Reporte General -->
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-3">Reporte General de Métricas</h6>
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Report" asp-action="DownloadGeneralReportPDF"
+                                       class="btn btn-danger">
+                                        <i class="bi bi-file-pdf me-1"></i> Descargar PDF
+                                    </a>
+                                   
+                                </div>
+                            </div>
+
+                            <!-- Reporte Especialidades -->
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-3">Reporte de Especialidades</h6>
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Report" asp-action="DownloadSpecialtiesReportPDF"
+                                       class="btn btn-danger">
+                                        <i class="bi bi-file-pdf me-1"></i> Descargar PDF
+                                    </a>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Mini Gráfico de Resumen -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h6 class="mb-0 fw-bold">
+                        <i class="bi bi-activity text-danger me-2"></i>Resumen de Actividad
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-calendar-check text-primary h3 mb-2 d-block"></i>
+                                <h4 class="fw-bold mb-1">@Model.TotalAppointments</h4>
+                                <small class="text-muted">Total Citas</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-people text-success h3 mb-2 d-block"></i>
+                                <h4 class="fw-bold mb-1">@Model.TotalPatients</h4>
+                                <small class="text-muted">Pacientes</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-person-badge text-info h3 mb-2 d-block"></i>
+                                <h4 class="fw-bold mb-1">@Model.TotalDoctors</h4>
+                                <small class="text-muted">Doctores</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <canvas id="miniActivityChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
 
+<style>
+    .card {
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+
+    .bg-primary-subtle {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+
+    .bg-success-subtle {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+
+    .bg-info-subtle {
+        background-color: rgba(13, 202, 240, 0.1) !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+    }
+</style>
+
+@section Scripts {
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        // Configuración global de Chart.js
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.plugins.legend.display = true;
+        Chart.defaults.plugins.legend.position = 'bottom';
+
+        // ============================================
+        // Gráfico de Citas por Estado (Dona)
+        // ============================================
+        @if (Model.AppointmentsByState != null && Model.AppointmentsByState.Any())
+        {
+            <text>
+                const appointmentsCtx = document.getElementById('appointmentsByStateChart').getContext('2d');
+                const appointmentsByStateChart = new Chart(appointmentsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [@Html.Raw(string.Join(",", Model.AppointmentsByState.Select(x => $"'{x.StateName}'")))],
+                        datasets: [{
+                            label: 'Citas',
+                            data: [@Html.Raw(string.Join(",", Model.AppointmentsByState.Select(x => x.Total)))],
+                            backgroundColor: [
+                                'rgba(25, 135, 84, 0.8)',   // Verde - Atendida
+                                'rgba(255, 193, 7, 0.8)',   // Amarillo - Pendiente
+                                'rgba(220, 53, 69, 0.8)',   // Rojo - Cancelada
+                                'rgba(108, 117, 125, 0.8)'  // Gris - No Asistió
+                            ],
+                            borderColor: [
+                                'rgba(25, 135, 84, 1)',
+                                'rgba(255, 193, 7, 1)',
+                                'rgba(220, 53, 69, 1)',
+                                'rgba(108, 117, 125, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        let value = context.parsed || 0;
+                                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        let percentage = ((value / total) * 100).toFixed(1);
+                                        return label + ': ' + value + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            </text>
+        }
+
+        // ============================================
+        // Gráfico de Top Especialidades (Barras Horizontales)
+        // ============================================
+        @if (Model.TopSpecialties != null && Model.TopSpecialties.Any())
+        {
+            <text>
+                const specialtiesCtx = document.getElementById('topSpecialtiesChart').getContext('2d');
+                const topSpecialtiesChart = new Chart(specialtiesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [@Html.Raw(string.Join(",", Model.TopSpecialties.Select(x => $"'{x.NameSpecialty}'")))],
+                        datasets: [{
+                            label: 'Citas',
+                            data: [@Html.Raw(string.Join(",", Model.TopSpecialties.Select(x => x.TotalAppointments)))],
+                            backgroundColor: 'rgba(13, 202, 240, 0.8)',
+                            borderColor: 'rgba(13, 202, 240, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Citas: ' + context.parsed.x;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                grid: {
+                                    display: true,
+                                    drawBorder: false
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            </text>
+        }
+
+        // ============================================
+        // Mini Gráfico de Actividad (Línea)
+        // ============================================
+        @if (Model.AppointmentsByState != null && Model.AppointmentsByState.Any())
+        {
+            <text>
+                const miniActivityCtx = document.getElementById('miniActivityChart').getContext('2d');
+                const miniActivityChart = new Chart(miniActivityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: [@Html.Raw(string.Join(",", Model.AppointmentsByState.Select(x => $"'{x.StateName}'")))],
+                        datasets: [{
+                            label: 'Tendencia',
+                            data: [@Html.Raw(string.Join(",", Model.AppointmentsByState.Select(x => x.Total)))],
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(220, 53, 69, 1)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                display: true,
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            }
+                        }
+                    }
+                });
+            </text>
+        }
+    </script>
+}

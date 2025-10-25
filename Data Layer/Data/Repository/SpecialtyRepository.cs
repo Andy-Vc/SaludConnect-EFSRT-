@@ -8,6 +8,7 @@ using Data.Interface;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Models;
+using Models.DTO;
 
 namespace Data.Repository
 {
@@ -126,6 +127,39 @@ namespace Data.Repository
                 Console.WriteLine(ex.Message);
             }
             return count;
+        }
+
+        public async Task<List<SpecialtyDTO>> GetAllSpecialties()
+        {
+            var list = new List<SpecialtyDTO>();
+            try
+            {
+                using (var conexion = new SqlConnection(stringConexion))
+                {
+                    await conexion.OpenAsync();
+                    using (var cmd = new SqlCommand("SP_GET_ALL_SPECIALTIES", conexion))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                list.Add(new SpecialtyDTO
+                                {
+                                    IdSpecialty = Convert.ToInt32(reader["ID_SPECIALTY"]),
+                                    NameSpecialty = reader["NAME_SPECIALTY"].ToString(),
+                                    DescriptionSpeciality = reader["DESCRIPTION_SPECIALITY"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener especialidades: {ex.Message}");
+            }
+            return list;
         }
     }
 }
