@@ -227,6 +227,56 @@
         .btn-secondary:hover {
             background-color: #4b5563;
         }
+
+
+    .booking-legend {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .booking-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: white;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .booking-legend-indicator {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.25rem;
+        border: 2px solid;
+    }
+
+    .booking-legend-indicator--selected {
+        background-color: #3b82f6;
+        border-color: #2563eb;
+    }
+
+    .booking-legend-indicator--available {
+        background-color: #eff6ff;
+        border-color: #3b82f6;
+    }
+
+    .booking-legend-indicator--unavailable {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+    }
+
+    .booking-legend-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #374151;
+    }
 </style>
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -350,17 +400,19 @@
 
                     <!-- Leyenda -->
                     <div class="flex flex-wrap items-center justify-center gap-4 mt-6 pt-6 border-t border-secondary-200">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-4 h-4 bg-blue-600 rounded border-2 border-blue-600"></div>
-                            <span class="text-sm text-text-secondary">Seleccionado</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-4 h-4 bg-blue-100 border-2 border-blue-500 rounded"></div>
-                            <span class="text-sm text-text-secondary">Disponible</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-4 h-4 bg-gray-100 rounded border-2 border-gray-300"></div>
-                            <span class="text-sm text-text-secondary">No disponible</span>
+                        <div class="booking-legend">
+                            <div class="booking-legend-item">
+                                <div class="booking-legend-indicator booking-legend-indicator--selected"></div>
+                                <span class="booking-legend-text">Seleccionado</span>
+                            </div>
+                            <div class="booking-legend-item">
+                                <div class="booking-legend-indicator booking-legend-indicator--available"></div>
+                                <span class="booking-legend-text">Disponible</span>
+                            </div>
+                            <div class="booking-legend-item">
+                                <div class="booking-legend-indicator booking-legend-indicator--unavailable"></div>
+                                <span class="booking-legend-text">No disponible</span>
+                            </div>
                         </div>
                     </div>
                 </div>

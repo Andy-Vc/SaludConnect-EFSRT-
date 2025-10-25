@@ -81,7 +81,7 @@
                             </svg>
                             <h4 class="font-medium text-text-primary">Duración</h4>
                         </div>
-                        <p class="text-text-primary font-semibold">30 minutos</p>
+                        <p class="text-text-primary font-semibold">20 minutos</p>
                         <p class="text-text-secondary">Consulta estándar</p>
                     </div>
                 </div>
@@ -95,9 +95,9 @@
                         </svg>
                         <h4 class="font-medium text-text-primary">Ubicación</h4>
                     </div>
-                    <p class="text-text-primary font-semibold">Centro Médico MediCitas</p>
-                    <p class="text-text-secondary">Calle Gran Vía, 45, 28013 Madrid</p>
-                    <p class="text-text-secondary">Planta 3, Consulta 302</p>
+                    <p class="text-text-primary font-semibold">Centro Médico SaludConnect</p>
+                    <p class="text-text-secondary">Ciudad de México, CDMX, México</p>
+                    <p class="text-text-secondary">El número de piso y consulta en detalles.</p>
                 </div>
 
                 <!-- Preparation Instructions -->
@@ -123,7 +123,7 @@
             <div class="mt-6 pt-6 border-t border-secondary-200">
                 <h4 class="text-sm font-medium text-text-primary mb-3">¿Necesitas hacer cambios?</h4>
                 <div class="flex flex-wrap gap-3">
-                    <a asp-controller="Patient" asp-action="BookingSpecialty" class="text-sm text-primary hover:text-primary-700 transition-smooth flex items-center">
+                    <a asp-controller="Patient" asp-action="Booking" class="text-sm text-primary hover:text-primary-700 transition-smooth flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
                         </svg>
@@ -195,9 +195,6 @@
 
             <!-- Confirmation Button -->
             <button id="confirm-appointment-btn" class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed mb-4" disabled onclick="confirmAppointment()">
-                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
                 Confirmar Cita Médica
             </button>
 

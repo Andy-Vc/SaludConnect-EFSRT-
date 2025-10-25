@@ -11,5 +11,6 @@ namespace Web.Models.ViewModels.PatientWM
         public DoctorCard DoctorInfo { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+
     }
 }

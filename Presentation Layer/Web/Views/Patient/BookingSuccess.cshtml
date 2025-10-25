@@ -5,6 +5,171 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
+<style>
+    /* MODAL DE CONFIRMACIÓN - CLASES ÚNICAS */
+    .booking-success-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+    }
+
+        .booking-success-modal.hidden {
+            display: none;
+        }
+
+    .booking-success-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 2.5rem;
+        max-width: 32rem;
+        margin: 0 1.5rem;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border: 2px solid #e5e7eb;
+    }
+
+    .booking-success-icon {
+        width: 5rem;
+        height: 5rem;
+        background-color: #f0fdf4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        border: 4px solid #dcfce7;
+    }
+
+        .booking-success-icon svg {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #16a34a;
+        }
+
+    .booking-success-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.75rem;
+    }
+
+    .booking-success-message {
+        color: #6b7280;
+        font-size: 1.125rem;
+        line-height: 1.75;
+        margin-bottom: 2rem;
+    }
+
+    .booking-success-reference {
+        background-color: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .booking-success-reference-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+    }
+
+    .booking-success-reference-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+    .booking-success-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .booking-success-btn {
+        flex: 1;
+        background-color: #3b82f6;
+        color: white;
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        transform: scale(1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+        .booking-success-btn:hover {
+            transform: scale(1.05);
+        }
+
+    .booking-success-btn-primary {
+        background-color: #3b82f6;
+    }
+
+        .booking-success-btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+    .booking-success-btn-secondary {
+        background-color: #6b7280;
+    }
+
+        .booking-success-btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+    .booking-success-info {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .booking-success-info-text {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    /* Responsive */
+    @@media (max-width: 640px) {
+        .booking-success-content {
+            padding: 2rem 1.5rem;
+            margin: 0 1rem;
+        }
+
+        .booking-success-buttons {
+            flex-direction: column;
+        }
+
+        .booking-success-icon {
+            width: 4rem;
+            height: 4rem;
+        }
+
+            .booking-success-icon svg {
+                width: 2rem;
+                height: 2rem;
+            }
+
+        .booking-success-title {
+            font-size: 1.25rem;
+        }
+
+        .booking-success-message {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
 <!-- Main Content -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb Navigation -->
@@ -98,27 +263,43 @@
     </div>
 </main>
 
-<!-- Success Modal -->
-<div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-surface rounded-xl p-8 max-w-md mx-4 text-center">
-        <div class="w-16 h-16 bg-success-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+<div id="success-modal" class="booking-success-modal hidden">
+    <div class="booking-success-content">
+        <!-- Icono de éxito -->
+        <div class="booking-success-icon">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
             </svg>
         </div>
-        <h3 class="text-xl font-semibold text-text-primary mb-2">¡Cita Confirmada!</h3>
-        <p class="text-text-secondary mb-6">Tu cita ha sido reservada exitosamente. Recibirás una confirmación por email y recordatorios automáticos.</p>
-        <div class="bg-secondary-50 rounded-lg p-4 mb-6">
-            <p class="text-sm font-medium text-text-primary">Número de Referencia</p>
-            <p class="text-lg font-semibold text-primary" id="appointment-reference">#MC-2025-001234</p>
+
+        <!-- Título y mensaje -->
+        <h3 class="booking-success-title">¡Cita Confirmada!</h3>
+        <p class="booking-success-message">
+            Tu cita ha sido reservada exitosamente. Recibirás una confirmación por email y recordatorios automáticos.
+        </p>
+
+        <!-- Número de referencia -->
+        <div class="booking-success-reference">
+            <p class="booking-success-reference-label">Número de Referencia</p>
+            <p class="booking-success-reference-number" id="appointment-reference">#MC-2025-001234</p>
         </div>
-        <div class="flex space-x-3">
-            <button onclick="goToDashboard()" class="flex-1 btn-primary">
+
+        <!-- Botones -->
+        <div class="booking-success-buttons">
+            <button onclick="goToDashboard()" class="booking-success-btn booking-success-btn-primary">
                 Ir al Dashboard
             </button>
-            <button onclick="closeSuccessModal()" class="flex-1 btn-secondary">
+            <button onclick="closeSuccessModal()" class="booking-success-btn booking-success-btn-secondary">
                 Cerrar
             </button>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="booking-success-info">
+            <p class="booking-success-info-text">
+                📧 Se envió confirmación a tu correo<br>
+                ⏰ Recibirás recordatorio 24h antes
+            </p>
         </div>
     </div>
 </div>
@@ -127,7 +308,7 @@
 <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span class="text-text-primary">Confirmando cita...</span>
+        <span class="text-text-primary">Confirmando cita</span>
     </div>
 </div>
 
@@ -147,7 +328,7 @@
 
             const confirmButton = document.getElementById('confirm-appointment-btn');
             if (confirmButton) {
-                confirmButton.innerHTML = `...Confirmando...`;
+                confirmButton.innerHTML = `Confirmado`;
                 confirmButton.disabled = true;
             }
 
@@ -170,17 +351,11 @@
                     body: JSON.stringify(appointmentData)
                 });
 
-                console.log('2. Response status:', createResponse.status);
-
                 const createText = await createResponse.text();
-                console.log('3. Response text:', createText);
-
                 const createResult = JSON.parse(createText);
-                console.log('4. Parsed result:', createResult);
 
                 if (createResult.success) {
-                    console.log('5. SUCCESS - Showing modal');
-                    document.getElementById('appointment-reference').textContent = `#MC-${createResult.appointmentId}`;
+                    document.getElementById('appointment-reference').textContent = `#CM000-${createResult.appointmentId}`;
                     document.getElementById('success-modal').classList.remove('hidden');
 
                     // Reset button

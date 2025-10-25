@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - MediCitas</title>
+    <title>@ViewData["Title"] - SaludConnect</title>
 
     <link rel="stylesheet" href="../css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,7 +132,7 @@
                 <a class="text-text-secondary hover:text-text-primary block px-3 py-2 rounded-md text-base font-medium"
                    asp-controller="Patient"
                    asp-action="Notifications">
-                    Notificaciones (3)
+                    Notificaciones (1)
                 </a>
                
             </div>
@@ -153,7 +153,7 @@
                         <svg class="h-8 w-8 text-primary mr-3" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
                         </svg>
-                        <h3 class="text-lg font-semibold text-text-primary">MediCitas</h3>
+                        <h3 class="text-lg font-semibold text-text-primary">SaludConnect</h3>
                     </div>
                     <p class="text-text-secondary text-sm mb-4">
                         Tu salud es nuestra prioridad. Gestiona tus citas médicas de forma fácil y segura con nuestro portal de pacientes.
@@ -184,23 +184,23 @@
                         <li>
                             <a class="text-text-secondary hover:text-primary transition-colors"
                                asp-controller="Patient"
-                               asp-action="Index">
+                               asp-action="Booking">
                                 Reserva
                             </a>
                         </li>
                         
                         <li>
                             <a class="text-text-secondary hover:text-primary transition-colors"
-                               asp-controller="Appointments"
-                               asp-action="History">
+                               asp-controller="Patient"
+                               asp-action="Record">
                                 Historial 
                             </a>
                         </li>
 
                         <li>
                             <a class="text-text-secondary hover:text-primary transition-colors"
-                               asp-controller="Help"
-                               asp-action="Index">
+                               asp-controller="Patient"
+                               asp-action="Help">
                                 Centro de Ayuda
                             </a>
                         </li>
@@ -220,21 +220,21 @@
                     <ul class="space-y-2 text-sm text-text-secondary">
                         <li class="flex items-center">
                             <i class="fas fa-phone mr-2"></i>
-                            +34 900 123 456
+                            +52 55 2789 2000
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-2"></i>
-                            info@medicitas.es
+                            saludconnect@gmail.com
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-map-marker-alt mr-2"></i>
-                            Madrid, España
+                            Ciudad de México, CDMX, México
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-secondary-200 mt-8 pt-8 text-center">
-                <p class="text-text-secondary text-sm">© 2025 MediCitas. Todos los derechos reservados.</p>
+                <p class="text-text-secondary text-sm">© 2025 SaludConnect. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
