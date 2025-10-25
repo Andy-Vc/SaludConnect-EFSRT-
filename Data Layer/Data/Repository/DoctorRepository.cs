@@ -112,8 +112,8 @@ namespace Data.Repository
                                             languagues = reader.GetString(reader.GetOrdinal("Languages")),
                                             AvailableToday = (short)reader.GetInt32(reader.GetOrdinal("AvailableToday")),
                                             AvailableTomorrow = (short)reader.GetInt32(reader.GetOrdinal("AvailableTomorrow")),
-                                            AvailableThisWeek = (short)reader.GetInt32(reader.GetOrdinal("AvailableThisWeek"))
-
+                                            AvailableThisWeek = (short)reader.GetInt32(reader.GetOrdinal("AvailableThisWeek")),
+                                            AvailableLabel = reader.GetString(reader.GetOrdinal("AvailableLabel"))
                                         });
                                     }
                                 }

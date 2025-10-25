@@ -1,4 +1,5 @@
 ﻿using Web.Models;
+using Web.Models.ViewModels.PatientVM;
 
 namespace Web.Services.Interface
 {
@@ -6,5 +7,7 @@ namespace Web.Services.Interface
     {
         Task<int> totalSpecialties();
         Task<List<Specialty>> ListSpecialties();
+        Task<List<SpecialtyViewModel>> ListSpecialtiesWithDescription();
+
     }
 }

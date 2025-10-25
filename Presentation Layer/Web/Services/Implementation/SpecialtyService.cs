@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Web.Models;
 using Web.Models.ViewModels.DoctorVM;
+using Web.Models.ViewModels.PatientVM;
 using Web.Services.Interface;
 
 namespace Web.Services.Implementation
@@ -33,6 +34,24 @@ namespace Web.Services.Implementation
             return new List<Specialty>();
         }
 
+        public async Task<List<SpecialtyViewModel>> ListSpecialtiesWithDescription()
+        {
+            var url = "Specialty/list-specialties-with-description";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var specialties = JsonSerializer.Deserialize<List<SpecialtyViewModel>>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return specialties ?? new List<SpecialtyViewModel>();
+            }
+            return new List<SpecialtyViewModel>();
+        }
 
         public async Task<int> totalSpecialties()
         {
