@@ -18,14 +18,16 @@ namespace Web.Controllers
         private readonly IUser user;
         private readonly ISpecialty specialty;
         private readonly IMedicalRecord medicalRecordService;
+        private readonly IDoctor doctorService;
 
-        public DoctorController(IAppointment appointment, IService service, IUser user, ISpecialty specialty, IMedicalRecord medicalRecordService)
+        public DoctorController(IAppointment appointment, IService service, IUser user, ISpecialty specialty, IMedicalRecord medicalRecordService, IDoctor doctorService)
         {
             this.appointment = appointment;
             this.service = service;
             this.user = user;
             this.specialty = specialty;
             this.medicalRecordService = medicalRecordService;
+            this.doctorService = doctorService;
         }
 
         #region
@@ -310,6 +312,161 @@ namespace Web.Controllers
 
             return File(pdfBytes, "application/pdf", fileName);
         }
+
+
+        //CRUD
+
+        public async Task<IActionResult> Index()
+        {
+            var user = HttpContext.Session.GetObjectFromJson<User>("User");
+            if (user == null || user.Role.IdRole != 2)
+            {
+                return RedirectToAction("Login", "UserAuth");
+            }
+
+            var doctors = await doctorService.ListDoctors();
+            return View(doctors);
+        }
+
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var doctor = await doctorService.GetDoctorById(id);
+            if (doctor == null)
+            {
+                TempData["Error"] = "Doctor no encontrado";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(doctor);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            
+            return View(new CreateDoctorDTO());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateDoctorDTO doctor)
+        {
+            try
+            {
+                // Depuración: imprimir todos los valores del DTO
+                Console.WriteLine("=== Datos recibidos ===");
+                Console.WriteLine($"FirstName: {doctor.FirstName}");
+                Console.WriteLine($"LastNamePat: {doctor.LastNamePat}");
+                Console.WriteLine($"LastNameMat: {doctor.LastNameMat}");
+                Console.WriteLine($"Document: {doctor.Document}");
+                Console.WriteLine($"Birthdate: {doctor.Birthdate}");
+                Console.WriteLine($"Phone: {doctor.Phone}");
+                Console.WriteLine($"Gender: {doctor.Gender}");
+                Console.WriteLine($"Email: {doctor.Email}");
+                Console.WriteLine($"PasswordHash: {doctor.PasswordHash}");
+                Console.WriteLine($"IdRole: {doctor.IdRole}"); // << Aquí verás si llega 0 o 3
+
+                if (!ModelState.IsValid)
+                {
+                    Console.WriteLine("=== Errores de ModelState ===");
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var errors = ModelState[key].Errors;
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"Campo: {key}, Error: {error.ErrorMessage}");
+                        }
+                    }
+                    return View(doctor);
+                }
+
+                // Forzar rol fijo
+                doctor.IdRole = 3;
+
+                var result = await doctorService.CreateDoctor(doctor);
+                if (result != null)
+                    return RedirectToAction(nameof(Index));
+
+                return View(doctor);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error en POST CreateDoctor: " + ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw; // Para que se vea el error en el navegador (solo desarrollo)
+            }
+        }
+
+
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var doctor = await doctorService.GetDoctorById(id);
+            if (doctor == null)
+            {
+                TempData["Error"] = "Doctor no encontrado";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var updateDto = new UpdateDoctorDTO
+            {
+                IdUser = doctor.IdUser,
+                FirstName = doctor.FirstName,
+                LastNamePat = doctor.LastNamePat,
+                LastNameMat = doctor.LastNameMat,
+                Phone = doctor.Phone,
+                Email = doctor.Email,
+                ProfilePicture = doctor.ProfilePicture
+            };
+
+            return View(updateDto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, UpdateDoctorDTO doctor)
+        {
+            if (id != doctor.IdUser)
+            {
+                TempData["Error"] = "El ID no coincide";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(doctor);
+            }
+
+            var success = await doctorService.UpdateDoctor(id, doctor);
+            if (success)
+            {
+                TempData["Success"] = "Doctor actualizado exitosamente";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["Error"] = "Error al actualizar doctor";
+            return View(doctor);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await doctorService.DeleteDoctor(id);
+
+            if (success)
+            {
+                TempData["Success"] = "Doctor eliminado exitosamente";
+            }
+            else
+            {
+                TempData["Error"] = "Error al eliminar doctor";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
 
     }
 }

@@ -1,0 +1,162 @@
+﻿@model Web.Models.DTO.UpdateServiceDTO
+
+@{
+    ViewData["Title"] = "Editar Servicio";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-gradient-primary text-white py-3 rounded-top-4">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-gear-fill me-2"></i>Editar Servicio
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" id="editServiceForm">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Por favor, corrija los siguientes errores:
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <input type="hidden" asp-for="IdService" />
+
+                        <!-- Nombre del Servicio -->
+                        <div class="mb-4">
+                            <label asp-for="NameService" class="form-label fw-semibold">
+                                <i class="bi bi-pencil-square text-primary me-1"></i>Nombre del Servicio
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="NameService" class="form-control form-control-lg" placeholder="Ingrese el nombre del servicio" />
+                            <span asp-validation-for="NameService" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold">
+                                <i class="bi bi-card-text text-info me-1"></i>Descripción
+                            </label>
+                            <input asp-for="Description" class="form-control form-control-lg" placeholder="Descripción breve del servicio" />
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="mb-4">
+                            <label asp-for="Price" class="form-label fw-semibold">
+                                <i class="bi bi-currency-dollar text-success me-1"></i>Precio
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Price" class="form-control form-control-lg" placeholder="S/ 0.00" />
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Duración -->
+                        <div class="mb-4">
+                            <label asp-for="DurationMinutes" class="form-label fw-semibold">
+                                <i class="bi bi-clock text-warning me-1"></i>Duración (minutos)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="DurationMinutes" class="form-control form-control-lg" placeholder="Ej: 30, 60" />
+                            <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Especialidad -->
+                        <div class="mb-4">
+                            <label asp-for="IdSpecialty" class="form-label fw-semibold">
+                                <i class="bi bi-clipboard2-pulse text-danger me-1"></i>Especialidad
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="IdSpecialty" class="form-select">
+                                <option value="">-- Seleccione una especialidad --</option>
+                                @foreach (var specialty in ViewBag.Specialties)
+                                {
+                                    <option value="@specialty.IdSpecialty">@specialty.NameSpecialty</option>
+                                }
+                            </select>
+                            <span asp-validation-for="IdSpecialty" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-lg btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        // Confirmación antes de enviar
+        document.getElementById('editServiceForm').addEventListener('submit', function(e) {
+            const name = document.querySelector('input[name="NameService"]').value;
+            const duration = document.querySelector('input[name="DurationMinutes"]').value;
+
+            if (name && duration) {
+                if (!confirm(`¿Confirma guardar los cambios del servicio "${name}" con duración ${duration} min?`)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Convertir nombre de servicio a mayúsculas automáticamente
+        const nameInput = document.querySelector('input[name="NameService"]');
+        nameInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+        }
+
+        .rounded-4 {
+            border-radius: 1rem !important;
+        }
+
+        .rounded-top-4 {
+            border-top-left-radius: 1rem !important;
+            border-top-right-radius: 1rem !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .form-label {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control-lg,
+        .form-select-lg {
+            font-size: 1rem;
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+        }
+    </style>
+}
+

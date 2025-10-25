@@ -1,0 +1,240 @@
+﻿@model Web.Models.DTO.CreateServiceDTO
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+   
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-gradient-success text-white py-3 rounded-top-4">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-file-earmark-plus me-2"></i>Información del Servicio
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="createServiceForm">
+                        @Html.AntiForgeryToken()
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Por favor, corrija los siguientes errores:
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Nombre del Servicio -->
+                        <div class="mb-4">
+                            <label asp-for="NameService" class="form-label fw-semibold">
+                                <i class="bi bi-card-heading text-primary me-1"></i>Nombre del Servicio
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="NameService" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ej: Consulta General, Radiografía, etc."
+                                   maxlength="100" />
+                            <span asp-validation-for="NameService" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold">
+                                <i class="bi bi-text-paragraph text-info me-1"></i>Descripción
+                            </label>
+                            <textarea asp-for="Description" 
+                                      class="form-control" 
+                                      rows="4"
+                                      placeholder="Describe el servicio que se ofrece..."
+                                      maxlength="500"></textarea>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Opcional: Proporciona detalles sobre el servicio
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Fila: Precio y Duración -->
+                        <div class="row">
+                            <!-- Precio -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Price" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-dollar text-success me-1"></i>Precio (S/.)
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-cash-coin"></i>
+                                    </span>
+                                    <input asp-for="Price" 
+                                           type="number" 
+                                           step="0.01"
+                                           min="0"
+                                           class="form-control" 
+                                           placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Duración -->
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="DurationMinutes" class="form-label fw-semibold">
+                                    <i class="bi bi-clock text-warning me-1"></i>Duración (minutos)
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </span>
+                                    <input asp-for="DurationMinutes" 
+                                           type="number" 
+                                           min="1"
+                                           max="480"
+                                           class="form-control" 
+                                           placeholder="30" />
+                                </div>
+                                <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Especialidad -->
+                        <div class="mb-4">
+                            <label asp-for="IdSpecialty" class="form-label fw-semibold">
+                                <i class="bi bi-clipboard2-pulse text-danger me-1"></i>Especialidad
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="IdSpecialty" class="form-select form-select-lg">
+                                <option value="">-- Seleccione una especialidad --</option>
+                                @foreach (var specialty in ViewBag.Specialties)
+                                {
+                                    <option value="@specialty.IdSpecialty">@specialty.NameSpecialty</option>
+                                }
+                            </select>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Selecciona la especialidad a la que pertenece este servicio
+                            </div>
+                            <span asp-validation-for="IdSpecialty" class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-lg btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-lg btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Crear Servicio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    
+    <script>
+        // Validación en tiempo real para el precio
+        document.querySelector('input[name="Price"]').addEventListener('input', function(e) {
+            if (e.target.value < 0) {
+                e.target.value = 0;
+            }
+        });
+
+        // Validación para duración
+        document.querySelector('input[name="DurationMinutes"]').addEventListener('input', function(e) {
+            if (e.target.value < 1) {
+                e.target.value = 1;
+            }
+            if (e.target.value > 480) {
+                e.target.value = 480;
+            }
+        });
+
+        // Confirmación antes de enviar
+        document.getElementById('createServiceForm').addEventListener('submit', function(e) {
+            const serviceName = document.querySelector('input[name="NameService"]').value;
+            if (serviceName && !confirm(`¿Confirma crear el servicio "${serviceName}"?`)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .rounded-4 {
+            border-radius: 1rem !important;
+        }
+
+        .rounded-top-4 {
+            border-top-left-radius: 1rem !important;
+            border-top-right-radius: 1rem !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+        }
+
+        .form-label {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group-text {
+            border: 1px solid #ced4da;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            font-size: 1.2rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .form-control-lg,
+        .form-select-lg {
+            font-size: 1rem;
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+        }
+
+        /* Animación para inputs */
+        .form-control,
+        .form-select {
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            transform: translateY(-2px);
+        }
+    </style>
+    }

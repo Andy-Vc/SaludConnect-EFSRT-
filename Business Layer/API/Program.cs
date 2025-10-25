@@ -17,7 +17,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDependencies();
 
-builder.Services.AddScoped<IAdmin, AdminService>();
+builder.Services.AddScoped<IAdmin, AdminRepository>();
+builder.Services.AddScoped<AdminBL>();
+
+builder.Services.AddScoped<IConsultories, ConsultoryRepository>();
+builder.Services.AddScoped<ConsultoryBL>();
+
+builder.Services.AddScoped<IService, ServiceRepository>();
+builder.Services.AddScoped<ServiceBL>();
 
 var app = builder.Build();
 

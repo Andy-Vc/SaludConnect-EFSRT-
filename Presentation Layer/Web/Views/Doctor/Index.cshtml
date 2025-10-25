@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Web.Models.DTO.DoctorFullDTO>
+
+
+@{
+    ViewData["Title"] = "Gestión de Doctores";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-3 fw-bold">Listado de Doctores</h1>
+
+    <!-- Mensajes de éxito/error -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo Doctor
+        </a>
+    </div>
+
+    <div class="card-body table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Foto</th>
+                    <th>Nombre Completo</th>
+                    <th>Documento</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Género</th>
+                    <th>Fecha Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var doctor in Model)
+                    {
+                        <tr>
+                            <td>@doctor.IdUser</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(doctor.ProfilePicture))
+                                {
+                                    <img src="@doctor.ProfilePicture"
+                                         alt="@doctor.FirstName"
+                                         class="rounded-circle"
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                                         style="width: 40px; height: 40px;">
+                                        <i class="bi bi-person-fill text-white"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>@doctor.FirstName @doctor.LastNamePat @doctor.LastNameMat</td>
+                            <td>@doctor.Document</td>
+                            <td>@doctor.Email</td>
+                            <td>@doctor.Phone</td>
+                            <td>
+                                @if (doctor.Gender == 'M')
+                                {
+                                    <span class="badge bg-info">
+                                        <i class="bi bi-gender-male"></i> Masculino
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-pink text-white">
+                                        <i class="bi bi-gender-female"></i> Femenino
+                                    </span>
+                                }
+                            </td>
+                            <td>@doctor.DateRegister.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@doctor.IdUser" class="btn btn-sm btn-warning me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@doctor.IdUser" class="btn btn-sm btn-info text-white me-1">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button type="button"
+                                        class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        onclick="setDeleteDoctor(@doctor.IdUser, '@doctor.FirstName @doctor.LastNamePat')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> No hay doctores registrados
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar al doctor <strong id="doctorName"></strong>?</p>
+                <p class="text-muted">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function setDeleteDoctor(id, name) {
+            document.getElementById('doctorName').textContent = name;
+            document.getElementById('deleteForm').action = '@Url.Action("Delete", "Doctor")/' + id;
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-pink {
+            background-color: #e91e63;
+        }
+    </style>
+}
+

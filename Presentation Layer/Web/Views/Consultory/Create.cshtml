@@ -1,0 +1,270 @@
+﻿@model Web.Models.DTO.CreateConsultoryDTO
+
+@{
+    ViewData["Title"] = "Nuevo Consultorio";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-gradient-primary text-white py-3 rounded-top-4">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-building me-2"></i>Información del Consultorio
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="createConsultoryForm">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Por favor, corrija los siguientes errores:
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Número de Consultorio -->
+                        <div class="mb-4">
+                            <label asp-for="NumberConsultories" class="form-label fw-semibold">
+                                <i class="bi bi-door-closed text-primary me-1"></i>Número de Consultorio
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-hash"></i>
+                                </span>
+                                <input asp-for="NumberConsultories"
+                                       class="form-control"
+                                       placeholder="Ej: C-101, Consultorio 1, etc."
+                                       maxlength="10" />
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Ingrese el número o código del consultorio
+                            </div>
+                            <span asp-validation-for="NumberConsultories" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Número de Piso -->
+                        <div class="mb-4">
+                            <label asp-for="FloorNumber" class="form-label fw-semibold">
+                                <i class="bi bi-building-up text-info me-1"></i>Número de Piso
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-layers"></i>
+                                </span>
+                                <select asp-for="FloorNumber" class="form-select">
+                                    <option value="">-- Seleccione el piso --</option>
+                                    <option value="1">Piso 1</option>
+                                    <option value="2">Piso 2</option>
+                                    <option value="3">Piso 3</option>
+                                    <option value="4">Piso 4</option>
+                                    <option value="5">Piso 5</option>
+                                    <option value="6">Piso 6</option>
+                                    <option value="7">Piso 7</option>
+                                    <option value="8">Piso 8</option>
+                                    <option value="9">Piso 9</option>
+                                    <option value="10">Piso 10</option>
+                                </select>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Seleccione en qué piso se encuentra ubicado
+                            </div>
+                            <span asp-validation-for="FloorNumber" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Especialidad -->
+                        <div class="mb-4">
+                            <label asp-for="IdSpecialty" class="form-label fw-semibold">
+                                <i class="bi bi-clipboard2-pulse text-danger me-1"></i>Especialidad
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-heart-pulse"></i>
+                                </span>
+                                <select asp-for="IdSpecialty" class="form-select">
+                                    <option value="">-- Seleccione una especialidad --</option>
+                                    @foreach (var specialty in ViewBag.Specialties)
+                                    {
+                                        <option value="@specialty.IdSpecialty">@specialty.NameSpecialty</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Selecciona la especialidad que se atenderá en este consultorio
+                            </div>
+                            <span asp-validation-for="IdSpecialty" class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-lg btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>Crear Consultorio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+           
+
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        // Vista previa en tiempo real
+        const numberInput = document.querySelector('input[name="NumberConsultories"]');
+        const floorSelect = document.querySelector('select[name="FloorNumber"]');
+        const specialtySelect = document.querySelector('select[name="IdSpecialty"]');
+        const previewCard = document.getElementById('previewCard');
+        const previewNumber = document.getElementById('previewNumber');
+        const previewFloor = document.getElementById('previewFloor');
+        const previewSpecialty = document.getElementById('previewSpecialty');
+
+        function updatePreview() {
+            const hasNumber = numberInput.value.trim() !== '';
+            const hasFloor = floorSelect.value !== '';
+            const hasSpecialty = specialtySelect.value !== '';
+
+            if (hasNumber || hasFloor || hasSpecialty) {
+                previewCard.style.display = 'block';
+                previewNumber.textContent = numberInput.value || '-';
+                previewFloor.textContent = floorSelect.value ? `Piso ${floorSelect.value}` : '-';
+                previewSpecialty.textContent = specialtySelect.selectedOptions[0]?.text || '-';
+            } else {
+                previewCard.style.display = 'none';
+            }
+        }
+
+        numberInput.addEventListener('input', updatePreview);
+        floorSelect.addEventListener('change', updatePreview);
+        specialtySelect.addEventListener('change', updatePreview);
+
+        // Confirmación antes de enviar
+        document.getElementById('createConsultoryForm').addEventListener('submit', function(e) {
+            const consultoryNumber = numberInput.value;
+            const floor = floorSelect.value;
+
+            if (consultoryNumber && floor) {
+                if (!confirm(`¿Confirma crear el consultorio "${consultoryNumber}" en el piso ${floor}?`)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Convertir número de consultorio a mayúsculas automáticamente
+        numberInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+        }
+
+        .rounded-4 {
+            border-radius: 1rem !important;
+        }
+
+        .rounded-top-4 {
+            border-top-left-radius: 1rem !important;
+            border-top-right-radius: 1rem !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .form-label {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group-text {
+            border: 1px solid #ced4da;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            font-size: 1.2rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .form-control-lg,
+        .form-select-lg,
+        .input-group-lg .form-control,
+        .input-group-lg .form-select {
+            font-size: 1rem;
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+        }
+
+        /* Animación para inputs */
+        .form-control,
+        .form-select {
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                transform: translateY(-2px);
+            }
+
+        /* Vista previa */
+        #previewCard {
+            animation: slideDown 0.3s ease;
+        }
+
+        @@keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group-lg .input-group-text {
+            padding: 0.5rem 1rem;
+        }
+    </style>
+}
