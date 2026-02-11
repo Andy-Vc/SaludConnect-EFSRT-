@@ -1,0 +1,11 @@
+*.html linguist-documentation=true
+*.css linguist-documentation=true
+*.js linguist-detectable=true
+*.cs linguist-detectable=true
+*.sql linguist-detectable=true
+
+wwwroot/** linguist-vendored
+bin/** linguist-vendored
+obj/** linguist-vendored
+*.min.js linguist-vendored
+*.min.css linguist-vendored
