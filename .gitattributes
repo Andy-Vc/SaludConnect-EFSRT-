@@ -1,11 +1,17 @@
-*.html linguist-documentation=true
-*.css linguist-documentation=true
-*.js linguist-detectable=true
-*.cs linguist-detectable=true
-*.sql linguist-detectable=true
+# Marcar HTML/CSS como documentación
+*.html linguist-documentation
+*.css linguist-documentation
 
+# Asegurar detección de lenguajes principales
+*.cs linguist-detectable
+*.js linguist-detectable
+*.sql linguist-detectable
+
+# Excluir directorios generados/vendor
 wwwroot/** linguist-vendored
 bin/** linguist-vendored
 obj/** linguist-vendored
+
+# Excluir minificados
 *.min.js linguist-vendored
 *.min.css linguist-vendored
